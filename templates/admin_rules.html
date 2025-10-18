@@ -1,0 +1,15 @@
+{% extends "admin_layout.html" %}
+{% block title %}Recommendation Rules - Admin{% endblock %}
+{% block admin_content %}
+<h2>Recommendation Rules</h2>
+<p>Store your rules as JSON or YAML text below. They are saved to <code>site_settings.recommendation_rules</code>.</p>
+<style>
+  .textarea{width:100%;min-height:320px;padding:.8rem;border:1px solid #f3c2d3;border-radius:10px}
+  .btn{display:inline-flex;align-items:center;gap:.4rem;padding:.5rem 1rem;border-radius:10px;border:1px solid #f3c2d3;background:#ffedf3;color:#b10e52;text-decoration:none}
+  .btn.primary{background:#ff7fb0;border-color:#ff69a6;color:#fff}
+</style>
+<form method="POST" class="card">
+  <textarea class="textarea" name="rules" placeholder="{\n  \"oily\": { \"facewash\": [ ... ] }\n}">{{ rules }}</textarea>
+  <div style="margin-top:.6rem"><button class="btn primary" type="submit">Save Rules</button></div>
+</form>
+{% endblock %}

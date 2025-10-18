@@ -1,0 +1,108 @@
+{
+  "skin_types": {
+    "oily": {
+      "facewash": [
+        {
+          "product_id": "O-FW-1",
+          "brand": "CeraVe",
+          "product_name": "Foaming Facial Cleanser (Oily Skin)",
+          "volume": "236 ml",
+          "image": "https://m.media-amazon.com/images/I/71nwb4K8dGL._SL1500_.jpg",
+          "links": {
+            "amazon": { "url": "https://www.amazon.in/dp/B000WV2TTY", "price": 799 },
+            "nykaa": { "url": "https://www.nykaa.com/cerave-foaming-cleanser/p/123456", "price": 820 },
+            "flipkart": { "url": "https://www.flipkart.com/cerave-foaming-cleanser/p/itm123", "price": 780 }
+          }
+        },
+        {
+          "product_id": "O-FW-2",
+          "brand": "Cetaphil",
+          "product_name": "Oily Skin Cleanser",
+          "volume": "125 ml",
+          "image": "https://m.media-amazon.com/images/I/61LlfsXz4eL._SL1500_.jpg",
+          "links": {
+            "amazon": { "url": "https://www.amazon.in/dp/B000PHUQY6", "price": 350 },
+            "nykaa": { "url": "https://www.nykaa.com/cetaphil-oily-cleanser/p/123457", "price": 360 },
+            "flipkart": { "url": "https://www.flipkart.com/cetaphil-oily-cleanser/p/itm124", "price": 340 }
+          }
+        }
+      ],
+      "toner": [
+        {
+          "product_id": "O-T-1",
+          "brand": "Dot & Key",
+          "product_name": "Pore Tightening Toner",
+          "volume": "150 ml",
+          "image": "https://m.media-amazon.com/images/I/71NmfP91M2L._SL1500_.jpg",
+          "links": {
+            "amazon": { "url": "https://www.amazon.in/dp/B08XYZ1234", "price": 399 },
+            "nykaa": { "url": "https://www.nykaa.com/dot-key-pore-toner/p/123458", "price": 420 },
+            "flipkart": { "url": "https://www.flipkart.com/dot-key-pore-toner/p/itm125", "price": 385 }
+          }
+        }
+      ],
+      "moisturizer": [
+        {
+          "product_id": "O-M-1",
+          "brand": "CeraVe",
+          "product_name": "Moisturizing Cream for Oily Skin",
+          "volume": "340 g",
+          "image": "https://m.media-amazon.com/images/I/81K2G0Y8i5L._SL1500_.jpg",
+          "links": {
+            "amazon": { "url": "https://www.amazon.in/dp/B000YJ2SLG", "price": 1299 },
+            "nykaa": { "url": "https://www.nykaa.com/cerave-oily-cream/p/123459", "price": 1340 },
+            "flipkart": { "url": "https://www.flipkart.com/cerave-oily-cream/p/itm126", "price": 1250 }
+          }
+        }
+      ],
+      "serum": [
+        {
+          "product_id": "O-S-1",
+          "brand": "Dot & Key",
+          "product_name": "10% Niacinamide Serum",
+          "volume": "30 ml",
+          "image": "https://m.media-amazon.com/images/I/71qQZDLzS1L._SL1500_.jpg",
+          "links": {
+            "amazon": { "url": "https://www.amazon.in/dp/B08HXYZ567", "price": 595 },
+            "nykaa": { "url": "https://www.nykaa.com/dot-key-niacinamide-serum/p/123460", "price": 610 },
+            "flipkart": { "url": "https://www.flipkart.com/dot-key-niacinamide-serum/p/itm127", "price": 580 }
+          }
+        }
+      ]
+    },
+
+    "dry": {
+      "facewash": [
+        {
+          "product_id": "D-FW-1",
+          "brand": "Cetaphil",
+          "product_name": "Gentle Skin Cleanser (Dry Skin)",
+          "volume": "125 ml",
+          "image": "https://m.media-amazon.com/images/I/61hJ6-6gBPL._SL1500_.jpg",
+          "links": {
+            "amazon": { "url": "https://www.amazon.in/dp/B0000532V8", "price": 310 },
+            "nykaa": { "url": "https://www.nykaa.com/cetaphil-gentle-cleanser/p/123461", "price": 325 },
+            "flipkart": { "url": "https://www.flipkart.com/cetaphil-gentle-cleanser/p/itm128", "price": 300 }
+          }
+        }
+      ],
+      "toner": [],
+      "moisturizer": [],
+      "serum": []
+    },
+
+    "sensitive": {
+      "facewash": [],
+      "toner": [],
+      "moisturizer": [],
+      "serum": []
+    },
+
+    "combination": {
+      "facewash": [],
+      "toner": [],
+      "moisturizer": [],
+      "serum": []
+    }
+  }
+}

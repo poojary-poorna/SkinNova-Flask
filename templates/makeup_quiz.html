@@ -1,0 +1,301 @@
+{% extends "base.html" %}
+
+{% block title %}Makeup Quiz - SkinNova{% endblock %}
+
+{% block content %}
+<div class="quiz-container">
+    <div class="quiz-header text-center">
+        <h1><i class="fas fa-palette"></i> Makeup & Undertone Quiz</h1>
+        <p>Discover your skin undertone and get personalized makeup recommendations that enhance your natural beauty.</p>
+    </div>
+    
+    <form method="POST" class="quiz-form">
+        <!-- Question 1: Skin Undertone -->
+        <div class="quiz-question" data-required="true">
+            <h3>What is your skin undertone?</h3>
+            <p class="question-description">Look at your wrists in natural light. What color are your veins?</p>
+            
+            <div class="quiz-options">
+                <label class="quiz-option" for="warm">
+                    <input type="radio" id="warm" name="skin_undertone" value="warm">
+                    <div class="option-content">
+                        <strong>Warm Undertone</strong>
+                        <p>Green-tinted veins, golden or olive complexion</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="cool">
+                    <input type="radio" id="cool" name="skin_undertone" value="cool">
+                    <div class="option-content">
+                        <strong>Cool Undertone</strong>
+                        <p>Blue or purple-tinted veins, pink or rosy complexion</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="neutral">
+                    <input type="radio" id="neutral" name="skin_undertone" value="neutral">
+                    <div class="option-content">
+                        <strong>Neutral Undertone</strong>
+                        <p>Blue-green veins, balanced complexion</p>
+                    </div>
+                </label>
+            </div>
+        </div>
+        
+        <!-- Question 2: Makeup Preferences -->
+        <div class="quiz-question">
+            <h3>What are your makeup preferences? (Select all that apply)</h3>
+            <p class="question-description">Help us understand your makeup style and routine preferences.</p>
+            
+            <div class="quiz-options">
+                <label class="quiz-option" for="natural-look">
+                    <input type="checkbox" id="natural-look" name="makeup_preferences" value="natural-look">
+                    <div class="option-content">
+                        <strong>Natural, Everyday Look</strong>
+                        <p>Light coverage, subtle enhancement</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="bold-lips">
+                    <input type="checkbox" id="bold-lips" name="makeup_preferences" value="bold-lips">
+                    <div class="option-content">
+                        <strong>Bold Lip Colors</strong>
+                        <p>Statement reds, deep berries, vibrant shades</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="dramatic-eyes">
+                    <input type="checkbox" id="dramatic-eyes" name="makeup_preferences" value="dramatic-eyes">
+                    <div class="option-content">
+                        <strong>Dramatic Eye Looks</strong>
+                        <p>Smoky eyes, bold eyeshadows, winged liner</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="long-wearing">
+                    <input type="checkbox" id="long-wearing" name="makeup_preferences" value="long-wearing">
+                    <div class="option-content">
+                        <strong>Long-Wearing Products</strong>
+                        <p>All-day staying power, smudge-proof formulas</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="cruelty-free">
+                    <input type="checkbox" id="cruelty-free" name="makeup_preferences" value="cruelty-free">
+                    <div class="option-content">
+                        <strong>Cruelty-Free & Vegan</strong>
+                        <p>Ethical beauty, animal-friendly products</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="quick-application">
+                    <input type="checkbox" id="quick-application" name="makeup_preferences" value="quick-application">
+                    <div class="option-content">
+                        <strong>Quick & Easy Application</strong>
+                        <p>5-minute makeup routines, multi-use products</p>
+                    </div>
+                </label>
+            </div>
+        </div>
+        
+        <div class="quiz-actions">
+            <button type="submit" class="btn btn-primary btn-large">
+                <i class="fas fa-lipstick"></i> Get My Makeup Recommendations
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+.quiz-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.quiz-header {
+    margin-bottom: 3rem;
+}
+
+.quiz-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.quiz-header p {
+    font-size: 1.1rem;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.quiz-question {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+}
+
+.quiz-question h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+}
+
+.question-description {
+    color: #666;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+}
+
+.quiz-options {
+    display: grid;
+    gap: 1rem;
+}
+
+.quiz-option {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.quiz-option:hover {
+    border-color: var(--primary);
+    background: rgba(233, 30, 99, 0.02);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(233, 30, 99, 0.1);
+}
+
+.quiz-option input {
+    margin-right: 1rem;
+    width: 20px;
+    height: 20px;
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+
+.option-content {
+    flex: 1;
+}
+
+.option-content strong {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: var(--dark);
+    font-weight: 600;
+}
+
+.option-content p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.quiz-option.selected {
+    border-color: var(--primary);
+    background: rgba(233, 30, 99, 0.05);
+    box-shadow: 0 4px 15px rgba(233, 30, 99, 0.15);
+}
+
+.quiz-actions {
+    text-align: center;
+    margin-top: 3rem;
+}
+
+.btn-large {
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .quiz-header h1 {
+        font-size: 2rem;
+    }
+    
+    .quiz-question {
+        padding: 2rem 1.5rem;
+    }
+    
+    .quiz-option {
+        padding: 1rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+    
+    .quiz-option input {
+        margin-right: 0;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Undertone preview colors */
+.undertone-preview {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.undertone-swatch {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.warm-swatch {
+    background: linear-gradient(45deg, #d4a574, #e6c29e);
+}
+
+.cool-swatch {
+    background: linear-gradient(45deg, #f4d2d7, #ddb7c7);
+}
+
+.neutral-swatch {
+    background: linear-gradient(45deg, #e8d5c4, #d4c1a8);
+}
+</style>
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add undertone preview
+    const undertoneQuestion = document.querySelector('.quiz-question[data-required="true"]');
+    const previewHtml = `
+        <div class="undertone-preview">
+            <div class="undertone-swatch warm-swatch" title="Warm undertone"></div>
+            <div class="undertone-swatch cool-swatch" title="Cool undertone"></div>
+            <div class="undertone-swatch neutral-swatch" title="Neutral undertone"></div>
+        </div>
+    `;
+    
+    undertoneQuestion.querySelector('.question-description').insertAdjacentHTML('afterend', previewHtml);
+    
+    // Highlight selected undertone swatch
+    const undertoneInputs = document.querySelectorAll('input[name="skin_undertone"]');
+    const swatches = document.querySelectorAll('.undertone-swatch');
+    
+    undertoneInputs.forEach((input, index) => {
+        input.addEventListener('change', function() {
+            // Reset all swatches
+            swatches.forEach(swatch => swatch.style.transform = 'scale(1)');
+            
+            // Highlight selected swatch
+            if (this.checked && swatches[index]) {
+                swatches[index].style.transform = 'scale(1.1)';
+                swatches[index].style.transition = 'transform 0.3s ease';
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
+{% endblock %}

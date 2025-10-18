@@ -1,0 +1,91 @@
+sku,category,brand,name,variant,price,currency,image_url,retailer_url
+LIP-0001,lipstick,Maybelline,SuperStay Matte Ink,Lover,649,INR,https://images.sample/maybelline_lover.jpg,https://www.nykaa.com/product1
+LIP-0002,lipstick,MAC,Retro Matte Lipstick,Ruby Woo,2200,INR,https://images.sample/mac_ruby.jpg,https://www.nykaa.com/product2
+LIP-0003,lipstick,Lakme,Forever Matte Liquid Lip Color,Crimson,349,INR,https://images.sample/lakme_crimson.jpg,https://www.nykaa.com/product3
+LIP-0004,lipstick,L'Oreal,Colour Riche Matte,Graceful 234,799,INR,https://images.sample/loreal_graceful.jpg,https://www.nykaa.com/product4
+LIP-0005,lipstick,Huda Beauty,Power Bullet Matte Lipstick,Interview,2400,INR,https://images.sample/huda_interview.jpg,https://www.nykaa.com/product5
+LIP-0006,lipstick,Swiss Beauty,Matte Lip Crayon,Rose Pink,249,INR,https://images.sample/swiss_rose.jpg,https://www.nykaa.com/product6
+LIP-0007,lipstick,Insight,Matte Lipstick,Shade 12,120,INR,https://images.sample/insight_12.jpg,https://www.nykaa.com/product7
+LIP-0008,lipstick,Lakme,Absolute Matte Melt Liquid Lip Color,Red Smoke,850,INR,https://images.sample/lakme_redsmoke.jpg,https://www.nykaa.com/product8
+LIP-0009,lipstick,MAC,Lustre Lipstick,Syrup,1950,INR,https://images.sample/mac_syrup.jpg,https://www.nykaa.com/product9
+LIP-0010,lipstick,Maybelline,Color Sensational Creamy Matte,Nude Nuance,399,INR,https://images.sample/mayb_nude.jpg,https://www.nykaa.com/product10
+LIP-0011,lipstick,L'Oreal,Infallible Le Rouge,Everlasting Plum,950,INR,https://images.sample/loreal_plum.jpg,https://www.nykaa.com/product11
+LIP-0012,lipstick,Huda Beauty,Matte Power Bullet,Prom Night,2400,INR,https://images.sample/huda_prom.jpg,https://www.nykaa.com/product12
+LIP-0013,lipstick,Swiss Beauty,Pure Matte Lipstick,Deep Maroon,229,INR,https://images.sample/swiss_maroon.jpg,https://www.nykaa.com/product13
+LIP-0014,lipstick,Insight,Super Matte Lipstick,Shade 08,125,INR,https://images.sample/insight_08.jpg,https://www.nykaa.com/product14
+LIP-0015,lipstick,Lakme,Enrich Matte Lipstick,Shade WM10,299,INR,https://images.sample/lakme_wm10.jpg,https://www.nykaa.com/product15
+LIP-0016,lipstick,MAC,Amplified Lipstick,Brick-O-La,2100,INR,https://images.sample/mac_brickola.jpg,https://www.nykaa.com/product16
+LIP-0017,lipstick,Maybelline,Sensational Liquid Matte,Soft Wine,349,INR,https://images.sample/mayb_softwine.jpg,https://www.nykaa.com/product17
+LIP-0018,lipstick,Huda Beauty,Silk Balm Icy,Blueberry,2200,INR,https://images.sample/huda_blue.jpg,https://www.nykaa.com/product18
+LIP-0019,lipstick,Swiss Beauty,Luxe Matte Lipstick,Coffee Brown,249,INR,https://images.sample/swiss_coffee.jpg,https://www.nykaa.com/product19
+LIP-0020,lipstick,Insight,Matte Crayon,Shade 15,149,INR,https://images.sample/insight_15.jpg,https://www.nykaa.com/product20
+
+FND-0001,foundation,Maybelline,Fit Me Matte + Poreless,128 Warm Nude,649,INR,https://images.sample/fitme_128.jpg,https://www.nykaa.com/fnd1
+FND-0002,foundation,Lakme,9to5 Primer + Matte,Classic Ivory,495,INR,https://images.sample/lakme_ivory.jpg,https://www.nykaa.com/fnd2
+FND-0003,foundation,L'Oreal,Infallible 24H,Golden Beige,899,INR,https://images.sample/infallible_gb.jpg,https://www.nykaa.com/fnd3
+FND-0004,foundation,MAC,Studio Fix Fluid Foundation,NW20,3300,INR,https://images.sample/mac_fix.jpg,https://www.nykaa.com/fnd4
+FND-0005,foundation,Huda Beauty,Faux Filter Foundation,Toasted Coconut,3300,INR,https://images.sample/huda_toasted.jpg,https://www.nykaa.com/fnd5
+FND-0006,foundation,Swiss Beauty,Liquid Foundation,Natural Beige,349,INR,https://images.sample/swiss_beige.jpg,https://www.nykaa.com/fnd6
+FND-0007,foundation,Insight,HD Foundation,Warm Sand,220,INR,https://images.sample/insight_warm.jpg,https://www.nykaa.com/fnd7
+FND-0008,foundation,Lakme,Absolute Argan Oil Serum Foundation,Silk Golden,750,INR,https://images.sample/lakme_argan.jpg,https://www.nykaa.com/fnd8
+FND-0009,foundation,Maybelline,Dream Satin Skin Foundation,B2 Beige,700,INR,https://images.sample/mayb_dream.jpg,https://www.nykaa.com/fnd9
+FND-0010,foundation,L'Oreal,True Match Super Blendable Foundation,Neutral Beige,799,INR,https://images.sample/loreal_true.jpg,https://www.nykaa.com/fnd10
+FND-0011,foundation,MAC,Pro Longwear Nourishing Waterproof Foundation,NC25,3600,INR,https://images.sample/mac_prolong.jpg,https://www.nykaa.com/fnd11
+FND-0012,foundation,Huda Beauty,Glowish Skin Tint,Light Beige,3100,INR,https://images.sample/huda_glowish.jpg,https://www.nykaa.com/fnd12
+FND-0013,foundation,Swiss Beauty,Airbrush Foundation,Natural,399,INR,https://images.sample/swiss_airbrush.jpg,https://www.nykaa.com/fnd13
+FND-0014,foundation,Insight,Second Skin Foundation,Porcelain,250,INR,https://images.sample/insight_skin.jpg,https://www.nykaa.com/fnd14
+FND-0015,foundation,Lakme,CC Cream,Beige,299,INR,https://images.sample/lakme_cc.jpg,https://www.nykaa.com/fnd15
+FND-0016,foundation,Maybelline,Super Stay 24H Full Coverage,Sun Beige,799,INR,https://images.sample/mayb_superstay.jpg,https://www.nykaa.com/fnd16
+FND-0017,foundation,L'Oreal,Matte Magique Foundation,N7 Pure Beige,595,INR,https://images.sample/loreal_magique.jpg,https://www.nykaa.com/fnd17
+FND-0018,foundation,MAC,Face and Body Foundation,C2,2800,INR,https://images.sample/mac_facebody.jpg,https://www.nykaa.com/fnd18
+FND-0019,foundation,Swiss Beauty,Ultra Base Foundation,Soft Beige,320,INR,https://images.sample/swiss_ultra.jpg,https://www.nykaa.com/fnd19
+FND-0020,foundation,Insight,Stay Matte Foundation,Golden Beige,199,INR,https://images.sample/insight_matte.jpg,https://www.nykaa.com/fnd20
+
+EYE-0001,eyeshadow,Maybelline,The Nudes Palette,01 Nudes,599,INR,https://images.sample/nudes_palette.jpg,https://www.nykaa.com/eye1
+EYE-0002,eyeshadow,Lakme,9to5 Eye Quartet,Desert Rose,650,INR,https://images.sample/lakme_eyequartet.jpg,https://www.nykaa.com/eye2
+EYE-0003,eyeshadow,L'Oreal,La Petite Palette,Maximalist,799,INR,https://images.sample/loreal_pet.jpg,https://www.nykaa.com/eye3
+EYE-0004,eyeshadow,MAC,Amber Times Nine Palette,Neutral,4200,INR,https://images.sample/mac_amber.jpg,https://www.nykaa.com/eye4
+EYE-0005,eyeshadow,Huda Beauty,Nude Obsessions Palette,Light,2500,INR,https://images.sample/huda_nude.jpg,https://www.nykaa.com/eye5
+EYE-0006,eyeshadow,Swiss Beauty,Ultimate Shadow Palette,Berry,349,INR,https://images.sample/swiss_berry.jpg,https://www.nykaa.com/eye6
+EYE-0007,eyeshadow,Insight,Pro Eyeshadow Palette,Smokey,220,INR,https://images.sample/insight_smokey.jpg,https://www.nykaa.com/eye7
+EYE-0008,eyeshadow,Lakme,Absolute Infinity Eyeshadow,Soft Nudes,995,INR,https://images.sample/lakme_infinity.jpg,https://www.nykaa.com/eye8
+EYE-0009,eyeshadow,Maybelline,City Mini Palette,Urban Jungle,750,INR,https://images.sample/mayb_citymini.jpg,https://www.nykaa.com/eye9
+EYE-0010,eyeshadow,L'Oreal,Color Riche Les Ombres,Velvet Rose,899,INR,https://images.sample/loreal_ombres.jpg,https://www.nykaa.com/eye10
+EYE-0011,eyeshadow,MAC,Art Library Palette,Nude Model,4900,INR,https://images.sample/mac_artlib.jpg,https://www.nykaa.com/eye11
+EYE-0012,eyeshadow,Huda Beauty,Rose Quartz Palette,Multi,5400,INR,https://images.sample/huda_rose.jpg,https://www.nykaa.com/eye12
+EYE-0013,eyeshadow,Swiss Beauty,Shimmer Eyeshadow Kit,Golden Glow,299,INR,https://images.sample/swiss_glow.jpg,https://www.nykaa.com/eye13
+EYE-0014,eyeshadow,Insight,Color Play Eyeshadow,Shade 05,180,INR,https://images.sample/insight_play.jpg,https://www.nykaa.com/eye14
+EYE-0015,eyeshadow,Lakme,Kajal Eyeshadow Duo,Smokey Eyes,750,INR,https://images.sample/lakme_duo.jpg,https://www.nykaa.com/eye15
+EYE-0016,eyeshadow,Maybelline,Blushed Nudes Palette,Blushed,599,INR,https://images.sample/mayb_blushed.jpg,https://www.nykaa.com/eye16
+EYE-0017,eyeshadow,L'Oreal,True Match Eye Shadow Quad,Sahara,650,INR,https://images.sample/loreal_quad.jpg,https://www.nykaa.com/eye17
+EYE-0018,eyeshadow,MAC,Times Nine Palette,Smokey Burgundy,4200,INR,https://images.sample/mac_smokey.jpg,https://www.nykaa.com/eye18
+EYE-0019,eyeshadow,Swiss Beauty,Matte Eyeshadow,Peach,329,INR,https://images.sample/swiss_peach.jpg,https://www.nykaa.com/eye19
+EYE-0020,eyeshadow,Insight,Smokey Eyeshadow Palette,Dark Night,220,INR,https://images.sample/insight_dark.jpg,https://www.nykaa.com/eye20
+
+BLU-0001,blush,Maybelline,Master Contour Blush,Rose,399,INR,https://images.sample/mayb_blush.jpg,https://www.nykaa.com/blu1
+BLU-0002,blush,Lakme,9to5 Pure Rouge Blusher,Peach Affair,500,INR,https://images.sample/lakme_peach.jpg,https://www.nykaa.com/blu2
+BLU-0003,blush,L'Oreal,Le Blush,Sunset,750,INR,https://images.sample/loreal_blush.jpg,https://www.nykaa.com/blu3
+BLU-0004,blush,MAC,Sheertone Blush,Peachykeen,2400,INR,https://images.sample/mac_peach.jpg,https://www.nykaa.com/blu4
+BLU-0005,blush,Huda Beauty,Glow Obsessions Blush,Coral,2700,INR,https://images.sample/huda_coral.jpg,https://www.nykaa.com/blu5
+BLU-0006,blush,Swiss Beauty,Baked Blusher,Shade 05,249,INR,https://images.sample/swiss_baked.jpg,https://www.nykaa.com/blu6
+BLU-0007,blush,Insight,Glow Blusher,Rosewood,180,INR,https://images.sample/insight_rosewood.jpg,https://www.nykaa.com/blu7
+BLU-0008,blush,Lakme,Absolute Face Stylist Blush,Coral Punch,750,INR,https://images.sample/lakme_coral.jpg,https://www.nykaa.com/blu8
+BLU-0009,blush,Maybelline,Fit Me Blush,Nude,499,INR,https://images.sample/mayb_nudeblush.jpg,https://www.nykaa.com/blu9
+BLU-0010,blush,L'Oreal,True Match Blush,Apricot Kiss,899,INR,https://images.sample/loreal_apricot.jpg,https://www.nykaa.com/blu10
+BLU-0011,blush,MAC,Glow Play Blush,Cheer Up,2800,INR,https://images.sample/mac_cheer.jpg,https://www.nykaa.com/blu11
+BLU-0012,blush,Huda Beauty,Soft Glow Blush,Desert Rose,3100,INR,https://images.sample/huda_soft.jpg,https://www.nykaa.com/blu12
+BLU-0013,blush,Swiss Beauty,Matte Blusher,Rosy Brown,220,INR,https://images.sample/swiss_rosy.jpg,https://www.nykaa.com/blu13
+BLU-0014,blush,Insight,Velvet Blush,Shade 08,149,INR,https://images.sample/insight_velvet.jpg,https://www.nykaa.com/blu14
+BLU-0015,blush,Lakme,Enrich Blush,Raspberry,350,INR,https://images.sample/lakme_raspberry.jpg,https://www.nykaa.com/blu15
+BLU-0016,blush,Maybelline,Cheek Heat Liquid Blush,Rose Flush,650,INR,https://images.sample/mayb_cheekheat.jpg,https://www.nykaa.com/blu16
+BLU-0017,blush,L'Oreal,Infallible Blush Paint,Coral,950,INR,https://images.sample/loreal_infallible.jpg,https://www.nykaa.com/blu17
+BLU-0018,blush,MAC,Extra Dimension Blush,Fairly Precious,3100,INR,https://images.sample/mac_fairly.jpg,https://www.nykaa.com/blu18
+BLU-0019,blush,Swiss Beauty,Glow Blusher,Peach Glow,249,INR,https://images.sample/swiss_peachglow.jpg,https://www.nykaa.com/blu19
+BLU-0020,blush,Insight,Soft Touch Blush,Shade 15,170,INR,https://images.sample/insight_soft.jpg,https://www.nykaa.com/blu20
+
+MSC-0001,mascara,Maybelline,Colossal Volume Express,Black,499,INR,https://images.sample/colossal.jpg,https://www.nykaa.com/msc1
+MSC-0002,mascara,L'Oreal,Paradise Extatic,Black,799,INR,https://images.sample/paradise.jpg,https://www.nykaa.com/msc2
+MSC-0003,mascara,MAC,In Extreme Dimension,Black,2400,INR,https://images.sample/mac_masc.jpg,https://www.nykaa.com/msc3
+MSC-0004,mascara,Huda Beauty,Legit Lashes,Black,2800,INR,https://images.sample/huda_legit.jpg,https://www.nykaa.com/msc4
+MSC-0005,mascara,Swiss Beauty,Lash Volume Mascara,Black,199,INR,https://images.sample/swiss_masc.jpg,https://www.nykaa.com/msc5
+MSC-0006,mascara,Insight,Pro Volume Mascara,Black,150,INR,,

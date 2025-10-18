@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Admin - SkinNova{% endblock %}
+{% block content %}
+<style>
+  .admin-wrap{display:grid;grid-template-columns:260px 1fr;gap:1rem}
+  .admin-sidebar{background:#ffe4ec;border:1px solid #ffd1e0;border-radius:12px;padding:1rem;position:sticky;top:80px;height:fit-content}
+  .admin-sidebar h3{color:#d63384;margin-bottom:0.75rem}
+  .admin-nav a{display:block;padding:0.5rem 0.75rem;border-radius:8px;color:#b10e52;text-decoration:none}
+  .admin-nav a.active,.admin-nav a:hover{background:#ffd7e6}
+  .admin-main{background:#fff;border:1px solid #f3c2d3;border-radius:12px;padding:1rem}
+  .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem .9rem;border-radius:10px;border:1px solid #f3c2d3;background:#ffedf3;color:#b10e52;text-decoration:none}
+  .btn.primary{background:#ff7fb0;color:#fff;border-color:#ff69a6}
+  .btn.danger{background:#ffb3c9;border-color:#ff8fb2;color:#7a0f37}
+  .grid{display:grid;gap:1rem}
+  .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  @media(max-width:900px){.admin-wrap{grid-template-columns:1fr}}
+  table.product-table{width:100%;border-collapse:separate;border-spacing:0 8px}
+  table.product-table th,table.product-table td{padding:.6rem .75rem;background:#fff}
+  table.product-table th{background:#ffe9f1;color:#7a0f37}
+  table.product-table tr{border:1px solid #f3c2d3}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+  .form-row.single{grid-template-columns:1fr}
+  .input{width:100%;padding:.55rem .7rem;border:1px solid #f3c2d3;border-radius:10px}
+  .label{font-weight:600;color:#7a0f37;margin-bottom:.25rem}
+  .card{border:1px solid #f3c2d3;border-radius:12px;padding:1rem;background:#fff}
+</style>
+<div class="admin-wrap">
+  <aside class="admin-sidebar">
+    <h3>Admin Panel</h3>
+    <div class="admin-nav">
+      <a href="{{ url_for('admin_dashboard') }}" class="{% if request.path=='/admin' %}active{% endif %}">Overview</a>
+      <a href="{{ url_for('admin_products') }}" class="{% if request.path.startswith('/admin/products') %}active{% endif %}">Products</a>
+      <a href="{{ url_for('admin_reviews') }}" class="{% if request.path.startswith('/admin/reviews') %}active{% endif %}">Reviews</a>
+      <a href="{{ url_for('admin_rules') }}" class="{% if request.path.startswith('/admin/rules') %}active{% endif %}">Recommendation Rules</a>
+      <a href="{{ url_for('admin_blog_list') }}" class="{% if request.path.startswith('/admin/blog') %}active{% endif %}">Blog</a>
+      <a href="{{ url_for('admin_settings') }}" class="{% if request.path.startswith('/admin/settings') %}active{% endif %}">Site Settings</a>
+    </div>
+    <hr>
+    <div class="grid">
+      <a class="btn" href="{{ url_for('index') }}">View Site</a>
+      <a class="btn" href="{{ url_for('logout') }}">Logout</a>
+    </div>
+  </aside>
+  <main class="admin-main">
+    {% block admin_content %}{% endblock %}
+  </main>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}User Login - SkinNova{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="auth-icon"><i class="fas fa-user"></i></div>
+      <h1>User Login</h1>
+      <p>Sign in to your SkinNova account</p>
+    </div>
+    <form method="POST" class="auth-form">
+      <div class="form-group">
+        <label for="username" class="form-label"><i class="fas fa-user"></i> Username</label>
+        <input type="text" id="username" name="username" class="input-modern" placeholder="Enter your username" required>
+      </div>
+      <div class="form-group">
+        <label for="password" class="form-label"><i class="fas fa-lock"></i> Password</label>
+        <input type="password" id="password" name="password" class="input-modern" placeholder="Enter your password" required>
+      </div>
+      <button type="submit" class="btn-modern btn-full"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+    </form>
+    <div class="auth-footer">
+      <p>Admin? <a href="{{ url_for('login_admin') }}">Go to Admin Login</a></p>
+      <p>New user? <a href="{{ url_for('register') }}">Create an account</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,323 @@
+[
+  {
+    "id": 1,
+    "name": "Hyaluronic Acid Hydrating Serum",
+    "brand": "The Ordinary",
+    "category": "Serum",
+    "price": 6.8,
+    "rating": 4.5,
+    "description": "Intense hydration serum with hyaluronic acid for plump, dewy skin. Perfect for all skin types.",
+    "ingredients": [
+      "Hyaluronic Acid",
+      "Vitamin B5",
+      "Glycerin",
+      "Sodium Hyaluronate"
+    ],
+    "skin_types": [
+      "Dry",
+      "Normal",
+      "Combination",
+      "Sensitive"
+    ],
+    "concerns": [
+      "Dehydration",
+      "Fine Lines",
+      "Dullness",
+      "Dryness"
+    ],
+    "image_url": "https://images.unsplash.com/photo-1556228720-195a672e8a18?w=400&h=400&fit=crop",
+    "availability": "In Stock",
+    "size": "30ml",
+    "cruelty_free": true,
+    "vegan": true,
+    "source": "Mock Data"
+  },
+  {
+    "id": 2,
+    "name": "Niacinamide 10% + Zinc 1%",
+    "brand": "The Ordinary",
+    "category": "Serum",
+    "price": 5.9,
+    "rating": 4.3,
+    "description": "Oil control and pore-minimizing serum with niacinamide and zinc. Reduces blemishes and improves skin texture.",
+    "ingredients": [
+      "Niacinamide",
+      "Zinc PCA",
+      "Hyaluronic Acid",
+      "Dimethicone"
+    ],
+    "skin_types": [
+      "Oily",
+      "Combination",
+      "Normal"
+    ],
+    "concerns": [
+      "Large Pores",
+      "Oiliness",
+      "Acne",
+      "Blemishes"
+    ],
+    "image_url": "https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=400&h=400&fit=crop",
+    "availability": "In Stock",
+    "size": "30ml",
+    "cruelty_free": true,
+    "vegan": true,
+    "source": "Mock Data"
+  },
+  {
+    "id": 3,
+    "name": "Retinol 0.5% in Squalane",
+    "brand": "The Ordinary",
+    "category": "Treatment",
+    "price": 7.2,
+    "rating": 4.2,
+    "description": "Anti-aging treatment with retinol in squalane for smoother, firmer skin. Reduces fine lines and wrinkles.",
+    "ingredients": [
+      "Retinol",
+      "Squalane",
+      "Vitamin E",
+      "Tocopherol"
+    ],
+    "skin_types": [
+      "Normal",
+      "Dry",
+      "Combination"
+    ],
+    "concerns": [
+      "Fine Lines",
+      "Wrinkles",
+      "Uneven Texture",
+      "Aging"
+    ],
+    "image_url": "https://images.unsplash.com/photo-1599305445771-b0be54c8c7e8?w=400&h=400&fit=crop",
+    "availability": "In Stock",
+    "size": "30ml",
+    "cruelty_free": true,
+    "vegan": true,
+    "source": "Mock Data"
+  },
+  {
+    "id": 4,
+    "name": "Vitamin C Suspension 23% + HA Spheres 2%",
+    "brand": "The Ordinary",
+    "category": "Serum",
+    "price": 5.5,
+    "rating": 4.0,
+    "description": "High-potency vitamin C serum for brightening and anti-aging. Improves skin tone and reduces dark spots.",
+    "ingredients": [
+      "Ascorbic Acid",
+      "Hyaluronic Acid",
+      "Vitamin E",
+      "Sodium Hyaluronate"
+    ],
+    "skin_types": [
+      "Normal",
+      "Dry",
+      "Combination"
+    ],
+    "concerns": [
+      "Dark Spots",
+      "Dullness",
+      "Uneven Tone",
+      "Aging"
+    ],
+    "image_url": "https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=400&h=400&fit=crop",
+    "availability": "In Stock",
+    "size": "30ml",
+    "cruelty_free": true,
+    "vegan": true,
+    "source": "Mock Data"
+  },
+  {
+    "id": 5,
+    "name": "Gentle Cleansing Foam",
+    "brand": "CeraVe",
+    "category": "Cleanser",
+    "price": 12.99,
+    "rating": 4.6,
+    "description": "Gentle foaming cleanser with ceramides and hyaluronic acid. Removes makeup and impurities without stripping skin.",
+    "ingredients": [
+      "Ceramides",
+      "Hyaluronic Acid",
+      "Niacinamide",
+      "Glycerin"
+    ],
+    "skin_types": [
+      "Normal",
+      "Dry",
+      "Sensitive"
+    ],
+    "concerns": [
+      "Sensitivity",
+      "Dehydration",
+      "Barrier Repair",
+      "Dryness"
+    ],
+    "image_url": "https://images.unsplash.com/photo-1556228720-195a672e8a18?w=400&h=400&fit=crop",
+    "availability": "In Stock",
+    "size": "236ml",
+    "cruelty_free": false,
+    "vegan": false,
+    "source": "Mock Data"
+  },
+  {
+    "id": 6,
+    "name": "Daily Moisturizing Lotion",
+    "brand": "CeraVe",
+    "category": "Moisturizer",
+    "price": 15.99,
+    "rating": 4.4,
+    "description": "Lightweight daily moisturizer with ceramides and hyaluronic acid. Provides 24-hour hydration for all skin types.",
+    "ingredients": [
+      "Ceramides",
+      "Hyaluronic Acid",
+      "MVE Technology",
+      "Glycerin"
+    ],
+    "skin_types": [
+      "Normal",
+      "Dry",
+      "Combination"
+    ],
+    "concerns": [
+      "Dehydration",
+      "Barrier Repair",
+      "Dryness",
+      "Sensitivity"
+    ],
+    "image_url": "https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=400&h=400&fit=crop",
+    "availability": "In Stock",
+    "size": "355ml",
+    "cruelty_free": false,
+    "vegan": false,
+    "source": "Mock Data"
+  },
+  {
+    "id": 7,
+    "name": "SPF 30 Daily Facial Sunscreen",
+    "brand": "EltaMD",
+    "category": "Sunscreen",
+    "price": 32.0,
+    "rating": 4.7,
+    "description": "Broad-spectrum mineral sunscreen for daily protection. Lightweight, non-greasy formula suitable for sensitive skin.",
+    "ingredients": [
+      "Zinc Oxide",
+      "Octinoxate",
+      "Hyaluronic Acid",
+      "Vitamin E"
+    ],
+    "skin_types": [
+      "Normal",
+      "Dry",
+      "Sensitive"
+    ],
+    "concerns": [
+      "Sun Protection",
+      "Anti-Aging",
+      "Sensitivity",
+      "UV Damage"
+    ],
+    "image_url": "https://images.unsplash.com/photo-1599305445771-b0be54c8c7e8?w=400&h=400&fit=crop",
+    "availability": "In Stock",
+    "size": "85g",
+    "cruelty_free": true,
+    "vegan": false,
+    "source": "Mock Data"
+  },
+  {
+    "id": 8,
+    "name": "AHA 30% + BHA 2% Peeling Solution",
+    "brand": "The Ordinary",
+    "category": "Treatment",
+    "price": 7.2,
+    "rating": 4.1,
+    "description": "Weekly exfoliating treatment with AHA and BHA acids. Improves skin texture and reduces blemishes.",
+    "ingredients": [
+      "Glycolic Acid",
+      "Salicylic Acid",
+      "Tasmanian Pepperberry",
+      "Hyaluronic Acid"
+    ],
+    "skin_types": [
+      "Normal",
+      "Oily",
+      "Combination"
+    ],
+    "concerns": [
+      "Texture",
+      "Acne",
+      "Dark Spots",
+      "Blemishes"
+    ],
+    "image_url": "https://images.unsplash.com/photo-1556228720-195a672e8a18?w=400&h=400&fit=crop",
+    "availability": "In Stock",
+    "size": "30ml",
+    "cruelty_free": true,
+    "vegan": true,
+    "source": "Mock Data"
+  },
+  {
+    "id": 9,
+    "name": "Rose Water Facial Toner",
+    "brand": "Heritage Store",
+    "category": "Toner",
+    "price": 8.99,
+    "rating": 4.3,
+    "description": "Pure rose water toner that hydrates and refreshes skin. Natural astringent properties help tighten pores.",
+    "ingredients": [
+      "Rose Water",
+      "Glycerin",
+      "Natural Fragrance",
+      "Water"
+    ],
+    "skin_types": [
+      "Normal",
+      "Dry",
+      "Sensitive"
+    ],
+    "concerns": [
+      "Hydration",
+      "Pore Tightening",
+      "Sensitivity",
+      "Refreshment"
+    ],
+    "image_url": "https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=400&h=400&fit=crop",
+    "availability": "In Stock",
+    "size": "240ml",
+    "cruelty_free": true,
+    "vegan": true,
+    "source": "Mock Data"
+  },
+  {
+    "id": 10,
+    "name": "Overnight Hydrating Mask",
+    "brand": "Laneige",
+    "category": "Treatment",
+    "price": 25.0,
+    "rating": 4.5,
+    "description": "Overnight hydrating mask that provides intense moisture while you sleep. Wake up to plump, glowing skin.",
+    "ingredients": [
+      "Hyaluronic Acid",
+      "Moisture Wrap Technology",
+      "Ceramides",
+      "Vitamin E"
+    ],
+    "skin_types": [
+      "Dry",
+      "Normal",
+      "Combination"
+    ],
+    "concerns": [
+      "Dehydration",
+      "Dullness",
+      "Dryness",
+      "Lack of Glow"
+    ],
+    "image_url": "https://images.unsplash.com/photo-1599305445771-b0be54c8c7e8?w=400&h=400&fit=crop",
+    "availability": "In Stock",
+    "size": "80ml",
+    "cruelty_free": false,
+    "vegan": false,
+    "source": "Mock Data"
+  }
+]

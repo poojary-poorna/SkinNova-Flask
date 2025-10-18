@@ -1,0 +1,392 @@
+{% extends "base.html" %}
+
+{% block title %}Skin Assessment Quiz - SkinNova{% endblock %}
+
+{% block content %}
+<div class="quiz-container">
+    <div class="quiz-header text-center">
+        <h1><i class="fas fa-clipboard-question"></i> Skin Assessment Quiz</h1>
+        <p>Answer these questions to get personalized skincare recommendations tailored to your unique skin profile.</p>
+    </div>
+    
+    <form method="POST" class="quiz-form">
+        <!-- Question 1: Skin Type -->
+        <div class="quiz-question" data-required="true">
+            <h3>What is your skin type?</h3>
+            <p class="question-description">Choose the option that best describes your skin throughout most of the day.</p>
+            
+            <div class="quiz-options">
+                <label class="quiz-option" for="oily">
+                    <input type="radio" id="oily" name="skin_type" value="oily">
+                    <div class="option-content">
+                        <strong>Oily</strong>
+                        <p>Shiny, enlarged pores, prone to breakouts</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="dry">
+                    <input type="radio" id="dry" name="skin_type" value="dry">
+                    <div class="option-content">
+                        <strong>Dry</strong>
+                        <p>Tight feeling, flaky, sometimes irritated</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="combination">
+                    <input type="radio" id="combination" name="skin_type" value="combination">
+                    <div class="option-content">
+                        <strong>Combination</strong>
+                        <p>Oily T-zone (forehead, nose, chin), dry cheeks</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="normal">
+                    <input type="radio" id="normal" name="skin_type" value="normal">
+                    <div class="option-content">
+                        <strong>Normal</strong>
+                        <p>Balanced, not too oily or dry, few imperfections</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="sensitive">
+                    <input type="radio" id="sensitive" name="skin_type" value="sensitive">
+                    <div class="option-content">
+                        <strong>Sensitive</strong>
+                        <p>Easily irritated, reactive to products, redness-prone</p>
+                    </div>
+                </label>
+            </div>
+        </div>
+        
+        <!-- Question 2: Skin Concerns -->
+        <div class="quiz-question">
+            <h3>What are your main skin concerns? (Select all that apply)</h3>
+            <p class="question-description">Choose the concerns you'd most like to address with your skincare routine.</p>
+            
+            <div class="quiz-options">
+                <label class="quiz-option" for="acne">
+                    <input type="checkbox" id="acne" name="skin_concerns" value="acne">
+                    <div class="option-content">
+                        <strong>Acne & Breakouts</strong>
+                        <p>Pimples, blackheads, whiteheads</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="dullness">
+                    <input type="checkbox" id="dullness" name="skin_concerns" value="dullness">
+                    <div class="option-content">
+                        <strong>Dullness</strong>
+                        <p>Lack of radiance, tired-looking skin</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="pigmentation">
+                    <input type="checkbox" id="pigmentation" name="skin_concerns" value="pigmentation">
+                    <div class="option-content">
+                        <strong>Dark Spots & Pigmentation</strong>
+                        <p>Uneven skin tone, post-acne marks</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="aging">
+                    <input type="checkbox" id="aging" name="skin_concerns" value="aging">
+                    <div class="option-content">
+                        <strong>Fine Lines & Aging</strong>
+                        <p>Wrinkles, loss of firmness</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="enlarged-pores">
+                    <input type="checkbox" id="enlarged-pores" name="skin_concerns" value="enlarged-pores">
+                    <div class="option-content">
+                        <strong>Enlarged Pores</strong>
+                        <p>Visible pores, rough texture</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="sensitivity">
+                    <input type="checkbox" id="sensitivity" name="skin_concerns" value="sensitivity">
+                    <div class="option-content">
+                        <strong>Sensitivity & Redness</strong>
+                        <p>Irritation, inflammation, rosacea</p>
+                    </div>
+                </label>
+            </div>
+        </div>
+        
+        <!-- Question 3: Preferences -->
+        <div class="quiz-question">
+            <h3>What are your skincare preferences? (Select all that apply)</h3>
+            <p class="question-description">Help us understand your routine and product preferences.</p>
+            
+            <div class="quiz-options">
+                <label class="quiz-option" for="natural">
+                    <input type="checkbox" id="natural" name="preferences" value="natural">
+                    <div class="option-content">
+                        <strong>Natural Ingredients</strong>
+                        <p>Prefer plant-based, organic formulas</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="fragrance-free">
+                    <input type="checkbox" id="fragrance-free" name="preferences" value="fragrance-free">
+                    <div class="option-content">
+                        <strong>Fragrance-Free</strong>
+                        <p>No added fragrances or strong scents</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="budget-friendly">
+                    <input type="checkbox" id="budget-friendly" name="preferences" value="budget-friendly">
+                    <div class="option-content">
+                        <strong>Budget-Friendly</strong>
+                        <p>Affordable options under $30</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="k-beauty">
+                    <input type="checkbox" id="k-beauty" name="preferences" value="k-beauty">
+                    <div class="option-content">
+                        <strong>K-Beauty</strong>
+                        <p>Korean skincare products and routines</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="minimal-routine">
+                    <input type="checkbox" id="minimal-routine" name="preferences" value="minimal-routine">
+                    <div class="option-content">
+                        <strong>Minimal Routine</strong>
+                        <p>Simple, few-step skincare routine</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="anti-aging">
+                    <input type="checkbox" id="anti-aging" name="preferences" value="anti-aging">
+                    <div class="option-content">
+                        <strong>Anti-Aging Focus</strong>
+                        <p>Retinoids, peptides, advanced formulas</p>
+                    </div>
+                </label>
+            </div>
+        </div>
+        
+        <div class="quiz-actions">
+            <button type="submit" class="btn btn-primary btn-large">
+                <i class="fas fa-magic"></i> Get My Recommendations
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+.quiz-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.quiz-header {
+    margin-bottom: 3rem;
+}
+
+.quiz-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.quiz-header p {
+    font-size: 1.1rem;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.quiz-question {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+}
+
+.quiz-question h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+}
+
+.question-description {
+    color: #666;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+}
+
+.quiz-options {
+    display: grid;
+    gap: 1rem;
+}
+
+.quiz-option {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.quiz-option:hover {
+    border-color: var(--primary);
+    background: rgba(233, 30, 99, 0.02);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(233, 30, 99, 0.1);
+}
+
+.quiz-option input {
+    margin-right: 1rem;
+    width: 20px;
+    height: 20px;
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+
+.option-content {
+    flex: 1;
+}
+
+.option-content strong {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: var(--dark);
+    font-weight: 600;
+}
+
+.option-content p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.quiz-option.selected {
+    border-color: var(--primary);
+    background: rgba(233, 30, 99, 0.05);
+    box-shadow: 0 4px 15px rgba(233, 30, 99, 0.15);
+}
+
+.quiz-actions {
+    text-align: center;
+    margin-top: 3rem;
+}
+
+.btn-large {
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .quiz-header h1 {
+        font-size: 2rem;
+    }
+    
+    .quiz-question {
+        padding: 2rem 1.5rem;
+    }
+    
+    .quiz-option {
+        padding: 1rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+    
+    .quiz-option input {
+        margin-right: 0;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Progress indicator */
+.quiz-progress {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.progress-step {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0.5rem;
+    font-weight: 600;
+    color: #666;
+}
+
+.progress-step.active {
+    background: var(--primary);
+    color: white;
+}
+
+.progress-step.completed {
+    background: var(--success);
+    color: white;
+}
+</style>
+
+{% block extra_scripts %}
+<script>
+// Add progress indicator
+document.addEventListener('DOMContentLoaded', function() {
+    // Create progress indicator
+    const progressHtml = `
+        <div class="quiz-progress">
+            <div class="progress-step active">1</div>
+            <div class="progress-step">2</div>
+            <div class="progress-step">3</div>
+        </div>
+    `;
+    
+    const quizHeader = document.querySelector('.quiz-header');
+    quizHeader.insertAdjacentHTML('afterend', progressHtml);
+    
+    // Update progress based on completed questions
+    function updateProgress() {
+        const questions = document.querySelectorAll('.quiz-question[data-required="true"]');
+        const steps = document.querySelectorAll('.progress-step');
+        let completedSteps = 0;
+        
+        questions.forEach((question, index) => {
+            const inputs = question.querySelectorAll('input');
+            let hasAnswer = false;
+            
+            inputs.forEach(input => {
+                if (input.checked) {
+                    hasAnswer = true;
+                }
+            });
+            
+            if (hasAnswer && steps[index]) {
+                steps[index].classList.add('completed');
+                steps[index].classList.remove('active');
+                completedSteps = index + 1;
+            }
+        });
+        
+        // Set next step as active
+        if (steps[completedSteps]) {
+            steps[completedSteps].classList.add('active');
+        }
+    }
+    
+    // Listen for changes
+    document.addEventListener('change', updateProgress);
+    updateProgress(); // Initial check
+});
+</script>
+{% endblock %}
+{% endblock %}

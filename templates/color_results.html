@@ -1,0 +1,539 @@
+{% extends "base.html" %}
+
+{% block title %}Your Color Analysis Results - SkinNova{% endblock %}
+
+{% block content %}
+<div class="results-container">
+    <div class="results-header text-center">
+        <h1><i class="fas fa-palette"></i> Your Perfect Color Palette</h1>
+        <p>Discover the colors that make you look radiant and confident</p>
+        
+        <div class="season-badge {{ results.season }}-season">
+            <i class="fas fa-star"></i>
+            You are a {{ results.season.title() }} Season!
+        </div>
+    </div>
+
+    <!-- Season Description -->
+    <div class="season-description card">
+        <div class="card-header">
+            <h2><i class="fas fa-info-circle"></i> About {{ results.season.title() }} Seasons</h2>
+        </div>
+        
+        <div class="season-content">
+            {% if results.season == 'warm' %}
+                <div class="season-info">
+                    <div class="season-swatch warm-gradient"></div>
+                    <div class="season-text">
+                        <h3>Warm Season Characteristics</h3>
+                        <p>You have golden, yellow, or peachy undertones that are enhanced by warm colors. Your natural beauty shines when you wear colors that echo the warmth in your complexion.</p>
+                        <ul>
+                            <li>✨ Golden or yellow undertones in skin</li>
+                            <li>🌟 Hair with warm tones (golden, auburn, warm brown)</li>
+                            <li>👁️ Eyes that are brown, amber, green, or warm hazel</li>
+                            <li>💍 Look best in gold jewelry</li>
+                        </ul>
+                    </div>
+                </div>
+            {% elif results.season == 'cool' %}
+                <div class="season-info">
+                    <div class="season-swatch cool-gradient"></div>
+                    <div class="season-text">
+                        <h3>Cool Season Characteristics</h3>
+                        <p>You have pink, red, or blue undertones that are complemented by cool colors. Cool colors make your skin look clear and vibrant.</p>
+                        <ul>
+                            <li>✨ Pink, red, or blue undertones in skin</li>
+                            <li>🌟 Hair with cool tones (ash blonde, cool brown, black)</li>
+                            <li>👁️ Eyes that are blue, grey, green, or cool hazel</li>
+                            <li>💍 Look best in silver jewelry</li>
+                        </ul>
+                    </div>
+                </div>
+            {% else %}
+                <div class="season-info">
+                    <div class="season-swatch neutral-gradient"></div>
+                    <div class="season-text">
+                        <h3>Neutral Season Characteristics</h3>
+                        <p>You have balanced undertones that work beautifully with both warm and cool colors. You're versatile and can wear a wide range of colors successfully.</p>
+                        <ul>
+                            <li>✨ Balanced undertones - neither strongly warm nor cool</li>
+                            <li>🌟 Hair in neutral tones (medium brown, dark blonde)</li>
+                            <li>👁️ Eyes in soft, mixed tones</li>
+                            <li>💍 Look good in both gold and silver jewelry</li>
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Your Perfect Colors -->
+    <div class="perfect-colors card">
+        <div class="card-header">
+            <h2><i class="fas fa-heart"></i> Your Perfect Colors</h2>
+        </div>
+        
+        <p class="section-intro">These colors will make you look healthy, vibrant, and radiant:</p>
+        
+        <div class="color-palette-grid">
+            {% for color in results.colors %}
+                <div class="color-card">
+                    <div class="color-circle" style="background: {{ color|lower|replace(' ', '')|replace('olive green', '#6B8E23')|replace('rust', '#B7410E')|replace('cream', '#FFFDD0')|replace('coral', '#FF7F50')|replace('peach', '#FFCBA4')|replace('gold', '#FFD700')|replace('navy blue', '#000080')|replace('silver', '#C0C0C0')|replace('pure white', '#FFFFFF')|replace('emerald', '#50C878')|replace('fuchsia', '#FF00FF')|replace('black', '#000000')|replace('soft pink', '#F8BBD0')|replace('grey', '#808080')|replace('beige', '#F5F5DC')|replace('lavender', '#E6E6FA')|replace('sage green', '#9CAF88')|replace('dusty blue', '#6B8CAE') }}"></div>
+                    <div class="color-name">{{ color }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Colors to Avoid -->
+    <div class="avoid-colors card">
+        <div class="card-header">
+            <h2><i class="fas fa-times-circle"></i> Colors to Avoid</h2>
+        </div>
+        
+        <p class="section-intro">These colors may wash you out or make you look tired:</p>
+        
+        <div class="avoid-colors-list">
+            {% for color in results.avoid %}
+                <div class="avoid-color-item">
+                    <i class="fas fa-ban"></i>
+                    <span>{{ color }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Wardrobe Recommendations -->
+    <div class="wardrobe-guide card">
+        <div class="card-header">
+            <h2><i class="fas fa-tshirt"></i> Wardrobe & Styling Guide</h2>
+        </div>
+        
+        <div class="wardrobe-sections">
+            <div class="wardrobe-section">
+                <h3><i class="fas fa-business-time"></i> Professional Wardrobe</h3>
+                {% if results.season == 'warm' %}
+                    <p>Build your professional wardrobe around warm neutrals like cream, camel, and warm grey. Add pops of color with coral blazers or golden accessories.</p>
+                    <div class="recommendation-tags">
+                        <span class="tag">Cream blazers</span>
+                        <span class="tag">Camel coats</span>
+                        <span class="tag">Warm grey suits</span>
+                        <span class="tag">Gold accessories</span>
+                    </div>
+                {% elif results.season == 'cool' %}
+                    <p>Your professional wardrobe shines with cool colors like navy, charcoal, and pure white. Add interest with jewel tones and silver details.</p>
+                    <div class="recommendation-tags">
+                        <span class="tag">Navy suits</span>
+                        <span class="tag">Charcoal blazers</span>
+                        <span class="tag">Crisp white shirts</span>
+                        <span class="tag">Silver accessories</span>
+                    </div>
+                {% else %}
+                    <p>You have the flexibility to wear both warm and cool professional colors. Focus on muted, sophisticated tones for the most flattering look.</p>
+                    <div class="recommendation-tags">
+                        <span class="tag">Soft grey suits</span>
+                        <span class="tag">Taupe blazers</span>
+                        <span class="tag">Off-white shirts</span>
+                        <span class="tag">Mixed metal accessories</span>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="wardrobe-section">
+                <h3><i class="fas fa-cocktail"></i> Evening & Special Occasions</h3>
+                {% if results.season == 'warm' %}
+                    <p>Make a statement in rich, warm colors. Think deep corals, golden yellows, and warm reds that complement your natural glow.</p>
+                    <div class="recommendation-tags">
+                        <span class="tag">Coral gowns</span>
+                        <span class="tag">Golden dresses</span>
+                        <span class="tag">Warm emerald</span>
+                        <span class="tag">Bronze details</span>
+                    </div>
+                {% elif results.season == 'cool' %}
+                    <p>Jewel tones are your best friend for special occasions. Rich purples, emerald greens, and sapphire blues will make you shine.</p>
+                    <div class="recommendation-tags">
+                        <span class="tag">Jewel tone gowns</span>
+                        <span class="tag">Royal blue</span>
+                        <span class="tag">Emerald green</span>
+                        <span class="tag">Deep purple</span>
+                    </div>
+                {% else %}
+                    <p>Choose sophisticated, muted tones for evening wear. Dusty rose, sage green, and soft lavender create an elegant, refined look.</p>
+                    <div class="recommendation-tags">
+                        <span class="tag">Dusty rose</span>
+                        <span class="tag">Sage green</span>
+                        <span class="tag">Soft lavender</span>
+                        <span class="tag">Muted navy</span>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="wardrobe-section">
+                <h3><i class="fas fa-sun"></i> Casual & Weekend</h3>
+                {% if results.season == 'warm' %}
+                    <p>Embrace earthy, warm tones for your casual wardrobe. Rust, olive green, and golden yellows will keep you looking fresh and natural.</p>
+                    <div class="recommendation-tags">
+                        <span class="tag">Olive green</span>
+                        <span class="tag">Rust orange</span>
+                        <span class="tag">Warm denim</span>
+                        <span class="tag">Camel accessories</span>
+                    </div>
+                {% elif results.season == 'cool' %}
+                    <p>Cool, fresh colors work perfectly for casual wear. Think navy, cool greys, and bright whites for a clean, polished casual look.</p>
+                    <div class="recommendation-tags">
+                        <span class="tag">Cool denim</span>
+                        <span class="tag">Navy stripes</span>
+                        <span class="tag">Cool grey</span>
+                        <span class="tag">Bright white tees</span>
+                    </div>
+                {% else %}
+                    <p>Mix and match both warm and cool casual pieces. Soft, muted colors in comfortable fabrics will create effortless, put-together looks.</p>
+                    <div class="recommendation-tags">
+                        <span class="tag">Soft pastels</span>
+                        <span class="tag">Muted prints</span>
+                        <span class="tag">Neutral basics</span>
+                        <span class="tag">Versatile layers</span>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Items -->
+    <div class="action-items card">
+        <div class="card-header">
+            <h2><i class="fas fa-tasks"></i> Your Color Action Plan</h2>
+        </div>
+        
+        <div class="action-steps">
+            <div class="action-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Audit Your Closet</h4>
+                    <p>Go through your wardrobe and identify pieces in your perfect colors. These should become your go-to items.</p>
+                </div>
+            </div>
+            
+            <div class="action-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>Build Your Color Foundation</h4>
+                    <p>Invest in quality basics in your best neutral colors. These will be the foundation of countless outfits.</p>
+                </div>
+            </div>
+            
+            <div class="action-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>Add Strategic Color</h4>
+                    <p>Introduce your perfect colors through accessories, scarves, and statement pieces that can transform neutral outfits.</p>
+                </div>
+            </div>
+            
+            <div class="action-step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>Update Your Makeup</h4>
+                    <p>Choose makeup colors that harmonize with your color palette for a cohesive, polished look.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Results -->
+    <div class="share-results text-center">
+        <h3>Love your results?</h3>
+        <p>Save this page and share your color palette with friends!</p>
+        <div class="share-actions">
+            <button class="btn btn-primary" onclick="window.print()">
+                <i class="fas fa-print"></i> Print Results
+            </button>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+.results-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.results-header {
+    margin-bottom: 3rem;
+}
+
+.results-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.season-badge {
+    display: inline-block;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: white;
+    margin-top: 1rem;
+    box-shadow: var(--shadow);
+}
+
+.warm-season {
+    background: linear-gradient(45deg, #FF6B35, #DAA520);
+}
+
+.cool-season {
+    background: linear-gradient(45deg, #4169E1, #9370DB);
+}
+
+.neutral-season {
+    background: linear-gradient(45deg, #D2B48C, #DDA0DD);
+}
+
+.season-info {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.season-swatch {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    box-shadow: var(--shadow);
+    flex-shrink: 0;
+}
+
+.warm-gradient {
+    background: linear-gradient(45deg, #FF6B35, #DAA520, #F4A460, #CD853F);
+}
+
+.cool-gradient {
+    background: linear-gradient(45deg, #4169E1, #9370DB, #DC143C, #00CED1);
+}
+
+.neutral-gradient {
+    background: linear-gradient(45deg, #D2B48C, #DDA0DD, #90EE90, #F0E68C);
+}
+
+.season-text h3 {
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.season-text ul {
+    margin-top: 1rem;
+    padding-left: 0;
+    list-style: none;
+}
+
+.season-text li {
+    margin-bottom: 0.5rem;
+    color: #666;
+}
+
+.section-intro {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.color-palette-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.color-card {
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.color-card:hover {
+    transform: translateY(-5px);
+}
+
+.color-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    border: 3px solid white;
+}
+
+.color-name {
+    font-weight: 600;
+    color: var(--dark);
+    font-size: 0.9rem;
+}
+
+.avoid-colors-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.avoid-color-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: rgba(244, 67, 54, 0.1);
+    border-radius: 8px;
+    color: var(--error);
+    font-weight: 500;
+}
+
+.wardrobe-sections {
+    display: grid;
+    gap: 2rem;
+}
+
+.wardrobe-section {
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.wardrobe-section h3 {
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.wardrobe-section p {
+    margin-bottom: 1rem;
+    color: #666;
+}
+
+.recommendation-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tag {
+    background: var(--primary);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.action-steps {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.action-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    background: var(--gradient-primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.step-content h4 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.step-content p {
+    color: #666;
+    margin: 0;
+}
+
+.share-results {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: rgba(233, 30, 99, 0.05);
+    border-radius: var(--border-radius);
+}
+
+.share-results h3 {
+    color: var(--primary);
+}
+
+.share-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+    .results-header h1 {
+        font-size: 2rem;
+    }
+    
+    .season-info {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .season-swatch {
+        margin: 0 auto 1rem;
+    }
+    
+    .color-palette-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .avoid-colors-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .recommendation-tags {
+        justify-content: center;
+    }
+    
+    .action-step {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .step-number {
+        margin: 0 auto 1rem;
+    }
+    
+    .share-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media print {
+    .navbar, .footer, .share-results {
+        display: none;
+    }
+    
+    .results-container {
+        max-width: none;
+        margin: 0;
+    }
+    
+    .card {
+        break-inside: avoid;
+        margin-bottom: 1rem;
+    }
+}
+</style>
+{% endblock %}

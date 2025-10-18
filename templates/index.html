@@ -1,0 +1,307 @@
+{% extends "base.html" %}
+
+{% block title %}SkinNova - Your Smart Beauty Assistant Platform{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content text-center">
+        <h1>Welcome to SkinNova</h1>
+        <p class="lead">Your personalized smart beauty assistant that provides tailored skincare and makeup recommendations based on your unique skin profile.</p>
+        
+        {% if not session.user_id %}
+            <div class="hero-actions">
+                <a href="{{ url_for('register') }}" class="btn btn-primary">Get Started</a>
+                {% if admin_setup_needed %}
+                    <a href="{{ url_for('setup_admin') }}" class="btn btn-outline"><i class="fas fa-key"></i> Setup Admin</a>
+                {% else %}
+                    <a href="{{ url_for('reset_admin_confirm') }}" class="btn btn-outline"><i class="fas fa-tools"></i> Reconfigure Admin</a>
+                {% endif %}
+                <a href="{{ url_for('login_user') }}" class="btn btn-outline"><i class="fas fa-user"></i> User Login</a>
+                <a href="{{ url_for('login_admin') }}" class="btn btn-outline"><i class="fas fa-user-shield"></i> Admin Login</a>
+            </div>
+        {% else %}
+            <div class="hero-actions">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Go to Dashboard</a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features">
+    <div class="container">
+        <h2 class="text-center mb-2">Discover Your Beauty Journey</h2>
+        <p class="text-center mb-2">Experience personalized beauty recommendations powered by smart technology</p>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-clipboard-question"></i>
+                </div>
+                <h3>Skin Assessment Quiz</h3>
+                <p>Take our comprehensive quiz to identify your skin type, concerns, and preferences for personalized skincare recommendations.</p>
+                {% if session.user_id %}
+                    <a href="{{ url_for('skin_quiz') }}" class="btn btn-outline">Take Quiz</a>
+                {% endif %}
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-palette"></i>
+                </div>
+                <h3>Makeup Recommendations</h3>
+                <p>Get tailored makeup suggestions for lipsticks, foundations, and eyeshadows based on your skin undertone.</p>
+                {% if session.user_id %}
+                    <a href="{{ url_for('makeup_quiz') }}" class="btn btn-outline">Explore Makeup</a>
+                {% endif %}
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-spa"></i>
+                </div>
+                <h3>Skincare Products</h3>
+                <p>Discover premium skincare products with real-time API integration, detailed ingredients, and personalized recommendations.</p>
+                <a href="{{ url_for('skincare_products') }}" class="btn btn-outline">Browse Products</a>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-eye-dropper"></i>
+                </div>
+                <h3>Color Analysis</h3>
+                <p>Discover which colors of clothing and jewelry enhance your natural beauty with our color analysis quiz.</p>
+                {% if session.user_id %}
+                    <a href="{{ url_for('color_analysis') }}" class="btn btn-outline">Analyze Colors</a>
+                {% endif %}
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-tags"></i>
+                </div>
+                <h3>Price Comparison</h3>
+                <p>Compare product prices across major e-commerce platforms like Amazon, Nykaa, and Sephora to find the best deals.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <h3>Find Dermatologists</h3>
+                <p>Locate nearby dermatologists using Google Maps integration for professional skincare consultation.</p>
+                {% if session.user_id %}
+                    <a href="{{ url_for('find_dermatologists') }}" class="btn btn-outline">Find Doctors</a>
+                {% endif %}
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-play-circle"></i>
+                </div>
+                <h3>Tutorial Videos</h3>
+                <p>Watch personalized YouTube tutorials based on your specific skin concerns and beauty goals.</p>
+                {% if session.user_id %}
+                    <a href="{{ url_for('tutorials') }}" class="btn btn-outline">Watch Tutorials</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-it-works">
+    <div class="container">
+        <h2 class="text-center mb-2">How SkinNova Works</h2>
+        
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <h3>Create Account</h3>
+                <p>Sign up for your free SkinNova account to get started with personalized beauty recommendations.</p>
+            </div>
+            
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <h3>Complete Assessments</h3>
+                <p>Take our skin assessment quiz and optional makeup and color analysis quizzes to build your profile.</p>
+            </div>
+            
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <h3>Get Recommendations</h3>
+                <p>Receive personalized product recommendations tailored to your unique skin type and preferences.</p>
+            </div>
+            
+            <div class="step-card">
+                <div class="step-number">4</div>
+                <h3>Shop Smart</h3>
+                <p>Compare prices across platforms and find the best deals on recommended products.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+{% if not session.user_id %}
+<section class="cta-section">
+    <div class="container text-center">
+        <h2>Ready to Transform Your Beauty Routine?</h2>
+        <p class="lead">Join thousands of users who have discovered their perfect beauty match with SkinNova.</p>
+        <a href="{{ url_for('register') }}" class="btn btn-primary">Start Your Journey</a>
+    </div>
+</section>
+{% endif %}
+
+<style>
+.hero {
+    padding: 4rem 0;
+    background: linear-gradient(135deg, rgba(255, 107, 157, 0.1) 0%, rgba(168, 230, 207, 0.1) 100%);
+    text-align: center;
+    border-radius: var(--border-radius);
+    margin: 1rem 0;
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.lead {
+    font-size: 1.25rem;
+    color: #666;
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.features {
+    padding: 4rem 0;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.feature-card {
+    background: var(--bg-secondary);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    text-align: center;
+    transition: transform 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.how-it-works {
+    padding: 4rem 0;
+    background: rgba(248, 249, 250, 0.5);
+}
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.step-card {
+    background: var(--bg-secondary);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    text-align: center;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.step-number {
+    width: 60px;
+    height: 60px;
+    background: var(--gradient-primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 auto 1.5rem;
+}
+
+.cta-section {
+    padding: 4rem 0;
+    background: var(--gradient-primary);
+    color: white;
+}
+
+.cta-section h2 {
+    color: white;
+}
+
+.cta-section .btn-primary {
+    background: white;
+    color: var(--primary);
+}
+
+.cta-section .btn-primary:hover {
+    background: #f8f9fa;
+    transform: translateY(-2px);
+}
+
+/* Dark theme specific styles for homepage */
+[data-theme="dark"] .hero {
+    background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(255, 0, 255, 0.1) 100%);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    box-shadow: 0 8px 30px rgba(0, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .how-it-works {
+    background: rgba(0, 255, 255, 0.05);
+    border: 1px solid rgba(0, 255, 255, 0.1);
+    border-radius: var(--border-radius);
+    margin: 1rem 0;
+}
+
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .steps-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .hero-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+</style>
+{% endblock %}

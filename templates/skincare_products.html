@@ -1,0 +1,2052 @@
+{% extends "base.html" %}
+
+{% block title %}Skincare Products - SkinNova{% endblock %}
+
+{% block content %}
+<style>
+  .skin-hero{background:linear-gradient(135deg,#ffe9f1,#fff);border:1px solid #f3c2d3;border-radius:16px;padding:1.2rem 1.4rem;margin:1rem 0}
+  .filters{display:flex;flex-wrap:wrap;gap:.6rem;align-items:end;margin:.6rem 0}
+  .filters .input,.filters select{padding:.6rem .7rem;border:1px solid #f3c2d3;border-radius:10px;min-width:180px}
+  .filters .btn{padding:.6rem 1rem;border-radius:10px;border:1px solid #f3c2d3;background:#ffedf3;color:#b10e52}
+  .filters .btn.primary{background:#ff7fb0;border-color:#ff69a6;color:#fff}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-top:1rem}
+  .card{background:#fff;border:1px solid #f3c2d3;border-radius:14px;box-shadow:0 6px 18px rgba(255,105,180,.12);padding:1rem}
+  .img{width:100%;height:220px;object-fit:cover;border-radius:10px;border:1px solid #ffd1e0}
+  .name{font-weight:700;color:#7a0f37;margin:.5rem 0}
+  .cat{font-size:.85rem;color:#b10e52}
+  .prices{width:100%;border-collapse:separate;border-spacing:0 6px;margin:.5rem 0}
+  .prices th,.prices td{padding:.35rem .5rem;background:#fff;border:1px solid #f3c2d3}
+  .prices th{background:#ffe9f1;color:#7a0f37}
+  .tag-low{display:inline-block;padding:.15rem .45rem;background:#ff7fb0;color:#fff;border-radius:999px;font-size:.72rem;margin-left:.3rem}
+  .btn-buy{display:inline-flex;align-items:center;gap:.3rem;padding:.4rem .7rem;border-radius:999px;border:1px solid #f3c2d3;background:#ffedf3;color:#b10e52;text-decoration:none}
+  .btn-buy.primary{background:#ff7fb0;border-color:#ff69a6;color:#fff}
+</style>
+
+<section class="skin-hero">
+  <h1 style="margin:0;color:#d63384">Skincare Products</h1>
+  <p style="margin:.3rem 0 0;color:#7a0f37">Search and filter, then compare prices across Amazon, Nykaa, and Flipkart.</p>
+</section>
+
+<form method="GET" class="filters">
+  <input class="input" type="text" name="q" placeholder="Search products, brands, or ingredients..." value="{{ q }}">
+  <select name="category">
+    <option value="">All Categories</option>
+    {% for c in categories %}
+      <option value="{{ c }}" {% if category==c %}selected{% endif %}>{{ c }}</option>
+    {% endfor %}
+  </select>
+  <select name="skin_type">
+    <option value="">All Skin Types</option>
+    <option value="oily" {% if skin_type=='oily' %}selected{% endif %}>Oily</option>
+    <option value="dry" {% if skin_type=='dry' %}selected{% endif %}>Dry</option>
+    <option value="combination" {% if skin_type=='combination' %}selected{% endif %}>Combination</option>
+    <option value="normal" {% if skin_type=='normal' %}selected{% endif %}>Normal</option>
+    <option value="sensitive" {% if skin_type=='sensitive' %}selected{% endif %}>Sensitive</option>
+  </select>
+  <select name="concern">
+    <option value="">All Concerns</option>
+    <option value="acne" {% if concern=='acne' %}selected{% endif %}>Acne</option>
+    <option value="aging" {% if concern=='aging' %}selected{% endif %}>Aging</option>
+    <option value="dark_spots" {% if concern=='dark_spots' %}selected{% endif %}>Dark Spots</option>
+    <option value="dullness" {% if concern=='dullness' %}selected{% endif %}>Dullness</option>
+  </select>
+  <select name="price">
+    <option value="">All Prices</option>
+    <option value="low" {% if price=='low' %}selected{% endif %}>Budget</option>
+    <option value="mid" {% if price=='mid' %}selected{% endif %}>Mid</option>
+    <option value="high" {% if price=='high' %}selected{% endif %}>Premium</option>
+  </select>
+  <button class="btn primary" type="submit">Filter</button>
+  <a class="btn" href="{{ url_for('skincare_products') }}">Clear</a>
+  <a class="btn" href="{{ url_for('oily_facewash_gallery') }}">Oily • Face Wash</a>
+  </form>
+
+<div class="grid">
+  {% for it in items %}
+    <div class="card">
+      <img class="img" src="{{ it.image_url }}" alt="{{ it.name }}">
+      <div class="name">{{ it.canonical }}</div>
+      <div class="cat">{{ it.category }}</div>
+      <table class="prices">
+        <thead>
+          <tr><th>Store</th><th>Price</th><th></th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Amazon</td>
+            <td>{% if it.prices.amazon %}₹{{ it.prices.amazon }}{% else %}—{% endif %}{% if it.lowest=='amazon' %}<span class="tag-low">Lowest</span>{% endif %}</td>
+            <td><a class="btn-buy primary" target="_blank" href="{{ it.links.amazon }}">Buy</a></td>
+          </tr>
+          <tr>
+            <td>Nykaa</td>
+            <td>{% if it.prices.nykaa %}₹{{ it.prices.nykaa }}{% else %}—{% endif %}{% if it.lowest=='nykaa' %}<span class="tag-low">Lowest</span>{% endif %}</td>
+            <td><a class="btn-buy primary" target="_blank" href="{{ it.links.nykaa }}">Buy</a></td>
+          </tr>
+          <tr>
+            <td>Flipkart</td>
+            <td>{% if it.prices.flipkart %}₹{{ it.prices.flipkart }}{% else %}—{% endif %}{% if it.lowest=='flipkart' %}<span class="tag-low">Lowest</span>{% endif %}</td>
+            <td><a class="btn-buy primary" target="_blank" href="{{ it.links.flipkart }}">Buy</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="card" style="grid-column:1/-1;text-align:center;">
+      No products found. Add images under <code>static/images/</code> or adjust filters.
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}
+                    <i class="fas fa-star"></i>
+                    <span>Personalized Recommendations</span>
+                </div>
+            </div>
+            
+            <!-- Quiz Progress -->
+            <div class="quiz-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="progress-steps">
+                    <div class="step-indicator active" data-step="1">
+                        <div class="step-number">1</div>
+                        <span>Skin Type</span>
+                    </div>
+                    <div class="step-indicator" data-step="2">
+                        <div class="step-number">2</div>
+                        <span>Concerns</span>
+                    </div>
+                    <div class="step-indicator" data-step="3">
+                        <div class="step-number">3</div>
+                        <span>Routine</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="quiz-content" id="quiz-content">
+                <div class="quiz-step active" id="step-1">
+                    <h3>What's your skin type?</h3>
+                    <div class="quiz-options">
+                        <label class="quiz-option">
+                            <input type="radio" name="skin_type" value="dry">
+                            <span class="option-text">
+                                <i class="fas fa-tint"></i>
+                                <strong>Dry</strong>
+                                <small>Feels tight, may have flaky patches</small>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="skin_type" value="oily">
+                            <span class="option-text">
+                                <i class="fas fa-oil-can"></i>
+                                <strong>Oily</strong>
+                                <small>Shiny, especially in T-zone</small>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="skin_type" value="combination">
+                            <span class="option-text">
+                                <i class="fas fa-balance-scale"></i>
+                                <strong>Combination</strong>
+                                <small>Oily T-zone, dry cheeks</small>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="skin_type" value="normal">
+                            <span class="option-text">
+                                <i class="fas fa-smile"></i>
+                                <strong>Normal</strong>
+                                <small>Balanced, few imperfections</small>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="skin_type" value="sensitive">
+                            <span class="option-text">
+                                <i class="fas fa-heart"></i>
+                                <strong>Sensitive</strong>
+                                <small>Easily irritated, reactive</small>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="quiz-step" id="step-2">
+                    <h3>What are your main skin concerns?</h3>
+                    <div class="quiz-options">
+                        <label class="quiz-option">
+                            <input type="checkbox" name="concerns" value="acne">
+                            <span class="option-text">
+                                <i class="fas fa-circle"></i>
+                                <strong>Acne & Breakouts</strong>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="checkbox" name="concerns" value="aging">
+                            <span class="option-text">
+                                <i class="fas fa-clock"></i>
+                                <strong>Aging & Wrinkles</strong>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="checkbox" name="concerns" value="dark_spots">
+                            <span class="option-text">
+                                <i class="fas fa-sun"></i>
+                                <strong>Dark Spots & Pigmentation</strong>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="checkbox" name="concerns" value="dullness">
+                            <span class="option-text">
+                                <i class="fas fa-star"></i>
+                                <strong>Dullness & Uneven Tone</strong>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="checkbox" name="concerns" value="pores">
+                            <span class="option-text">
+                                <i class="fas fa-search"></i>
+                                <strong>Large Pores</strong>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="checkbox" name="concerns" value="dehydration">
+                            <span class="option-text">
+                                <i class="fas fa-tint"></i>
+                                <strong>Dehydration</strong>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="quiz-step" id="step-3">
+                    <h3>What's your skincare routine preference?</h3>
+                    <div class="quiz-options">
+                        <label class="quiz-option">
+                            <input type="radio" name="routine" value="minimal">
+                            <span class="option-text">
+                                <i class="fas fa-leaf"></i>
+                                <strong>Minimal</strong>
+                                <small>2-3 products maximum</small>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="routine" value="moderate">
+                            <span class="option-text">
+                                <i class="fas fa-balance-scale"></i>
+                                <strong>Moderate</strong>
+                                <small>4-6 products</small>
+                            </span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="routine" value="extensive">
+                            <span class="option-text">
+                                <i class="fas fa-layer-group"></i>
+                                <strong>Extensive</strong>
+                                <small>7+ products for complete care</small>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-navigation">
+                <button id="prev-btn" class="btn btn-outline" style="display: none;">
+                    <i class="fas fa-arrow-left"></i> Previous
+                </button>
+                <button id="next-btn" class="btn btn-primary">
+                    Next <i class="fas fa-arrow-right"></i>
+                </button>
+                <button id="get-recommendations" class="btn btn-primary" style="display: none;">
+                    <i class="fas fa-magic"></i> Get My Recommendations
+                </button>
+            </div>
+
+            <div class="quiz-results" id="quiz-results" style="display: none;">
+                <h3><i class="fas fa-sparkles"></i> Your Personalized Recommendations</h3>
+                <div id="recommendations-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search and Filters -->
+    <div class="search-filters-section">
+        <div class="search-bar">
+            <div class="search-input-group">
+                <input type="text" id="product-search" placeholder="Search products, brands, or ingredients..." class="search-input">
+                <button id="search-btn" class="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="filters-section">
+            <div class="filter-group">
+                <label>Category</label>
+                <select id="category-filter" class="filter-select">
+                    <option value="">All Categories</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label>Skin Type</label>
+                <select id="skin-type-filter" class="filter-select">
+                    <option value="">All Skin Types</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label>Concern</label>
+                <select id="concern-filter" class="filter-select">
+                    <option value="">All Concerns</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label>Price Range</label>
+                <select id="price-filter" class="filter-select">
+                    <option value="">All Prices</option>
+                    <option value="0-10">Under $10</option>
+                    <option value="10-25">$10 - $25</option>
+                    <option value="25-50">$25 - $50</option>
+                    <option value="50+">$50+</option>
+                </select>
+            </div>
+            
+            <button id="clear-filters" class="clear-filters-btn">
+                <i class="fas fa-times"></i> Clear All
+            </button>
+            
+            <button id="update-prices" class="btn btn-primary">
+                <i class="fas fa-sync-alt"></i> Update Prices
+            </button>
+            
+            <button id="view-scraped-data" class="btn btn-outline">
+                <i class="fas fa-database"></i> View Scraped Data
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loading-state" class="loading-section" style="display: none;">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading amazing products...</p>
+        </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div id="products-container" class="products-container">
+        <div class="products-grid" id="products-grid">
+            <!-- Products will be loaded here -->
+        </div>
+    </div>
+
+    <!-- No Results -->
+    <div id="no-results" class="no-results" style="display: none;">
+        <div class="no-results-content">
+            <i class="fas fa-search"></i>
+            <h3>No products found</h3>
+            <p>Try adjusting your filters or search terms</p>
+            <button id="reset-search" class="btn btn-primary">Reset Search</button>
+        </div>
+    </div>
+</div>
+
+<!-- Price Comparison Modal -->
+<div id="price-comparison-modal" class="price-comparison-modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2><i class="fas fa-balance-scale"></i> Price Comparison</h2>
+        <div id="price-comparison-content">
+            <!-- Price comparison data will be loaded here -->
+        </div>
+    </div>
+</div>
+
+<style>
+/* Hero Section */
+.hero-section {
+    background: var(--gradient-primary);
+    color: white;
+    padding: 4rem 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Skin Quiz Section */
+.skin-quiz-section {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-light);
+}
+
+.quiz-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.quiz-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+}
+
+.quiz-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--gradient-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    animation: float 3s ease-in-out infinite;
+}
+
+.quiz-icon i {
+    font-size: 2rem;
+    color: white;
+}
+
+.quiz-header h2 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 2.2rem;
+    font-weight: 700;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.quiz-header p {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto 1.5rem;
+}
+
+.quiz-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--primary-light);
+    color: var(--primary-color);
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: 1px solid var(--primary-color);
+}
+
+.quiz-badge i {
+    color: #ffc107;
+}
+
+/* Quiz Progress */
+.quiz-progress {
+    margin-bottom: 3rem;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 4px;
+    background: var(--border-color);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+    width: 33.33%;
+}
+
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.step-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+}
+
+.step-indicator.active {
+    opacity: 1;
+}
+
+.step-indicator.completed {
+    opacity: 1;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--border-color);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.step-indicator.active .step-number {
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.step-indicator.completed .step-number {
+    background: var(--success-color, #10b981);
+    color: white;
+}
+
+.step-indicator span {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.step-indicator.active span {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.quiz-step {
+    display: none;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.quiz-step.active {
+    display: block;
+}
+
+.quiz-step h3 {
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+    font-size: 1.4rem;
+    text-align: center;
+}
+
+.quiz-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.quiz-option {
+    display: block;
+    cursor: pointer;
+    border: 2px solid var(--border-color);
+    border-radius: 15px;
+    padding: 1.5rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--card-bg);
+    position: relative;
+    overflow: hidden;
+}
+
+.quiz-option::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.quiz-option:hover::before {
+    left: 100%;
+}
+
+.quiz-option:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    background: var(--primary-light);
+}
+
+.quiz-option input[type="radio"],
+.quiz-option input[type="checkbox"] {
+    display: none;
+}
+
+.quiz-option input[type="radio"]:checked + .option-text,
+.quiz-option input[type="checkbox"]:checked + .option-text {
+    color: var(--primary-color);
+}
+
+.quiz-option:has(input:checked) {
+    border-color: var(--primary-color);
+    background: var(--primary-light);
+}
+
+.option-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.8rem;
+    position: relative;
+    z-index: 2;
+}
+
+.option-text i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+.option-text strong {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+.option-text small {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.4;
+    transition: all 0.3s ease;
+}
+
+.quiz-option:hover .option-text i {
+    transform: scale(1.2);
+    color: var(--primary-color);
+}
+
+.quiz-option:hover .option-text strong {
+    color: var(--primary-color);
+}
+
+.quiz-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 3rem;
+    padding: 1.5rem;
+    background: var(--bg-secondary);
+    border-radius: 15px;
+    border: 1px solid var(--border-color);
+}
+
+.quiz-navigation .btn {
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.quiz-navigation .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.quiz-results {
+    margin-top: 2rem;
+    padding: 2rem;
+    background: var(--primary-light);
+    border-radius: 10px;
+    border: 1px solid var(--primary-color);
+}
+
+.quiz-results h3 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Recommendation Cards */
+.recommendations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.recommendation-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    display: flex;
+    gap: 1rem;
+}
+
+.recommendation-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-medium);
+    border-color: var(--primary-color);
+}
+
+.recommendation-image {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+}
+
+.recommendation-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.recommendation-info {
+    flex: 1;
+}
+
+.recommendation-info h4 {
+    color: var(--primary-color);
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+}
+
+.recommendation-category {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin: 0 0 0.5rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.recommendation-description {
+    color: var(--text-color);
+    font-size: 0.9rem;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.4;
+}
+
+.recommendation-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0.5rem 0;
+}
+
+.recommendation-rating .stars {
+    color: #ffc107;
+    font-size: 0.9rem;
+}
+
+.recommendation-rating .rating-text {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+.recommendation-price {
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 0.5rem 0;
+}
+
+/* Search and Filters */
+.search-filters-section {
+    background: var(--bg-secondary);
+    padding: 2rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.search-bar {
+    max-width: 800px;
+    margin: 0 auto 2rem;
+}
+
+.search-input-group {
+    display: flex;
+    background: white;
+    border-radius: 50px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.search-input-group:focus-within {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+}
+
+.search-input {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    background: transparent;
+}
+
+.search-btn {
+    padding: 1rem 1.5rem;
+    background: var(--gradient-primary);
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.search-btn:hover {
+    background: var(--primary-dark);
+    transform: scale(1.05);
+}
+
+.filters-section {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: end;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 150px;
+}
+
+.filter-group label {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.filter-select {
+    padding: 0.75rem 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.clear-filters-btn {
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    border: 2px solid var(--error);
+    color: var(--error);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.clear-filters-btn:hover {
+    background: var(--error);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Products Grid */
+.products-container {
+    padding: 3rem 0;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.product-card {
+    background: var(--bg-secondary);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    transition: all 0.4s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.product-image {
+    height: 250px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.product-card:hover .product-image img {
+    transform: scale(1.1);
+}
+
+.product-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--gradient-primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.product-info {
+    padding: 1.5rem;
+}
+
+.product-brand {
+    color: var(--secondary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.product-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+}
+
+.product-description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.product-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.product-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--success);
+}
+
+.product-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stars {
+    color: var(--warning);
+    font-size: 0.9rem;
+}
+
+.rating-text {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.product-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.tag {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.product-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.btn-add-to-cart {
+    flex: 1;
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-add-to-cart:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.btn-view-details {
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-view-details:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-price-compare {
+    background: transparent;
+    border: 2px solid var(--success);
+    color: var(--success);
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 0.5rem;
+    width: 100%;
+}
+
+.btn-price-compare:hover {
+    background: var(--success);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Price Comparison Modal */
+.price-comparison-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: var(--bg-secondary);
+    margin: 5% auto;
+    padding: 2rem;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .modal-content {
+    background: rgba(10, 10, 15, 0.95);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.close {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
+}
+
+.close:hover {
+    color: var(--error);
+}
+
+.price-comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.price-site-card {
+    background: var(--bg-primary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .price-site-card {
+    background: rgba(0, 255, 255, 0.05);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.price-site-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .price-site-card:hover {
+    box-shadow: 0 10px 25px rgba(0, 255, 255, 0.2);
+}
+
+.site-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+    text-transform: capitalize;
+}
+
+.site-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--success);
+    margin-bottom: 0.5rem;
+}
+
+.site-currency {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.site-link {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background: var(--gradient-primary);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.site-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.no-price-data {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+}
+
+.loading-prices {
+    text-align: center;
+    padding: 2rem;
+}
+
+.loading-prices .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-top: 4px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+/* Loading State */
+.loading-section {
+    text-align: center;
+    padding: 4rem 0;
+}
+
+.loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-top: 4px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* No Results */
+.no-results {
+    text-align: center;
+    padding: 4rem 0;
+}
+
+.no-results-content i {
+    font-size: 4rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.no-results-content h3 {
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.no-results-content p {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+/* Dark Theme Enhancements */
+[data-theme="dark"] .search-input-group {
+    background: rgba(10, 10, 15, 0.8);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+}
+
+[data-theme="dark"] .search-input {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .search-input::placeholder {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .filter-select {
+    background: rgba(10, 10, 15, 0.8);
+    border-color: rgba(0, 255, 255, 0.3);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .product-card {
+    background: rgba(10, 10, 15, 0.9);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    box-shadow: 0 8px 30px rgba(0, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .product-card:hover {
+    box-shadow: 0 20px 40px rgba(0, 255, 255, 0.2);
+    border-color: rgba(0, 255, 255, 0.4);
+}
+
+[data-theme="dark"] .product-image {
+    background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 100%);
+}
+
+[data-theme="dark"] .tag {
+    background: rgba(0, 255, 255, 0.1);
+    color: var(--text-primary);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+    
+    .filters-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .filter-group {
+        min-width: auto;
+    }
+    
+    .products-grid {
+        grid-template-columns: 1fr;
+        padding: 0 1rem;
+    }
+    
+    .product-actions {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-input-group {
+        flex-direction: column;
+        border-radius: 12px;
+    }
+    
+    .search-input {
+        border-radius: 12px 12px 0 0;
+    }
+    
+    .search-btn {
+        border-radius: 0 0 12px 12px;
+    }
+}
+</style>
+
+{% block extra_scripts %}
+<script>
+(function() {
+    const searchInput = document.getElementById('product-search');
+    const searchBtn = document.getElementById('search-btn');
+    const categoryFilter = document.getElementById('category-filter');
+    const skinTypeFilter = document.getElementById('skin-type-filter');
+    const concernFilter = document.getElementById('concern-filter');
+    const priceFilter = document.getElementById('price-filter');
+    const clearFiltersBtn = document.getElementById('clear-filters');
+    const updatePricesBtn = document.getElementById('update-prices');
+    const viewScrapedDataBtn = document.getElementById('view-scraped-data');
+    const productsGrid = document.getElementById('products-grid');
+    const loadingState = document.getElementById('loading-state');
+    const noResults = document.getElementById('no-results');
+    const resetSearchBtn = document.getElementById('reset-search');
+    
+    // Quiz elements
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const getRecommendationsBtn = document.getElementById('get-recommendations');
+    const quizResults = document.getElementById('quiz-results');
+    const recommendationsContent = document.getElementById('recommendations-content');
+
+    let currentProducts = [];
+    let currentFilters = {};
+    
+    // Quiz variables
+    let currentStep = 1;
+    const totalSteps = 3;
+    let quizData = {
+        skin_type: '',
+        concerns: [],
+        routine: ''
+    };
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+        loadFilters();
+        loadProducts();
+    });
+
+    // Load filter options
+    async function loadFilters() {
+        try {
+            const response = await fetch('/api/skincare/filters');
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+                populateFilterOptions(categoryFilter, data.filters.categories);
+                populateFilterOptions(skinTypeFilter, data.filters.skin_types);
+                populateFilterOptions(concernFilter, data.filters.concerns);
+            }
+        } catch (error) {
+            console.error('Error loading filters:', error);
+        }
+    }
+
+    function populateFilterOptions(selectElement, options) {
+        options.forEach(option => {
+            const optionElement = document.createElement('option');
+            optionElement.value = option;
+            optionElement.textContent = option;
+            selectElement.appendChild(optionElement);
+        });
+    }
+
+    // Load products
+    async function loadProducts(filters = {}) {
+        showLoading();
+        hideNoResults();
+        
+        try {
+            const params = new URLSearchParams();
+            Object.keys(filters).forEach(key => {
+                if (filters[key]) {
+                    params.append(key, filters[key]);
+                }
+            });
+            
+            const response = await fetch(`/api/skincare/products?${params}`);
+            const data = await response.json();
+            
+            hideLoading();
+            
+            if (data.status === 'success') {
+                currentProducts = data.products;
+                displayProducts(currentProducts);
+            } else {
+                showError('Failed to load products');
+            }
+        } catch (error) {
+            hideLoading();
+            showError('Error loading products');
+            console.error('Error:', error);
+        }
+    }
+
+    // Display products
+    function displayProducts(products) {
+        if (products.length === 0) {
+            showNoResults();
+            return;
+        }
+        
+        productsGrid.innerHTML = products.map(product => `
+            <div class="product-card" data-product-id="${product.id}">
+                <div class="product-image">
+                    <img src="${product.image_url}" alt="${product.name}" loading="lazy">
+                    <div class="product-badge">${product.category}</div>
+                </div>
+                <div class="product-info">
+                    <div class="product-brand">${product.brand}</div>
+                    <h3 class="product-title">${product.name}</h3>
+                    <p class="product-description">${product.description}</p>
+                    <div class="product-details">
+                        <div class="product-price">${product.price_range}</div>
+                        <div class="product-rating">
+                            <div class="stars">${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5-Math.floor(product.rating))}</div>
+                            <span class="rating-text">${product.rating}</span>
+                        </div>
+                    </div>
+                    <div class="product-tags">
+                        ${product.skin_types.map(type => `<span class="tag">${type}</span>`).join('')}
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn-add-to-cart" onclick="addToCart(${product.id})">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                        <button class="btn-view-details" onclick="viewProductDetails(${product.id})">
+                            <i class="fas fa-eye"></i> Details
+                        </button>
+                        <button class="btn-price-compare" onclick="showPriceComparison(${product.id})">
+                            <i class="fas fa-balance-scale"></i> Compare Prices
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Event listeners
+    searchBtn.addEventListener('click', handleSearch);
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            handleSearch();
+        }
+    });
+
+    [categoryFilter, skinTypeFilter, concernFilter, priceFilter].forEach(filter => {
+        filter.addEventListener('change', handleFilterChange);
+    });
+
+    clearFiltersBtn.addEventListener('click', clearAllFilters);
+    resetSearchBtn.addEventListener('click', clearAllFilters);
+    updatePricesBtn.addEventListener('click', updatePrices);
+    viewScrapedDataBtn.addEventListener('click', viewScrapedData);
+    
+    // Quiz event listeners
+    prevBtn.addEventListener('click', previousStep);
+    nextBtn.addEventListener('click', nextStep);
+    getRecommendationsBtn.addEventListener('click', getRecommendations);
+
+    function handleSearch() {
+        const query = searchInput.value.trim();
+        if (query) {
+            searchProducts(query);
+        } else {
+            loadProducts(currentFilters);
+        }
+    }
+
+    function handleFilterChange() {
+        currentFilters = {
+            category: categoryFilter.value,
+            skin_type: skinTypeFilter.value,
+            concern: concernFilter.value,
+            price_range: getPriceRange(priceFilter.value)
+        };
+        loadProducts(currentFilters);
+    }
+
+    function getPriceRange(value) {
+        if (!value) return null;
+        const [min, max] = value.split('-').map(Number);
+        return { min, max };
+    }
+
+    function clearAllFilters() {
+        searchInput.value = '';
+        categoryFilter.value = '';
+        skinTypeFilter.value = '';
+        concernFilter.value = '';
+        priceFilter.value = '';
+        currentFilters = {};
+        loadProducts();
+    }
+
+    async function searchProducts(query) {
+        showLoading();
+        try {
+            const response = await fetch(`/api/skincare/search?q=${encodeURIComponent(query)}`);
+            const data = await response.json();
+            
+            hideLoading();
+            
+            if (data.status === 'success') {
+                currentProducts = data.products;
+                displayProducts(currentProducts);
+            } else {
+                showError('Search failed');
+            }
+        } catch (error) {
+            hideLoading();
+            showError('Search error');
+            console.error('Error:', error);
+        }
+    }
+
+    // Utility functions
+    function showLoading() {
+        loadingState.style.display = 'block';
+        productsGrid.style.display = 'none';
+    }
+
+    function hideLoading() {
+        loadingState.style.display = 'none';
+        productsGrid.style.display = 'grid';
+    }
+
+    function showNoResults() {
+        noResults.style.display = 'block';
+        productsGrid.style.display = 'none';
+    }
+
+    function hideNoResults() {
+        noResults.style.display = 'none';
+        productsGrid.style.display = 'grid';
+    }
+
+    function showError(message) {
+        alert(message);
+    }
+
+    // Global functions
+    window.addToCart = function(productId) {
+        const product = currentProducts.find(p => p.id === productId);
+        if (product) {
+            alert(`Added ${product.name} to cart!`);
+            // Here you would typically add to a shopping cart
+        }
+    };
+
+    window.viewProductDetails = function(productId) {
+        const product = currentProducts.find(p => p.id === productId);
+        if (product) {
+            // Show product details modal or navigate to detail page
+            const details = `
+                <strong>${product.name}</strong><br>
+                <strong>Brand:</strong> ${product.brand}<br>
+                <strong>Price:</strong> $${product.price}<br>
+                <strong>Rating:</strong> ${product.rating}/5<br>
+                <strong>Description:</strong> ${product.description}<br>
+                <strong>Ingredients:</strong> ${product.ingredients.join(', ')}<br>
+                <strong>Skin Types:</strong> ${product.skin_types.join(', ')}<br>
+                <strong>Concerns:</strong> ${product.concerns.join(', ')}<br>
+                <strong>Size:</strong> ${product.size}<br>
+                <strong>Availability:</strong> ${product.availability}
+            `;
+            alert(details);
+        }
+    };
+
+    window.showPriceComparison = async function(productId) {
+        const modal = document.getElementById('price-comparison-modal');
+        const content = document.getElementById('price-comparison-content');
+        
+        // Show modal
+        modal.style.display = 'block';
+        
+        // Show loading state
+        content.innerHTML = `
+            <div class="loading-prices">
+                <div class="spinner"></div>
+                <p>Loading price comparison data...</p>
+            </div>
+        `;
+        
+        try {
+            // Fetch price comparison data
+            const response = await fetch(`/api/skincare/price-comparison/${productId}`);
+            const data = await response.json();
+            
+            if (data.status === 'success' && data.price_comparison.length > 0) {
+                // Display price comparison
+                content.innerHTML = `
+                    <div class="price-comparison-grid">
+                        ${data.price_comparison.map(site => `
+                            <div class="price-site-card">
+                                <div class="site-name">${site.site}</div>
+                                <div class="site-price">₹${site.price}</div>
+                                <div class="site-currency">${site.currency}</div>
+                                ${site.product_url ? `<a href="${site.product_url}" target="_blank" class="site-link">View Product</a>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            } else {
+                // No price data available
+                content.innerHTML = `
+                    <div class="no-price-data">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem; color: var(--warning);"></i>
+                        <h3>No Price Data Available</h3>
+                        <p>Price comparison data is not available for this product yet.</p>
+                        <button onclick="refreshPrices()" class="btn btn-primary">Refresh Prices</button>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            console.error('Error fetching price comparison:', error);
+            content.innerHTML = `
+                <div class="no-price-data">
+                    <i class="fas fa-exclamation-circle" style="font-size: 3rem; margin-bottom: 1rem; color: var(--error);"></i>
+                    <h3>Error Loading Prices</h3>
+                    <p>There was an error loading price comparison data.</p>
+                    <button onclick="showPriceComparison(${productId})" class="btn btn-primary">Try Again</button>
+                </div>
+            `;
+        }
+    };
+
+    window.refreshPrices = async function() {
+        try {
+            const response = await fetch('/api/skincare/refresh-prices');
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+                alert('Price data refreshed successfully!');
+                // Reload the current page to show updated prices
+                location.reload();
+            } else {
+                alert('Error refreshing price data');
+            }
+        } catch (error) {
+            console.error('Error refreshing prices:', error);
+            alert('Error refreshing price data');
+        }
+    };
+
+    // New advanced scraper functions
+    async function updatePrices() {
+        try {
+            updatePricesBtn.disabled = true;
+            updatePricesBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+            
+            const response = await fetch('/api/skincare/update-prices?limit=10&download_images=true');
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+                alert(`Price update completed! Processed ${data.rows_processed} records.`);
+                // Reload the page to show updated data
+                location.reload();
+            } else {
+                alert('Error updating prices: ' + data.error);
+            }
+        } catch (error) {
+            console.error('Error updating prices:', error);
+            alert('Error updating prices');
+        } finally {
+            updatePricesBtn.disabled = false;
+            updatePricesBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Update Prices';
+        }
+    }
+
+    async function viewScrapedData() {
+        try {
+            viewScrapedDataBtn.disabled = true;
+            viewScrapedDataBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+            
+            const response = await fetch('/api/skincare/scraped-products');
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+                // Create a modal to display scraped data
+                showScrapedDataModal(data.products);
+            } else {
+                alert('Error loading scraped data: ' + data.error);
+            }
+        } catch (error) {
+            console.error('Error loading scraped data:', error);
+            alert('Error loading scraped data');
+        } finally {
+            viewScrapedDataBtn.disabled = false;
+            viewScrapedDataBtn.innerHTML = '<i class="fas fa-database"></i> View Scraped Data';
+        }
+    }
+
+    function showScrapedDataModal(products) {
+        // Create modal HTML
+        const modalHTML = `
+            <div id="scraped-data-modal" class="scraped-data-modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2><i class="fas fa-database"></i> Scraped Price Data</h2>
+                    <div class="scraped-data-content">
+                        <p>Total records: ${products.length}</p>
+                        <div class="scraped-products-grid">
+                            ${products.slice(0, 20).map(product => `
+                                <div class="scraped-product-card">
+                                    <h4>${product.brand} ${product.name}</h4>
+                                    <p><strong>Site:</strong> ${product.site}</p>
+                                    <p><strong>Price:</strong> ${product.price ? '₹' + product.price : 'N/A'}</p>
+                                    <p><strong>Scraped:</strong> ${new Date(product.scraped_at).toLocaleDateString()}</p>
+                                    ${product.product_url ? `<a href="${product.product_url}" target="_blank" class="btn btn-outline">View Product</a>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                        ${products.length > 20 ? `<p>Showing first 20 of ${products.length} records</p>` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Add modal to page
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        
+        // Add modal styles
+        const modalStyles = `
+            <style>
+                .scraped-data-modal {
+                    display: block;
+                    position: fixed;
+                    z-index: 1000;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0,0,0,0.5);
+                }
+                .scraped-data-modal .modal-content {
+                    background-color: var(--card-bg);
+                    margin: 5% auto;
+                    padding: 20px;
+                    border: 1px solid var(--border-color);
+                    border-radius: 10px;
+                    width: 90%;
+                    max-width: 1200px;
+                    max-height: 80vh;
+                    overflow-y: auto;
+                }
+                .scraped-data-modal .close {
+                    color: var(--text-color);
+                    float: right;
+                    font-size: 28px;
+                    font-weight: bold;
+                    cursor: pointer;
+                }
+                .scraped-data-modal .close:hover {
+                    color: var(--primary-color);
+                }
+                .scraped-products-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                    gap: 15px;
+                    margin-top: 20px;
+                }
+                .scraped-product-card {
+                    background: var(--card-bg);
+                    border: 1px solid var(--border-color);
+                    border-radius: 8px;
+                    padding: 15px;
+                }
+                .scraped-product-card h4 {
+                    margin: 0 0 10px 0;
+                    color: var(--primary-color);
+                }
+                .scraped-product-card p {
+                    margin: 5px 0;
+                    font-size: 14px;
+                }
+            </style>
+        `;
+        
+        document.head.insertAdjacentHTML('beforeend', modalStyles);
+        
+        // Add close functionality
+        const modal = document.getElementById('scraped-data-modal');
+        const closeBtn = modal.querySelector('.close');
+        
+        closeBtn.onclick = function() {
+            modal.remove();
+        };
+        
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                modal.remove();
+            }
+        };
+    }
+
+    // Quiz functions
+    function nextStep() {
+        if (validateCurrentStep()) {
+            saveCurrentStepData();
+            if (currentStep < totalSteps) {
+                currentStep++;
+                showStep(currentStep);
+                updateNavigationButtons();
+            }
+        }
+    }
+
+    function previousStep() {
+        if (currentStep > 1) {
+            currentStep--;
+            showStep(currentStep);
+            updateNavigationButtons();
+        }
+    }
+
+    function showStep(step) {
+        // Hide all steps
+        document.querySelectorAll('.quiz-step').forEach(stepEl => {
+            stepEl.classList.remove('active');
+        });
+        
+        // Show current step
+        document.getElementById(`step-${step}`).classList.add('active');
+        
+        // Update progress indicators
+        updateProgressIndicators(step);
+    }
+
+    function updateProgressIndicators(currentStep) {
+        const indicators = document.querySelectorAll('.step-indicator');
+        const progressFill = document.getElementById('progress-fill');
+        
+        indicators.forEach((indicator, index) => {
+            const stepNumber = index + 1;
+            indicator.classList.remove('active', 'completed');
+            
+            if (stepNumber < currentStep) {
+                indicator.classList.add('completed');
+            } else if (stepNumber === currentStep) {
+                indicator.classList.add('active');
+            }
+        });
+        
+        // Update progress bar
+        const progressPercentage = (currentStep / totalSteps) * 100;
+        progressFill.style.width = `${progressPercentage}%`;
+    }
+
+    function updateNavigationButtons() {
+        prevBtn.style.display = currentStep > 1 ? 'block' : 'none';
+        
+        if (currentStep === totalSteps) {
+            nextBtn.style.display = 'none';
+            getRecommendationsBtn.style.display = 'block';
+        } else {
+            nextBtn.style.display = 'block';
+            getRecommendationsBtn.style.display = 'none';
+        }
+    }
+
+    function validateCurrentStep() {
+        if (currentStep === 1) {
+            const skinType = document.querySelector('input[name="skin_type"]:checked');
+            if (!skinType) {
+                alert('Please select your skin type');
+                return false;
+            }
+        } else if (currentStep === 2) {
+            const concerns = document.querySelectorAll('input[name="concerns"]:checked');
+            if (concerns.length === 0) {
+                alert('Please select at least one skin concern');
+                return false;
+            }
+        } else if (currentStep === 3) {
+            const routine = document.querySelector('input[name="routine"]:checked');
+            if (!routine) {
+                alert('Please select your routine preference');
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function saveCurrentStepData() {
+        if (currentStep === 1) {
+            const skinType = document.querySelector('input[name="skin_type"]:checked');
+            if (skinType) quizData.skin_type = skinType.value;
+        } else if (currentStep === 2) {
+            const concerns = document.querySelectorAll('input[name="concerns"]:checked');
+            quizData.concerns = Array.from(concerns).map(cb => cb.value);
+        } else if (currentStep === 3) {
+            const routine = document.querySelector('input[name="routine"]:checked');
+            if (routine) quizData.routine = routine.value;
+        }
+    }
+
+    async function getRecommendations() {
+        if (validateCurrentStep()) {
+            saveCurrentStepData();
+            
+            try {
+                getRecommendationsBtn.disabled = true;
+                getRecommendationsBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Getting Recommendations...';
+                
+                const response = await fetch(`/api/skincare/recommendations?skin_type=${quizData.skin_type}&${quizData.concerns.map(c => `concerns=${c}`).join('&')}`);
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    displayRecommendations(data.recommendations);
+                } else {
+                    alert('Error getting recommendations: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error getting recommendations:', error);
+                alert('Error getting recommendations');
+            } finally {
+                getRecommendationsBtn.disabled = false;
+                getRecommendationsBtn.innerHTML = '<i class="fas fa-magic"></i> Get My Recommendations';
+            }
+        }
+    }
+
+    function displayRecommendations(recommendations) {
+        if (recommendations.length === 0) {
+            recommendationsContent.innerHTML = '<p>No specific recommendations found. Please browse our products below.</p>';
+        } else {
+            const recommendationsHTML = recommendations.slice(0, 6).map(product => `
+                <div class="recommendation-card">
+                    <div class="recommendation-image">
+                        <img src="${product.image_url}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/150x150?text=No+Image'">
+                    </div>
+                    <div class="recommendation-info">
+                        <h4>${product.brand} ${product.name}</h4>
+                        <p class="recommendation-category">${product.category}</p>
+                        <p class="recommendation-description">${product.description}</p>
+                        <div class="recommendation-rating">
+                            <span class="stars">${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}</span>
+                            <span class="rating-text">${product.rating}/5</span>
+                        </div>
+                        <div class="recommendation-price">${product.price_range}</div>
+                        <button class="btn btn-primary" onclick="viewProductDetails(${product.id})">
+                            <i class="fas fa-eye"></i> View Details
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            recommendationsContent.innerHTML = `
+                <div class="recommendations-grid">
+                    ${recommendationsHTML}
+                </div>
+            `;
+        }
+        
+        quizResults.style.display = 'block';
+        quizResults.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Close modal when clicking outside or on close button
+    window.onclick = function(event) {
+        const modal = document.getElementById('price-comparison-modal');
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    };
+
+    // Close modal with close button
+    document.querySelector('.close').onclick = function() {
+        document.getElementById('price-comparison-modal').style.display = 'none';
+    };
+})();
+</script>
+{% endblock %}
+
+{% endblock %}

@@ -1,0 +1,360 @@
+{% extends "base.html" %}
+
+{% block title %}Skincare Products - SkinNova{% endblock %}
+
+{% block content %}
+<style>
+  .skin-hero{background:linear-gradient(135deg,#ffe9f1,#fff);border:1px solid #f3c2d3;border-radius:16px;padding:1.2rem 1.4rem;margin:1rem 0}
+  .quiz-container{max-width:1100px;margin:0 auto}
+  .stepper{display:block;margin:1.2rem 0}
+  .step{background:#fff;border:1px solid #f3c2d3;border-radius:14px;padding:1.25rem 1.2rem;margin:.9rem 0;box-shadow:0 6px 18px rgba(255,105,180,.08)}
+  .step h3{margin:.2rem 0 .8rem;color:#7a0f37;font-size:1.15rem}
+  .choices{display:flex;flex-wrap:wrap;gap:.6rem}
+  .chip{cursor:pointer;padding:.45rem .7rem;border-radius:999px;border:1px solid #f3c2d3;background:#ffedf3;color:#b10e52}
+  .chip.active{background:#ff7fb0;border-color:#ff69a6;color:#fff}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-top:1rem}
+  .card{background:#fff;border:1px solid #f3c2d3;border-radius:14px;box-shadow:0 6px 18px rgba(255,105,180,.12);padding:1rem;display:flex;flex-direction:column}
+  .img{width:100%;height:220px;object-fit:cover;border-radius:10px;border:1px solid #ffd1e0}
+  .name{font-weight:700;color:#7a0f37;margin:.5rem 0}
+  .desc{color:#7a0f37;font-size:.92rem}
+  .prices{width:100%;border-collapse:separate;border-spacing:0 6px;margin:.6rem 0}
+  .prices th,.prices td{padding:.35rem .5rem;background:#fff;border:1px solid #f3c2d3}
+  .prices th{background:#ffe9f1;color:#7a0f37}
+  .tag-low{display:inline-block;padding:.15rem .45rem;background:#ff7fb0;color:#fff;border-radius:999px;font-size:.72rem;margin-left:.3rem}
+  .btn-buy{display:inline-flex;align-items:center;gap:.3rem;padding:.4rem .7rem;border-radius:999px;border:1px solid #f3c2d3;background:#ffedf3;color:#b10e52;text-decoration:none}
+  .btn-buy.primary{background:#ff7fb0;border-color:#ff69a6;color:#fff}
+  .muted{color:#b10e52;opacity:.8}
+  .hint{font-size:.9rem;color:#7a0f37;margin:.5rem 0}
+  .toolbar{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin:.8rem 0}
+  .search-input{flex:1 1 320px;padding:.6rem .8rem;border:1px solid #f3c2d3;border-radius:10px}
+  .quick-types{display:flex;gap:.5rem;flex-wrap:wrap}
+</style>
+
+<section class="skin-hero">
+  <h1 style="margin:0;color:#d63384">Skincare Products</h1>
+  <p style="margin:.3rem 0 0;color:#7a0f37">Pick your skin type, concern, and product type to see tailored products with live price comparison.</p>
+</section>
+
+<div class="quiz-container">
+  <div class="stepper" id="stepper">
+    <div class="step quiz-question" data-step="1">
+      <h3>1) Skin Type</h3>
+      <div class="choices quiz-options" id="skinTypeChoices">
+        <button type="button" class="chip quiz-option" data-value="Oily">🛢️ Oily</button>
+        <button type="button" class="chip quiz-option" data-value="Dry">🌵 Dry</button>
+        <button type="button" class="chip quiz-option" data-value="Combination">⚖️ Combination</button>
+        <button type="button" class="chip quiz-option" data-value="Sensitive">💗 Sensitive</button>
+      </div>
+    </div>
+    <div class="step quiz-question" data-step="2" style="display:none;">
+      <h3>2) Skin Concern</h3>
+      <div class="choices quiz-options" id="concernChoices">
+        <button type="button" class="chip quiz-option" data-value="Acne">🔴 Acne</button>
+        <button type="button" class="chip quiz-option" data-value="Tanning">☀️ Tanning</button>
+        <button type="button" class="chip quiz-option" data-value="Dryness">💧 Dryness</button>
+        <button type="button" class="chip quiz-option" data-value="Pigmentation">🎯 Pigmentation</button>
+        <button type="button" class="chip quiz-option" data-value="Dark Spots">🌑 Dark Spots</button>
+      </div>
+    </div>
+    <div class="step quiz-question" data-step="3" style="display:none;">
+      <h3>3) Product Type</h3>
+      <div class="choices quiz-options" id="productTypeChoices">
+        <button type="button" class="chip quiz-option" data-value="Face Wash">🫧 Face Wash</button>
+        <button type="button" class="chip quiz-option" data-value="Serum">🧪 Serum</button>
+        <button type="button" class="chip quiz-option" data-value="Sunscreen">🧴 Sunscreen</button>
+        <button type="button" class="chip quiz-option" data-value="Moisturizer">💦 Moisturizer</button>
+        <button type="button" class="chip quiz-option" data-value="Toner">🌫️ Toner</button>
+        <button type="button" class="chip quiz-option" data-value="Face Mask">🎭 Face Mask</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-navigation" style="display:flex;justify-content:space-between;gap:.8rem;">
+    <button id="prevBtn" class="btn btn-outline" disabled>Previous</button>
+    <button id="nextBtn" class="btn btn-primary">Next</button>
+  </div>
+</div>
+
+<!-- Search + Quick Types -->
+<div class="toolbar">
+  <input id="skincareSearch" class="search-input" type="text" placeholder="Search products, brands, or ingredients...">
+  <button id="searchBtn" class="btn btn-primary">Search</button>
+</div>
+<div class="quick-types" id="quickTypes">
+  <button type="button" class="chip" data-type="Face Wash">🫧 Face Wash</button>
+  <button type="button" class="chip" data-type="Serum">🧪 Serum</button>
+  <button type="button" class="chip" data-type="Sunscreen">🧴 Sunscreen</button>
+  <button type="button" class="chip" data-type="Moisturizer">💦 Moisturizer</button>
+</div>
+
+<p class="hint" id="hint">Make a selection in each step. Results will load automatically.</p>
+
+<div class="grid" id="resultsGrid"></div>
+
+<script>
+  (function(){
+    // Apply page-specific full background using skinday.png without affecting other pages
+    function applyBg(){
+      document.body.classList.add('skincare-bg');
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', applyBg);
+    } else { applyBg(); }
+
+    const state = { skinType:null, concern:null, productType:null };
+    const grid = document.getElementById('resultsGrid');
+    const hint = document.getElementById('hint');
+    const steps = Array.from(document.querySelectorAll('.step.quiz-question'));
+    let cur = 0; // 0-based index for steps
+
+    function showStep(i){
+      steps.forEach((el, idx)=>{ el.style.display = (idx===i)?'block':'none'; });
+      document.getElementById('prevBtn').disabled = (i===0);
+      document.getElementById('nextBtn').textContent = (i===steps.length-1)?'See Results':'Next';
+    }
+    function canAdvance(i){
+      if(i===0) return !!state.skinType;
+      if(i===1) return !!state.concern;
+      if(i===2) return !!state.productType;
+      return false;
+    }
+    function tryAdvance(){
+      if(cur < steps.length-1 && canAdvance(cur)){
+        cur += 1; showStep(cur);
+      } else if(cur===steps.length-1 && canAdvance(cur)){
+        fetchProducts();
+      }
+    }
+
+    function mapConcern(c){
+      // Map UI concerns to backend schema
+      const m = { 'Tanning':'Dullness', 'Dryness':'Dehydration', 'Pigmentation':'Dark Spots' };
+      return m[c] || c;
+    }
+    function mapProductType(p){
+      // Align UI to data: Face Wash -> Facewash; Face Mask -> Mask
+      if(p==='Face Wash') return 'Facewash';
+      if(p==='Face Mask') return 'Mask';
+      return p;
+    }
+    function renderProducts(products){
+      grid.innerHTML = '';
+      if(!products.length){ hint.textContent = 'No products found.'; return; }
+      hint.textContent = `${products.length} product(s) found`;
+      for(const p of products){
+        const card = document.createElement('div');
+        card.className = 'card';
+        const buyMenuId = `buy-menu-${p.id || Math.random().toString(36).slice(2)}`;
+        card.innerHTML = `
+          <img class="img" src="${p.image_url || ''}" alt="${p.name}">
+          <div class="name">${p.brand ? p.brand + ' • ' : ''}${p.name}</div>
+          <div class="desc">${(p.description||'').slice(0,140)}${(p.description||'').length>140?'...':''}</div>
+          <div class="actions" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem;">
+            <button class="btn-buy primary" data-action="buy">Buy Now</button>
+            <button class="btn-buy" data-action="compare">Price Comparison</button>
+            <button class="btn-buy" data-action="cart">Add to Cart</button>
+          </div>
+          <div id="${buyMenuId}" class="buy-menu" style="display:none;margin-top:.4rem;">
+            <a class="btn-buy" target="_blank" data-site="nykaa" href="#">Nykaa</a>
+            <a class="btn-buy" target="_blank" data-site="amazon" href="#">Amazon</a>
+            <a class="btn-buy" target="_blank" data-site="flipkart" href="#">Flipkart</a>
+          </div>
+        `;
+        grid.appendChild(card);
+        const menu = card.querySelector(`#${buyMenuId}`);
+        menu.querySelectorAll('a').forEach(a=>{ a.href = buySearchLink(p, a.dataset.site); });
+        card.querySelector('[data-action="buy"]').addEventListener('click', ()=>{
+          menu.style.display = (menu.style.display==='none'||menu.style.display==='') ? 'block' : 'none';
+        });
+        card.querySelector('[data-action="compare"]').addEventListener('click', async ()=>{
+          await openPriceModal(p);
+        });
+        card.querySelector('[data-action="cart"]').addEventListener('click', ()=>{
+          addToCart(p);
+        });
+      }
+    }
+    function selectChip(containerId, value){
+      const container = document.getElementById(containerId);
+      [...container.querySelectorAll('.chip')].forEach(ch=>{
+        ch.classList.toggle('active', ch.dataset.value===value);
+      });
+    }
+    async function fetchProducts(){
+      grid.innerHTML = '';
+      if(!(state.skinType && state.concern && state.productType)){
+        hint.textContent = 'Make a selection in each step. Results will load automatically.';
+        return;
+      }
+      hint.textContent = 'Loading products...';
+      const params = new URLSearchParams({
+        product_type: mapProductType(state.productType),
+        skin_type: state.skinType,
+        concern: mapConcern(state.concern)
+      });
+      try{
+        const res = await fetch(`/api/skincare/products?${params.toString()}`);
+        const data = await res.json();
+        const products = (data && data.products) ? data.products : [];
+        renderProducts(products);
+      }catch(err){
+        hint.textContent = 'Failed to load products.';
+        console.error(err);
+      }
+    }
+    function buySearchLink(p, site){
+      const q = encodeURIComponent(`${p.brand||''} ${p.name}`.trim());
+      if(site==='amazon') return `https://www.amazon.in/s?k=${q}`;
+      if(site==='nykaa') return `https://www.nykaa.com/search?search=${q}`;
+      if(site==='flipkart') return `https://www.flipkart.com/search?q=${q}`;
+      return '#';
+    }
+    async function hydratePricesForModal(p){
+      try{
+        if(!p.id){ throw new Error('No product id'); }
+        const r = await fetch(`/api/skincare/price-comparison/${p.id}`);
+        const j = await r.json();
+        const rows = (j && j.price_comparison) ? j.price_comparison : [];
+        let prices = {amazon:null, nykaa:null, flipkart:null};
+        rows.forEach(row=>{
+          const site = (row.site||'').toLowerCase();
+          if(site.includes('amazon')) prices.amazon = row;
+          if(site.includes('nykaa')) prices.nykaa = row;
+          if(site.includes('flipkart')) prices.flipkart = row;
+        });
+        return prices;
+      }catch(e){
+        console.warn('Price compare fallback', e);
+        return {amazon:null, nykaa:null, flipkart:null};
+      }
+    }
+
+    async function openPriceModal(p){
+      ensureModal();
+      const modal = document.getElementById('pc-modal');
+      const content = document.getElementById('pc-content');
+      content.innerHTML = `<div class="name" style="margin-bottom:.5rem;">${p.brand? p.brand+' • ': ''}${p.name}</div>`;
+      const prices = await hydratePricesForModal(p);
+      const mkCell = row => row && row.price ? (row.currency && row.currency.toUpperCase()!=='INR' ? `${row.currency} ${row.price}` : `₹${row.price}`) : '—';
+      const link = row => row && row.product_url ? row.product_url : buySearchLink(p, (row && row.site||'').toLowerCase().includes('nykaa')?'nykaa':(row && row.site||'').toLowerCase().includes('amazon')?'amazon':'flipkart');
+      content.insertAdjacentHTML('beforeend', `
+        <table class="prices">
+          <thead><tr><th>Store</th><th>Price</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>Amazon</td><td>${mkCell(prices.amazon)}</td><td><a class="btn-buy primary" target="_blank" href="${buySearchLink(p,'amazon')}">Buy</a></td></tr>
+            <tr><td>Nykaa</td><td>${mkCell(prices.nykaa)}</td><td><a class="btn-buy primary" target="_blank" href="${buySearchLink(p,'nykaa')}">Buy</a></td></tr>
+            <tr><td>Flipkart</td><td>${mkCell(prices.flipkart)}</td><td><a class="btn-buy primary" target="_blank" href="${buySearchLink(p,'flipkart')}">Buy</a></td></tr>
+          </tbody>
+        </table>
+      `);
+      modal.style.display = 'block';
+    }
+
+    function ensureModal(){
+      if(document.getElementById('pc-modal')) return;
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = `
+        <div id="pc-modal" class="price-comparison-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:9999;">
+          <div class="modal-content" style="max-width:720px;margin:10vh auto;background:#fff;border:1px solid #f3c2d3;border-radius:12px;padding:1rem;box-shadow:0 10px 30px rgba(0,0,0,.2);">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;">
+              <h2 style="margin:0;color:#7a0f37;">Price Comparison</h2>
+              <button id="pc-close" class="btn-buy">Close</button>
+            </div>
+            <div id="pc-content"></div>
+          </div>
+        </div>`;
+      document.body.appendChild(wrapper.firstElementChild);
+      document.getElementById('pc-close').addEventListener('click', ()=>{
+        document.getElementById('pc-modal').style.display='none';
+        document.getElementById('pc-content').innerHTML='';
+      });
+      document.getElementById('pc-modal').addEventListener('click', (e)=>{
+        if(e.target.id==='pc-modal'){
+          document.getElementById('pc-modal').style.display='none';
+          document.getElementById('pc-content').innerHTML='';
+        }
+      });
+    }
+
+    function addToCart(p){
+      try{
+        const key = 'skincare-cart';
+        const cur = JSON.parse(localStorage.getItem(key) || '[]');
+        const item = { id:p.id, brand:p.brand, name:p.name, image:p.image_url };
+        if(!cur.find(x=>String(x.id)===String(item.id))){ cur.push(item); }
+        localStorage.setItem(key, JSON.stringify(cur));
+        hint.textContent = 'Added to cart';
+        setTimeout(()=>{ if(hint.textContent==='Added to cart') hint.textContent=''; }, 1500);
+      }catch(_e){ /* ignore */ }
+    }
+    function updatePriceCell(cell, row){
+      if(row && row.price){
+        cell.classList.remove('muted');
+        const val = row.currency && row.currency.toUpperCase()!=='INR' ? `${row.currency} ${row.price}` : `₹${row.price}`;
+        cell.textContent = val;
+      } else {
+        cell.textContent = '—';
+        cell.classList.add('muted');
+      }
+    }
+    function wire(containerId, key){
+      document.getElementById(containerId).addEventListener('click', (e)=>{
+        const btn = e.target.closest('.chip');
+        if(!btn) return;
+        state[key] = btn.dataset.value;
+        selectChip(containerId, state[key]);
+        tryAdvance();
+      });
+    }
+    wire('skinTypeChoices', 'skinType');
+    wire('concernChoices', 'concern');
+    wire('productTypeChoices', 'productType');
+
+    document.getElementById('prevBtn').addEventListener('click', function(){
+      if(cur>0){ cur -= 1; showStep(cur); }
+    });
+    document.getElementById('nextBtn').addEventListener('click', function(){
+      tryAdvance();
+    });
+
+    // Search handlers
+    async function searchProducts(){
+      const q = (document.getElementById('skincareSearch').value||'').trim();
+      if(!q){ hint.textContent = 'Enter text to search'; return; }
+      hint.textContent = 'Searching...'; grid.innerHTML='';
+      try{
+        const res = await fetch(`/api/skincare/search?q=${encodeURIComponent(q)}`);
+        const data = await res.json();
+        const products = (data && data.products) ? data.products : [];
+        renderProducts(products);
+      }catch(err){ hint.textContent='Failed to search.'; }
+    }
+    document.getElementById('searchBtn').addEventListener('click', searchProducts);
+    document.getElementById('skincareSearch').addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); searchProducts(); }});
+
+    // Quick type chips
+    document.getElementById('quickTypes').addEventListener('click', (e)=>{
+      const btn = e.target.closest('.chip'); if(!btn) return;
+      state.productType = btn.dataset.type; selectChip('productTypeChoices', state.productType);
+      fetchProducts();
+    });
+
+    showStep(cur);
+  })();
+</script>
+<style>
+  /* Page-specific body background for skincare page only */
+  body.skincare-bg {
+    background:
+      linear-gradient(135deg, rgba(255,233,241,.85), rgba(255,255,255,.9)),
+      url("{{ url_for('static', filename='images/skinday.png') }}") center center/cover no-repeat fixed;
+    min-height: 100vh;
+  }
+  /* Dark mode override for skincare page */
+  [data-theme="dark"] body.skincare-bg {
+    background:
+      linear-gradient(135deg, rgba(10,10,15,.75), rgba(26,26,46,.75)),
+      url("{{ url_for('static', filename='images/dkbackgroundimage.png') }}") center center/cover no-repeat fixed;
+  }
+</style>
+{% endblock %}

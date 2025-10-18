@@ -1,0 +1,628 @@
+{% extends "base.html" %}
+
+{% block title %}Makeup Recommendations - SkinNova{% endblock %}
+
+{% block content %}
+<div class="recommendations-header text-center">
+    <h1><i class="fas fa-lipstick"></i> Your Makeup Recommendations</h1>
+    <p>Perfect makeup products for your {{ user_profile.skin_undertone }} undertone</p>
+    
+    {% if user_profile.makeup_preferences %}
+        <div class="preferences-info">
+            <strong>Your Style:</strong> {{ user_profile.makeup_preferences.replace(',', ', ').title() }}
+        </div>
+    {% endif %}
+</div>
+
+<!-- Undertone Guide -->
+<div class="undertone-guide card">
+    <div class="card-header">
+        <h2><i class="fas fa-palette"></i> Your {{ user_profile.skin_undertone.title() }} Undertone Guide</h2>
+    </div>
+    
+    <div class="undertone-info">
+        {% if user_profile.skin_undertone == 'warm' %}
+            <div class="undertone-description">
+                <div class="undertone-swatch warm-swatch"></div>
+                <div class="undertone-text">
+                    <h3>Warm Undertone</h3>
+                    <p>Your golden, peachy, or olive undertones look amazing with:</p>
+                    <ul>
+                        <li><strong>Lip Colors:</strong> Coral, orange-reds, warm browns, peach</li>
+                        <li><strong>Eyeshadows:</strong> Golden browns, warm oranges, copper, bronze</li>
+                        <li><strong>Blush:</strong> Peach, coral, warm pink</li>
+                        <li><strong>Highlighter:</strong> Golden, champagne tones</li>
+                    </ul>
+                </div>
+            </div>
+        {% elif user_profile.skin_undertone == 'cool' %}
+            <div class="undertone-description">
+                <div class="undertone-swatch cool-swatch"></div>
+                <div class="undertone-text">
+                    <h3>Cool Undertone</h3>
+                    <p>Your pink, red, or blue undertones are complemented by:</p>
+                    <ul>
+                        <li><strong>Lip Colors:</strong> Berry tones, blue-reds, mauve, pink</li>
+                        <li><strong>Eyeshadows:</strong> Cool browns, purples, blues, silver</li>
+                        <li><strong>Blush:</strong> Rose pink, berry, cool pink</li>
+                        <li><strong>Highlighter:</strong> Icy, silver, pearl tones</li>
+                    </ul>
+                </div>
+            </div>
+        {% else %}
+            <div class="undertone-description">
+                <div class="undertone-swatch neutral-swatch"></div>
+                <div class="undertone-text">
+                    <h3>Neutral Undertone</h3>
+                    <p>Lucky you! Your balanced undertone works with both warm and cool tones:</p>
+                    <ul>
+                        <li><strong>Lip Colors:</strong> Dusty rose, nude pinks, soft berries</li>
+                        <li><strong>Eyeshadows:</strong> Taupe, soft browns, muted tones</li>
+                        <li><strong>Blush:</strong> Soft pink, dusty rose</li>
+                        <li><strong>Highlighter:</strong> Soft gold, rose gold, pearl</li>
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Product Categories -->
+<div class="product-categories">
+    <div class="category-tabs">
+        <button class="category-tab active" data-category="all">All Products</button>
+        <button class="category-tab" data-category="foundation">Foundation</button>
+        <button class="category-tab" data-category="lipstick">Lipstick</button>
+        <button class="category-tab" data-category="eyeshadow">Eyeshadow</button>
+        <button class="category-tab" data-category="blush">Blush</button>
+    </div>
+    
+    <div class="search-box">
+        <input type="text" id="makeup-search" placeholder="Search makeup products..." class="form-control">
+        <i class="fas fa-search"></i>
+    </div>
+</div>
+
+<!-- Products Grid -->
+<div class="products-grid">
+    {% for product in recommendations %}
+        <div class="product-card makeup-card" data-category="{{ (product.subcategory or product.category) }}" data-sku="{{ product.sku if product.sku else '' }}">
+            <div class="product-image">
+                {% if product.image_url %}
+                    <img src="{{ product.image_url }}" alt="{{ product.name }}" />
+                {% elif product.image_path %}
+                    <img src="{{ url_for('static', filename=product.image_path) }}" alt="{{ product.name }}" />
+                {% else %}
+                    {% set cat = (product.subcategory or product.category) %}
+                    {% if cat == 'lipstick' %}
+                        <i class="fas fa-kiss"></i>
+                    {% elif cat == 'foundation' %}
+                        <i class="fas fa-spray-can"></i>
+                    {% elif cat == 'eyeshadow' %}
+                        <i class="fas fa-eye"></i>
+                    {% elif cat == 'blush' %}
+                        <i class="fas fa-heart"></i>
+                    {% else %}
+                        <i class="fas fa-makeup-brush"></i>
+                    {% endif %}
+                {% endif %}
+            </div>
+            
+            <div class="product-info">
+                <div class="product-brand">{{ product.brand }}</div>
+                <h3 class="product-title">{{ product.name }}{% if product.variant %} - {{ product.variant }}{% endif %}</h3>
+                {% if product.description %}
+                    <p class="product-description">{{ product.description }}</p>
+                {% endif %}
+                
+                {% if product.rating %}
+                <div class="product-rating">
+                    <span class="stars">
+                        {% for i in range(5) %}
+                            <i class="fas fa-star{% if i >= product.rating|int %} text-muted{% endif %}"></i>
+                        {% endfor %}
+                    </span>
+                    <span>{{ product.rating }}/5</span>
+                </div>
+                {% endif %}
+                
+                <div class="product-price">{% if product.currency == 'INR' %}₹{{ product.price }}{% else %}${{ "%.2f"|format(product.price) }}{% endif %}</div>
+                
+                {% if product.suitable_undertones %}
+                <div class="undertone-match">
+                    <strong>Perfect for:</strong> {{ product.suitable_undertones.replace(',', ', ').title() }} undertones
+                </div>
+                {% endif %}
+                
+                {% if product.ingredients %}
+                    <div class="product-features">
+                        <strong>Key Features:</strong>
+                        <p>{{ product.ingredients }}</p>
+                    </div>
+                {% endif %}
+                
+                <div class="product-actions">
+                    {% if product.sku %}
+                    <button class="btn btn-primary compare-prices-sku" data-sku="{{ product.sku }}">
+                        <i class="fas fa-chart-bar"></i> Compare Prices (INR)
+                    </button>
+                    {% else %}
+                    <button class="btn btn-primary compare-prices" data-product-id="{{ product.id }}">
+                        <i class="fas fa-chart-bar"></i> Compare Prices
+                    </button>
+                    {% endif %}
+                </div>
+                
+                <div class="price-comparison">
+                    {% if product.retailer_url %}
+                        <a href="{{ product.retailer_url }}" target="_blank" class="price-link nykaa-link">Nykaa</a>
+                    {% else %}
+                        <a href="{{ product.nykaa_url }}" target="_blank" class="price-link nykaa-link">Nykaa</a>
+                    {% endif %}
+                    <a href="https://www.amazon.in/s?k={{ (product.brand ~ ' ' ~ product.name ~ ' ' ~ (product.variant or ''))|replace(' ', '+') }}" target="_blank" class="price-link amazon-link">
+                        <i class="fab fa-amazon"></i> Amazon
+                    </a>
+                    <a href="https://www.flipkart.com/search?q={{ (product.brand ~ ' ' ~ product.name ~ ' ' ~ (product.variant or ''))|replace(' ', '+') }}" target="_blank" class="price-link sephora-link">
+                        Flipkart
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    
+    {% if not recommendations %}
+        <div class="no-recommendations">
+            <div class="empty-state">
+                <i class="fas fa-palette"></i>
+                <h3>No Makeup Recommendations Yet</h3>
+                <p>Please complete your makeup quiz to get personalized product recommendations based on your skin undertone.</p>
+                <a href="{{ url_for('makeup_quiz') }}" class="btn btn-primary">Take Makeup Quiz</a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Makeup Application Tips -->
+{% if recommendations %}
+<div class="makeup-tips card">
+    <div class="card-header">
+        <h2><i class="fas fa-magic"></i> Application Tips for {{ user_profile.skin_undertone.title() }} Undertones</h2>
+    </div>
+    
+    <div class="tips-grid">
+        <div class="tip-card">
+            <div class="tip-icon">
+                <i class="fas fa-foundation"></i>
+            </div>
+            <h4>Foundation</h4>
+            <p>
+                {% if user_profile.skin_undertone == 'warm' %}
+                    Look for foundations with golden or yellow undertones. Avoid anything too pink or ashy.
+                {% elif user_profile.skin_undertone == 'cool' %}
+                    Choose foundations with pink or red undertones. Avoid yellow-based foundations.
+                {% else %}
+                    You can wear both warm and cool-toned foundations. Look for neutral or beige undertones.
+                {% endif %}
+            </p>
+        </div>
+        
+        <div class="tip-card">
+            <div class="tip-icon">
+                <i class="fas fa-lips"></i>
+            </div>
+            <h4>Lip Color</h4>
+            <p>
+                {% if user_profile.skin_undertone == 'warm' %}
+                    Coral, peach, and orange-based reds will make your complexion glow. Try warm berry tones too.
+                {% elif user_profile.skin_undertone == 'cool' %}
+                    Blue-based reds, berry tones, and cool pinks will complement your undertone perfectly.
+                {% else %}
+                    You're lucky! Most lip colors work on you. Try dusty roses and muted berry tones.
+                {% endif %}
+            </p>
+        </div>
+        
+        <div class="tip-card">
+            <div class="tip-icon">
+                <i class="fas fa-eye"></i>
+            </div>
+            <h4>Eye Makeup</h4>
+            <p>
+                {% if user_profile.skin_undertone == 'warm' %}
+                    Golden browns, coppers, and warm oranges will enhance your eyes. Try bronze highlighter on lids.
+                {% elif user_profile.skin_undertone == 'cool' %}
+                    Cool browns, purples, and silvers work beautifully. Add icy highlights for extra pop.
+                {% else %}
+                    Both warm and cool eyeshadows work. Stick to muted, sophisticated tones for best results.
+                {% endif %}
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Color Palette Visualization -->
+<div class="color-palette-section card">
+    <div class="card-header">
+        <h2><i class="fas fa-swatchbook"></i> Your Perfect Color Palette</h2>
+    </div>
+    
+    <div class="color-palette-visual">
+        {% if user_profile.skin_undertone == 'warm' %}
+            <div class="color-swatch" style="background: #FF6B35" title="Coral">Coral</div>
+            <div class="color-swatch" style="background: #D2691E" title="Chocolate">Chocolate</div>
+            <div class="color-swatch" style="background: #CD853F" title="Peru">Bronze</div>
+            <div class="color-swatch" style="background: #DAA520" title="Goldenrod">Gold</div>
+            <div class="color-swatch" style="background: #F4A460" title="Sandy Brown">Peach</div>
+            <div class="color-swatch" style="background: #BC8F8F" title="Rosy Brown">Warm Rose</div>
+        {% elif user_profile.skin_undertone == 'cool' %}
+            <div class="color-swatch" style="background: #DC143C" title="Crimson">Berry Red</div>
+            <div class="color-swatch" style="background: #4B0082" title="Indigo">Purple</div>
+            <div class="color-swatch" style="background: #708090" title="Slate Gray">Cool Gray</div>
+            <div class="color-swatch" style="background: #C0C0C0" title="Silver">Silver</div>
+            <div class="color-swatch" style="background: #FF69B4" title="Hot Pink">Cool Pink</div>
+            <div class="color-swatch" style="background: #8B4513" title="Saddle Brown">Cool Brown</div>
+        {% else %}
+            <div class="color-swatch" style="background: #F5DEB3" title="Wheat">Nude</div>
+            <div class="color-swatch" style="background: #D2B48C" title="Tan">Taupe</div>
+            <div class="color-swatch" style="background: #DDA0DD" title="Plum">Soft Plum</div>
+            <div class="color-swatch" style="background: #F0E68C" title="Khaki">Soft Gold</div>
+            <div class="color-swatch" style="background: #FFC0CB" title="Pink">Dusty Pink</div>
+            <div class="color-swatch" style="background: #B0C4DE" title="Light Steel Blue">Soft Blue</div>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+<style>
+.recommendations-header {
+    margin-bottom: 3rem;
+}
+
+.recommendations-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.recommendations-header p {
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.preferences-info {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(233, 30, 99, 0.05);
+    border-radius: 8px;
+    display: inline-block;
+}
+
+.undertone-guide {
+    margin-bottom: 3rem;
+}
+
+.undertone-description {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.undertone-swatch {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    flex-shrink: 0;
+}
+
+.warm-swatch {
+    background: linear-gradient(45deg, #d4a574, #e6c29e, #f4d2a7);
+}
+
+.cool-swatch {
+    background: linear-gradient(45deg, #f4d2d7, #ddb7c7, #e8ccd6);
+}
+
+.neutral-swatch {
+    background: linear-gradient(45deg, #e8d5c4, #d4c1a8, #c9b79c);
+}
+
+.undertone-text ul {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+}
+
+.undertone-text li {
+    margin-bottom: 0.5rem;
+    color: #666;
+}
+
+.product-image { position: relative;}
+.product-image img { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; display: block; }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.category-tabs {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.category-tab {
+    padding: 8px 16px;
+    border: 2px solid #e9ecef;
+    background: white;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.category-tab:hover,
+.category-tab.active {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: white;
+}
+
+.search-box {
+    position: relative;
+    max-width: 300px;
+}
+
+.search-box i {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+}
+
+.search-box input {
+    padding-right: 40px;
+}
+
+.makeup-card {
+    border-left: 4px solid var(--primary);
+}
+
+.undertone-match {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: rgba(233, 30, 99, 0.05);
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.product-features {
+    margin: 1rem 0;
+    font-size: 0.9rem;
+}
+
+.product-features strong {
+    color: var(--primary);
+}
+
+.product-features p {
+    margin: 0.5rem 0 0;
+    color: #666;
+}
+
+.no-recommendations {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    color: #ccc;
+    margin-bottom: 1rem;
+}
+
+.makeup-tips {
+    margin-top: 3rem;
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.tip-card {
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.tip-icon {
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.tip-card h4 {
+    margin-bottom: 1rem;
+    color: var(--primary);
+}
+
+.tip-card p {
+    color: #666;
+    line-height: 1.6;
+}
+
+.color-palette-section {
+    margin-top: 2rem;
+}
+
+.color-palette-visual {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.color-swatch {
+    height: 80px;
+    border-radius: 12px;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    padding: 0.5rem;
+    color: white;
+    font-weight: 600;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.color-swatch:hover {
+    transform: translateY(-3px);
+}
+
+@media (max-width: 768px) {
+    .undertone-description {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .undertone-swatch {
+        margin: 0 auto 1rem;
+    }
+    
+    .product-categories {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .category-tabs {
+        justify-content: center;
+    }
+    
+    .search-box {
+        max-width: none;
+    }
+    
+    .tips-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .color-palette-visual {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+</style>
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Category filtering
+    const categoryTabs = document.querySelectorAll('.category-tab');
+    const productCards = document.querySelectorAll('.makeup-card');
+    
+    categoryTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const category = this.dataset.category;
+            
+            // Update active tab
+            categoryTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Filter products
+            productCards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+    
+    // Search functionality
+    const searchInput = document.getElementById('makeup-search');
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            
+            productCards.forEach(card => {
+                const title = card.querySelector('.product-title').textContent.toLowerCase();
+                const brand = card.querySelector('.product-brand').textContent.toLowerCase();
+                
+                if (title.includes(query) || brand.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    }
+
+    // Price comparison for SKU-based items (INR)
+    const compareSkuButtons = document.querySelectorAll('.compare-prices-sku');
+    compareSkuButtons.forEach(btn => {
+        btn.addEventListener('click', async function() {
+            const sku = this.dataset.sku;
+            try {
+                const res = await fetch(`/api/price-compare-sku/${sku}`);
+                const data = await res.json();
+                if (data.error) throw new Error(data.error);
+                alert(`Price comparison for ${sku}\nNykaa: ₹${data.nykaa.price}\nAmazon: ₹${data.amazon.price}\nFlipkart: ₹${data.flipkart.price}`);
+            } catch (e) {
+                alert('Failed to fetch price comparison');
+            }
+        });
+    });
+    
+    // Color swatch click effect
+    const colorSwatches = document.querySelectorAll('.color-swatch');
+    colorSwatches.forEach(swatch => {
+        swatch.addEventListener('click', function() {
+            // Create ripple effect
+            const ripple = document.createElement('div');
+            ripple.style.position = 'absolute';
+            ripple.style.borderRadius = '50%';
+            ripple.style.background = 'rgba(255, 255, 255, 0.6)';
+            ripple.style.transform = 'scale(0)';
+            ripple.style.animation = 'ripple 0.6s linear';
+            ripple.style.pointerEvents = 'none';
+            
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = (rect.width - size) / 2 + 'px';
+            ripple.style.top = (rect.height - size) / 2 + 'px';
+            
+            this.style.position = 'relative';
+            this.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        });
+    });
+});
+
+// Add ripple animation CSS
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes ripple {
+        to {
+            transform: scale(2);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);
+</script>
+{% endblock %}
+{% endblock %}

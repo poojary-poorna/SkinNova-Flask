@@ -1,0 +1,1266 @@
+{% extends "base.html" %}
+
+{% block title %}Smart Color Analysis - SkinNova{% endblock %}
+
+{% block content %}
+<div class="quiz-container">
+    <div class="quiz-header text-center">
+        <h1><i class="fas fa-camera"></i> Smart Color Analysis</h1>
+        <p>Use your camera to capture a photo and get AI-powered color analysis based on your natural features.</p>
+    </div>
+
+    <!-- Camera Analysis Section -->
+    <div class="camera-analysis-section card">
+        <div class="card-header">
+            <h2><i class="fas fa-camera-retro"></i> AI Photo Color Analysis</h2>
+            <p>Get instant color analysis using your camera with our advanced AI technology</p>
+        </div>
+        
+        <div class="camera-container">
+            <div class="camera-section-enhanced">
+                <video id="cameraFeed" class="camera-feed-enhanced" style="display: none;" autoplay playsinline></video>
+                <canvas id="cameraCanvas" class="camera-canvas-enhanced" style="display: none;"></canvas>
+                <div class="camera-preview-enhanced" id="cameraPreview">
+                    <div class="preview-content-enhanced">
+                        <i class="fas fa-camera camera-icon-enhanced"></i>
+                        <h3>AI Color Analysis Ready</h3>
+                        <p>Click "Start Camera" to begin your personalized color analysis</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="camera-controls-enhanced">
+                <button id="startCamera" class="btn btn-neon-start">
+                    <i class="fas fa-video"></i> Start Camera
+                </button>
+                <button id="capturePhoto" class="btn btn-neon-capture" style="display: none;">
+                    <i class="fas fa-camera"></i> Capture Photo
+                </button>
+                <button id="retakePhoto" class="btn btn-neon-retake" style="display: none;">
+                    <i class="fas fa-redo"></i> Retake Photo
+                </button>
+            </div>
+            
+            <div class="photo-tips-enhanced">
+                <div class="tips-grid-enhanced">
+                    <div class="tip-item-enhanced">
+                        <i class="fas fa-sun"></i>
+                        <span>Natural Lighting</span>
+                    </div>
+                    <div class="tip-item-enhanced">
+                        <i class="fas fa-user-circle"></i>
+                        <span>Center Your Face</span>
+                    </div>
+                    <div class="tip-item-enhanced">
+                        <i class="fas fa-palette"></i>
+                        <span>No Makeup Preferred</span>
+                    </div>
+                    <div class="tip-item-enhanced">
+                        <i class="fas fa-shirt"></i>
+                        <span>Neutral Clothing</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Analysis Results -->
+        <div id="analysisResults" class="analysis-results-enhanced" style="display: none;">
+            <div class="analysis-header-enhanced">
+                <h3><i class="fas fa-chart-pie"></i> Your AI Color Analysis Results</h3>
+            </div>
+            
+            <div id="analysisContent">
+                <!-- Results will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Alternative: Manual Quiz -->
+    <div class="manual-quiz-section card">
+        <div class="card-header">
+            <h2><i class="fas fa-clipboard-question"></i> Alternative: Manual Color Quiz</h2>
+            <p class="text-muted">Prefer not to use your camera? Take our traditional color analysis quiz instead.</p>
+        </div>
+        
+        <div class="text-center">
+            <button id="toggle-manual-quiz" class="btn btn-outline">
+                <i class="fas fa-list"></i> Take Manual Quiz
+            </button>
+        </div>
+    </div>
+
+    <!-- Manual Quiz (Hidden by default) -->
+    <div id="manual-quiz" class="manual-quiz" style="display: none;">
+    
+    <form method="POST" class="quiz-form">
+        <!-- Question 1: Jewelry Preference -->
+        <div class="quiz-question color-question" data-required="true">
+            <h3>Which jewelry looks better on you?</h3>
+            <p class="question-description">Think about which metals make your skin look more radiant.</p>
+            
+            <div class="quiz-options">
+                <label class="quiz-option" for="gold">
+                    <input type="radio" id="gold" name="question_1" value="gold">
+                    <div class="option-content">
+                        <div class="jewelry-preview gold-jewelry"></div>
+                        <strong>Gold Jewelry</strong>
+                        <p>Warm, yellow gold tones</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="silver">
+                    <input type="radio" id="silver" name="question_1" value="silver">
+                    <div class="option-content">
+                        <div class="jewelry-preview silver-jewelry"></div>
+                        <strong>Silver Jewelry</strong>
+                        <p>Cool, silver/platinum tones</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="both-metals">
+                    <input type="radio" id="both-metals" name="question_1" value="both">
+                    <div class="option-content">
+                        <div class="jewelry-preview mixed-jewelry"></div>
+                        <strong>Both Look Good</strong>
+                        <p>Can wear both gold and silver</p>
+                    </div>
+                </label>
+            </div>
+        </div>
+        
+        <!-- Question 2: Favorite Colors -->
+        <div class="quiz-question color-question">
+            <h3>Which color family do you gravitate towards?</h3>
+            <p class="question-description">Choose the colors that you naturally prefer and feel confident wearing.</p>
+            
+            <div class="quiz-options">
+                <label class="quiz-option" for="warm-colors">
+                    <input type="radio" id="warm-colors" name="question_2" value="warm">
+                    <div class="option-content">
+                        <div class="color-preview warm-preview"></div>
+                        <strong>Warm Colors</strong>
+                        <p>Coral, peach, golden yellow, orange</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="cool-colors">
+                    <input type="radio" id="cool-colors" name="question_2" value="cool">
+                    <div class="option-content">
+                        <div class="color-preview cool-preview"></div>
+                        <strong>Cool Colors</strong>
+                        <p>Navy blue, emerald, fuchsia, purple</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="neutral-colors">
+                    <input type="radio" id="neutral-colors" name="question_2" value="neutral">
+                    <div class="option-content">
+                        <div class="color-preview neutral-preview"></div>
+                        <strong>Neutral Colors</strong>
+                        <p>Beige, grey, soft pink, sage green</p>
+                    </div>
+                </label>
+            </div>
+        </div>
+        
+        <!-- Question 3: White Preference -->
+        <div class="quiz-question color-question">
+            <h3>Which white looks better on you?</h3>
+            <p class="question-description">Compare how these different whites look against your skin.</p>
+            
+            <div class="quiz-options">
+                <label class="quiz-option" for="cream-white">
+                    <input type="radio" id="cream-white" name="question_3" value="warm">
+                    <div class="option-content">
+                        <div class="white-swatch cream-swatch"></div>
+                        <strong>Cream/Ivory</strong>
+                        <p>Warm, slightly yellow-toned white</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="pure-white">
+                    <input type="radio" id="pure-white" name="question_3" value="cool">
+                    <div class="option-content">
+                        <div class="white-swatch pure-swatch"></div>
+                        <strong>Pure White</strong>
+                        <p>Crisp, bright white</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="off-white">
+                    <input type="radio" id="off-white" name="question_3" value="neutral">
+                    <div class="option-content">
+                        <div class="white-swatch off-swatch"></div>
+                        <strong>Off-White</strong>
+                        <p>Soft, muted white</p>
+                    </div>
+                </label>
+            </div>
+        </div>
+        
+        <!-- Question 4: Hair Color -->
+        <div class="quiz-question color-question">
+            <h3>What's your natural hair color?</h3>
+            <p class="question-description">Consider your natural hair color, not dyed color.</p>
+            
+            <div class="quiz-options">
+                <label class="quiz-option" for="warm-hair">
+                    <input type="radio" id="warm-hair" name="question_4" value="warm">
+                    <div class="option-content">
+                        <strong>Warm Tones</strong>
+                        <p>Golden blonde, auburn, warm brown</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="cool-hair">
+                    <input type="radio" id="cool-hair" name="question_4" value="cool">
+                    <div class="option-content">
+                        <strong>Cool Tones</strong>
+                        <p>Ash blonde, cool brown, black</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="neutral-hair">
+                    <input type="radio" id="neutral-hair" name="question_4" value="neutral">
+                    <div class="option-content">
+                        <strong>Neutral Tones</strong>
+                        <p>Medium brown, dark blonde</p>
+                    </div>
+                </label>
+            </div>
+        </div>
+        
+        <!-- Question 5: Eye Color -->
+        <div class="quiz-question color-question">
+            <h3>What color are your eyes?</h3>
+            <p class="question-description">Choose the closest match to your natural eye color.</p>
+            
+            <div class="quiz-options">
+                <label class="quiz-option" for="warm-eyes">
+                    <input type="radio" id="warm-eyes" name="question_5" value="warm">
+                    <div class="option-content">
+                        <strong>Warm Eyes</strong>
+                        <p>Brown, amber, green, hazel with gold</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="cool-eyes">
+                    <input type="radio" id="cool-eyes" name="question_5" value="cool">
+                    <div class="option-content">
+                        <strong>Cool Eyes</strong>
+                        <p>Blue, grey, green, hazel with grey</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="neutral-eyes">
+                    <input type="radio" id="neutral-eyes" name="question_5" value="neutral">
+                    <div class="option-content">
+                        <strong>Neutral Eyes</strong>
+                        <p>Soft brown, mixed hazel</p>
+                    </div>
+                </label>
+            </div>
+        </div>
+        
+        <!-- Question 6: Best Colors -->
+        <div class="quiz-question color-question">
+            <h3>People often compliment you when you wear:</h3>
+            <p class="question-description">Think about which colors get you the most compliments.</p>
+            
+            <div class="quiz-options">
+                <label class="quiz-option" for="warm-compliments">
+                    <input type="radio" id="warm-compliments" name="question_6" value="warm">
+                    <div class="option-content">
+                        <strong>Warm Colors</strong>
+                        <p>Orange, coral, warm red, golden yellow</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="cool-compliments">
+                    <input type="radio" id="cool-compliments" name="question_6" value="cool">
+                    <div class="option-content">
+                        <strong>Cool Colors</strong>
+                        <p>Blue, purple, fuchsia, emerald green</p>
+                    </div>
+                </label>
+                
+                <label class="quiz-option" for="neutral-compliments">
+                    <input type="radio" id="neutral-compliments" name="question_6" value="neutral">
+                    <div class="option-content">
+                        <strong>Neutral Colors</strong>
+                        <p>Dusty pink, soft grey, sage, taupe</p>
+                    </div>
+                </label>
+            </div>
+        </div>
+        
+        <div class="quiz-actions">
+            <button type="submit" class="btn btn-primary btn-large">
+                <i class="fas fa-palette"></i> Discover My Color Palette
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+.quiz-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.quiz-header {
+    margin-bottom: 3rem;
+}
+
+.quiz-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.quiz-header p {
+    font-size: 1.1rem;
+    color: #666;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Enhanced Camera Analysis Styles */
+.camera-analysis-section {
+    margin-bottom: 3rem;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(233, 30, 99, 0.05));
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.camera-container {
+    text-align: center;
+    padding: 2rem;
+}
+
+.camera-section-enhanced {
+    width: 100%;
+    max-width: 600px;
+    height: 400px;
+    margin: 0 auto 2rem;
+    border: 3px dashed var(--primary);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(255, 192, 203, 0.1), rgba(255, 105, 180, 0.08));
+    backdrop-filter: blur(15px);
+    transition: all 0.3s ease;
+}
+
+.camera-section-enhanced:hover {
+    border-color: var(--accent-secondary);
+    box-shadow: 0 0 30px rgba(233, 30, 99, 0.2);
+}
+
+.camera-feed-enhanced, .camera-canvas-enhanced {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 17px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.camera-preview-enhanced {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 17px;
+    transition: all 0.3s ease;
+}
+
+.preview-content-enhanced {
+    text-align: center;
+    padding: 3rem;
+}
+
+.camera-icon-enhanced {
+    font-size: 5rem;
+    color: var(--primary);
+    margin-bottom: 2rem;
+    animation: pulse 2s infinite;
+    filter: drop-shadow(0 0 15px var(--primary));
+}
+
+.preview-content-enhanced h3 {
+    font-size: 1.8rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.preview-content-enhanced p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.camera-controls-enhanced {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
+
+.btn-neon-start {
+    background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    border: none;
+    box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+    animation: glow-blue 2s ease-in-out infinite alternate;
+    transition: all 0.3s ease;
+}
+
+.btn-neon-start:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 35px rgba(79, 172, 254, 0.6);
+}
+
+.btn-neon-capture {
+    background: linear-gradient(45deg, #fa709a 0%, #fee140 100%);
+    color: white;
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    border: none;
+    box-shadow: 0 8px 25px rgba(250, 112, 154, 0.4);
+    animation: glow-pink 1.5s ease-in-out infinite alternate;
+    transition: all 0.3s ease;
+}
+
+.btn-neon-capture:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 35px rgba(250, 112, 154, 0.6);
+}
+
+.btn-neon-retake {
+    background: linear-gradient(45deg, #a8edea 0%, #fed6e3 100%);
+    color: #333;
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    border: none;
+    box-shadow: 0 8px 25px rgba(168, 237, 234, 0.4);
+    transition: all 0.3s ease;
+}
+
+.btn-neon-retake:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 35px rgba(168, 237, 234, 0.6);
+}
+
+@keyframes glow-blue {
+    0% { box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4); }
+    100% { box-shadow: 0 12px 35px rgba(79, 172, 254, 0.7); }
+}
+
+@keyframes glow-pink {
+    0% { box-shadow: 0 8px 25px rgba(250, 112, 154, 0.4); }
+    100% { box-shadow: 0 12px 35px rgba(250, 112, 154, 0.7); }
+}
+
+.photo-tips-enhanced {
+    margin: 2rem 0;
+}
+
+.tips-grid-enhanced {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.tip-item-enhanced {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.tip-item-enhanced:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 25px var(--shadow);
+}
+
+.tip-item-enhanced i {
+    font-size: 2rem;
+    color: var(--accent-primary);
+    filter: drop-shadow(0 0 5px var(--accent-primary));
+}
+
+.tip-item-enhanced span {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.analysis-results-enhanced {
+    margin-top: 3rem;
+    padding: 2.5rem;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(52, 211, 153, 0.05) 100%);
+    border-radius: 20px;
+    border: 2px solid rgba(16, 185, 129, 0.2);
+    backdrop-filter: blur(15px);
+}
+
+.analysis-header-enhanced {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.analysis-header-enhanced h3 {
+    color: var(--success);
+    font-size: 2rem;
+    filter: drop-shadow(0 0 10px var(--success));
+}
+
+.analysis-results {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, rgba(233, 30, 99, 0.05) 0%, rgba(156, 39, 176, 0.05) 100%);
+    border-radius: var(--border-radius);
+    border: 2px solid rgba(233, 30, 99, 0.1);
+}
+
+.analysis-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.analysis-header h3 {
+    color: var(--primary);
+    font-size: 1.8rem;
+}
+
+.manual-quiz-section {
+    margin-bottom: 2rem;
+}
+
+.analysis-loading {
+    text-align: center;
+    padding: 3rem;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.quiz-question {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+}
+
+.quiz-question h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+}
+
+.question-description {
+    color: #666;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+}
+
+.quiz-options {
+    display: grid;
+    gap: 1rem;
+}
+
+.quiz-option {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.quiz-option:hover {
+    border-color: var(--primary);
+    background: rgba(233, 30, 99, 0.02);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(233, 30, 99, 0.1);
+}
+
+.quiz-option input {
+    margin-right: 1rem;
+    width: 20px;
+    height: 20px;
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+
+.option-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.option-content strong {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: var(--dark);
+    font-weight: 600;
+}
+
+.option-content p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.quiz-option.selected {
+    border-color: var(--primary);
+    background: rgba(233, 30, 99, 0.05);
+    box-shadow: 0 4px 15px rgba(233, 30, 99, 0.15);
+}
+
+.quiz-actions {
+    text-align: center;
+    margin-top: 3rem;
+}
+
+.btn-large {
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+/* Jewelry Previews */
+.jewelry-preview {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 1rem;
+    border: 3px solid;
+}
+
+.gold-jewelry {
+    background: linear-gradient(45deg, #FFD700, #B8860B);
+    border-color: #DAA520;
+}
+
+.silver-jewelry {
+    background: linear-gradient(45deg, #C0C0C0, #808080);
+    border-color: #A0A0A0;
+}
+
+.mixed-jewelry {
+    background: linear-gradient(45deg, #FFD700 50%, #C0C0C0 50%);
+    border-color: #999;
+}
+
+/* Color Previews */
+.color-preview {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    margin-right: 1rem;
+}
+
+.warm-preview {
+    background: linear-gradient(45deg, #FF6B35, #F4A460, #DAA520);
+}
+
+.cool-preview {
+    background: linear-gradient(45deg, #4169E1, #9370DB, #DC143C);
+}
+
+.neutral-preview {
+    background: linear-gradient(45deg, #D2B48C, #DDA0DD, #90EE90);
+}
+
+/* White Swatches */
+.white-swatch {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    margin-right: 1rem;
+}
+
+.cream-swatch {
+    background: #FFF8DC;
+}
+
+.pure-swatch {
+    background: #FFFFFF;
+}
+
+.off-swatch {
+    background: #F5F5F5;
+}
+
+@media (max-width: 768px) {
+    .quiz-header h1 {
+        font-size: 2rem;
+    }
+    
+    .quiz-question {
+        padding: 2rem 1.5rem;
+    }
+    
+    .quiz-option {
+        padding: 1rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+    
+    .quiz-option input {
+        margin-right: 0;
+        margin-bottom: 0.5rem;
+    }
+    
+    .option-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .jewelry-preview,
+    .color-preview,
+    .white-swatch {
+        margin: 0 auto 0.5rem;
+    }
+}
+</style>
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Camera functionality
+    const startCameraBtn = document.getElementById('startCamera');
+    const capturePhotoBtn = document.getElementById('capturePhoto');
+    const retakePhotoBtn = document.getElementById('retakePhoto');
+    const cameraFeed = document.getElementById('cameraFeed');
+    const cameraCanvas = document.getElementById('cameraCanvas');
+    const cameraPreview = document.getElementById('cameraPreview');
+    const analysisResults = document.getElementById('analysisResults');
+    const analysisContent = document.getElementById('analysisContent');
+    
+    let stream = null;
+    let capturedImageData = null;
+    
+    // Start Camera Function
+    async function startCamera() {
+        try {
+            console.log('Starting camera...');
+            
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                throw new Error('Camera API not supported in this browser');
+            }
+            
+            const constraints = {
+                video: {
+                    width: { ideal: 800, max: 1280 },
+                    height: { ideal: 600, max: 720 },
+                    facingMode: 'user',
+                    frameRate: { ideal: 30 }
+                },
+                audio: false
+            };
+            
+            stream = await navigator.mediaDevices.getUserMedia(constraints);
+            cameraFeed.srcObject = stream;
+            
+            await new Promise((resolve) => {
+                cameraFeed.onloadedmetadata = () => resolve();
+            });
+            
+            await cameraFeed.play();
+            
+            cameraFeed.style.display = 'block';
+            cameraPreview.style.display = 'none';
+            
+            startCameraBtn.style.display = 'none';
+            capturePhotoBtn.style.display = 'inline-block';
+            
+            const cameraSection = document.querySelector('.camera-section-enhanced');
+            cameraSection.style.borderColor = 'var(--accent-secondary)';
+            cameraSection.style.boxShadow = '0 0 40px rgba(0, 255, 255, 0.3)';
+            
+            showNotification('📸 Camera is live! Position yourself and click "Capture Photo"', 'success');
+            
+        } catch (error) {
+            console.error('Camera error:', error);
+            let errorMessage = 'Failed to access camera: ' + error.message;
+            showNotification(errorMessage, 'error');
+            
+            cameraPreview.innerHTML = `
+                <div class="preview-content-enhanced">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 4rem; color: var(--error); margin-bottom: 2rem;"></i>
+                    <h3 style="color: var(--error);">Camera Access Failed</h3>
+                    <p>${errorMessage}</p>
+                    <button onclick="location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: var(--accent-primary); color: white; border: none; border-radius: 5px; cursor: pointer;">Refresh Page</button>
+                </div>
+            `;
+        }
+    }
+    
+    function capturePhoto() {
+        const canvas = cameraCanvas;
+        const video = cameraFeed;
+        const context = canvas.getContext('2d');
+        
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        
+        context.drawImage(video, 0, 0);
+        capturedImageData = canvas.toDataURL('image/jpeg', 0.8);
+        
+        video.style.display = 'none';
+        cameraPreview.style.display = 'block';
+        cameraPreview.innerHTML = '';
+        cameraPreview.style.backgroundImage = `url(${capturedImageData})`;
+        cameraPreview.style.backgroundSize = 'cover';
+        cameraPreview.style.backgroundPosition = 'center';
+        
+        capturePhotoBtn.style.display = 'none';
+        retakePhotoBtn.style.display = 'inline-block';
+        
+        const cameraSection = document.querySelector('.camera-section-enhanced');
+        cameraSection.style.borderColor = 'var(--success)';
+        cameraSection.style.boxShadow = '0 0 40px rgba(16, 185, 129, 0.3)';
+        
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+        }
+        
+        showNotification('📷 Photo captured! Analyzing colors...', 'success');
+        
+        // Analyze colors automatically
+        setTimeout(() => {
+            analyzeColors();
+        }, 1500);
+    }
+    
+    function retakePhoto() {
+        cameraPreview.style.backgroundImage = '';
+        cameraPreview.innerHTML = `
+            <div class="preview-content-enhanced">
+                <i class="fas fa-camera camera-icon-enhanced"></i>
+                <h3>AI Color Analysis Ready</h3>
+                <p>Click "Start Camera" to begin your personalized color analysis</p>
+            </div>
+        `;
+        cameraPreview.style.display = 'block';
+        
+        startCameraBtn.style.display = 'inline-block';
+        capturePhotoBtn.style.display = 'none';
+        retakePhotoBtn.style.display = 'none';
+        
+        const cameraSection = document.querySelector('.camera-section-enhanced');
+        cameraSection.style.borderColor = 'var(--primary)';
+        cameraSection.style.boxShadow = 'none';
+        
+        analysisResults.style.display = 'none';
+        capturedImageData = null;
+        
+        showNotification('Ready to take a new photo! 📸', 'info');
+    }
+    
+    function analyzeColors() {
+        if (!capturedImageData) return;
+        
+        // Show analysis results with mock data (replace with real AI analysis)
+        const mockResults = {
+            undertone: 'warm',
+            confidence: 89,
+            dominantColors: ['#E8B4A0', '#D4A574', '#C49A7B', '#B8956A'],
+            season: 'Autumn',
+            recommendations: {
+                colors: ['Coral', 'Peach', 'Golden Yellow', 'Olive Green', 'Rust Orange', 'Cream White'],
+                avoid: ['Icy Blue', 'Silver', 'Pure White', 'Electric Pink', 'Cool Purple']
+            }
+        };
+        
+        displayAnalysisResults(mockResults);
+        analysisResults.style.display = 'block';
+        analysisResults.scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    function displayAnalysisResults(results) {
+        analysisContent.innerHTML = `
+            <div class="analysis-results-grid">
+                <div class="result-card main-analysis">
+                    <h4>🎯 Your Skin Undertone</h4>
+                    <div class="undertone-badge ${results.undertone}">
+                        ${results.undertone.charAt(0).toUpperCase() + results.undertone.slice(1)} Undertone
+                    </div>
+                    <div class="confidence-meter">
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" style="width: ${results.confidence}%"></div>
+                        </div>
+                        <span class="confidence-text">${results.confidence}% Confidence</span>
+                    </div>
+                </div>
+                
+                <div class="result-card color-palette">
+                    <h4>🌈 Dominant Colors</h4>
+                    <div class="color-swatches">
+                        ${results.dominantColors.map(color => `
+                            <div class="color-swatch" style="background-color: ${color}" title="${color}"></div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div class="result-card season-analysis">
+                    <h4>🍂 Your Color Season</h4>
+                    <div class="season-badge">${results.season}</div>
+                    <p>This seasonal palette complements your natural coloring beautifully.</p>
+                </div>
+                
+                <div class="result-card recommendations-card">
+                    <h4>✨ Perfect Colors for You</h4>
+                    <div class="color-recommendations">
+                        ${results.recommendations.colors.map(color => `
+                            <span class="color-tag recommended">${color}</span>
+                        `).join('')}
+                    </div>
+                    
+                    <h5>❌ Colors to Avoid</h5>
+                    <div class="color-recommendations">
+                        ${results.recommendations.avoid.map(color => `
+                            <span class="color-tag avoid">${color}</span>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="analysis-actions">
+                <button onclick="window.location.href='{{ url_for('makeup_recommendations') }}'" class="btn btn-primary btn-large">
+                    <i class="fas fa-lipstick"></i> View Makeup Recommendations
+                </button>
+                <button onclick="retakePhoto()" class="btn btn-secondary btn-large">
+                    <i class="fas fa-camera"></i> Take New Photo
+                </button>
+            </div>
+        `;
+        
+        // Add CSS for results styling
+        addResultsCSS();
+    }
+    
+    function addResultsCSS() {
+        const style = document.createElement('style');
+        style.textContent = `
+            .analysis-results-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 2rem;
+                margin-bottom: 3rem;
+            }
+            
+            .result-card {
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(15px);
+                border-radius: 16px;
+                padding: 2rem;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                text-align: center;
+                transition: all 0.3s ease;
+            }
+            
+            .result-card:hover {
+                transform: translateY(-5px);
+                background: rgba(255, 255, 255, 0.15);
+            }
+            
+            .undertone-badge {
+                display: inline-block;
+                padding: 1rem 2rem;
+                border-radius: 25px;
+                font-weight: 600;
+                font-size: 1.1rem;
+                margin: 1rem 0;
+            }
+            
+            .undertone-badge.warm {
+                background: linear-gradient(45deg, #FF6B35, #F4A460);
+                color: white;
+            }
+            
+            .undertone-badge.cool {
+                background: linear-gradient(45deg, #4169E1, #9370DB);
+                color: white;
+            }
+            
+            .undertone-badge.neutral {
+                background: linear-gradient(45deg, #D2B48C, #DDA0DD);
+                color: #333;
+            }
+            
+            .confidence-meter {
+                margin-top: 1.5rem;
+            }
+            
+            .confidence-bar {
+                width: 100%;
+                height: 10px;
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 5px;
+                overflow: hidden;
+                margin-bottom: 0.5rem;
+            }
+            
+            .confidence-fill {
+                height: 100%;
+                background: linear-gradient(90deg, var(--success), var(--accent-secondary));
+                border-radius: 5px;
+                transition: width 1s ease;
+            }
+            
+            .confidence-text {
+                font-weight: 600;
+                color: var(--success);
+            }
+            
+            .color-swatches {
+                display: flex;
+                gap: 1rem;
+                justify-content: center;
+                flex-wrap: wrap;
+                margin-top: 1rem;
+            }
+            
+            .color-swatch {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                border: 3px solid white;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                cursor: pointer;
+                transition: transform 0.3s ease;
+            }
+            
+            .color-swatch:hover {
+                transform: scale(1.1);
+            }
+            
+            .season-badge {
+                display: inline-block;
+                padding: 0.75rem 1.5rem;
+                background: var(--accent-primary);
+                color: white;
+                border-radius: 20px;
+                font-weight: 600;
+                margin: 1rem 0;
+            }
+            
+            .color-recommendations {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                justify-content: center;
+                margin: 1rem 0;
+            }
+            
+            .color-tag {
+                padding: 0.5rem 1rem;
+                border-radius: 15px;
+                font-size: 0.9rem;
+                font-weight: 500;
+            }
+            
+            .color-tag.recommended {
+                background: var(--success);
+                color: white;
+            }
+            
+            .color-tag.avoid {
+                background: var(--error);
+                color: white;
+            }
+            
+            .analysis-actions {
+                display: flex;
+                gap: 2rem;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    // Notification function
+    function showNotification(message, type = 'info') {
+        // Remove existing notifications
+        const existingNotifications = document.querySelectorAll('.notification');
+        existingNotifications.forEach(n => n.remove());
+        
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.innerHTML = `
+            <i class="fas ${
+                type === 'success' ? 'fa-check-circle' :
+                type === 'error' ? 'fa-exclamation-circle' :
+                'fa-info-circle'
+            }"></i>
+            <span>${message}</span>
+        `;
+        
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border-left: 4px solid ${
+                type === 'success' ? 'var(--success)' :
+                type === 'error' ? 'var(--error)' :
+                'var(--accent-primary)'
+            };
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px var(--shadow);
+            max-width: 400px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-primary);
+            animation: slideInRight 0.3s ease;
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 4000);
+    }
+    
+    // Event listeners
+    if (startCameraBtn) startCameraBtn.addEventListener('click', startCamera);
+    if (capturePhotoBtn) capturePhotoBtn.addEventListener('click', capturePhoto);
+    if (retakePhotoBtn) retakePhotoBtn.addEventListener('click', retakePhoto);
+    
+    // Make functions global for onclick handlers
+    window.retakePhoto = retakePhoto;
+    
+    // Manual quiz functionality (existing code)
+    const manualQuizToggle = document.getElementById('toggle-manual-quiz');
+    const manualQuiz = document.getElementById('manual-quiz');
+    
+    if (manualQuizToggle) {
+        manualQuizToggle.addEventListener('click', function() {
+            if (manualQuiz.style.display === 'none') {
+                manualQuiz.style.display = 'block';
+                this.innerHTML = '<i class="fas fa-camera"></i> Use Camera Instead';
+                manualQuiz.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                manualQuiz.style.display = 'none';
+                this.innerHTML = '<i class="fas fa-list"></i> Take Manual Quiz';
+            }
+        });
+    }
+    
+    // Add progress tracking for manual quiz
+    const questions = document.querySelectorAll('.color-question');
+    if (questions.length > 0) {
+        const totalQuestions = questions.length;
+        
+        // Update progress function
+        function updateProgress() {
+            let answeredQuestions = 0;
+            questions.forEach(question => {
+                const inputs = question.querySelectorAll('input[type="radio"]');
+                let hasAnswer = false;
+                inputs.forEach(input => {
+                    if (input.checked) hasAnswer = true;
+                });
+                if (hasAnswer) answeredQuestions++;
+            });
+        }
+        
+        // Listen for changes in manual quiz
+        document.addEventListener('change', updateProgress);
+    }
+});
+
+// Animation styles
+const animationStyle = document.createElement('style');
+animationStyle.textContent = `
+    @keyframes slideInRight {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes slideOutRight {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+    }
+`;
+document.head.appendChild(animationStyle);
+</script>
+
+<style>
+.color-progress {
+    margin: 2rem 0;
+    text-align: center;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--gradient-primary);
+    transition: width 0.3s ease;
+    border-radius: 4px;
+}
+
+.progress-text {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 500;
+}
+</style>
+{% endblock %}
+{% endblock %}

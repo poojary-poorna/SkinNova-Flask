@@ -1,0 +1,347 @@
+{% extends "base.html" %}
+
+{% block title %}Skincare Recommendations - SkinNova{% endblock %}
+
+{% block content %}
+<div class="recommendations-header text-center">
+    <h1><i class="fas fa-heart"></i> Your Skincare Recommendations</h1>
+    <p>Personalized products for {{ user_profile.skin_type }} skin</p>
+    
+    {% if user_profile.skin_concerns %}
+        <div class="skin-info">
+            <strong>Addressing:</strong> {{ user_profile.skin_concerns.replace(',', ', ').title() }}
+        </div>
+    {% endif %}
+</div>
+
+<!-- Filters -->
+<div class="filters-section">
+    <div class="filters">
+        <button class="filter-btn active" data-filter="all">All Products</button>
+        <button class="filter-btn" data-filter="cleanser">Cleansers</button>
+        <button class="filter-btn" data-filter="serum">Serums</button>
+        <button class="filter-btn" data-filter="moisturizer">Moisturizers</button>
+        <button class="filter-btn" data-filter="sunscreen">Sunscreens</button>
+    </div>
+    
+    <div class="search-box">
+        <input type="text" id="product-search" placeholder="Search products..." class="form-control">
+        <i class="fas fa-search"></i>
+    </div>
+</div>
+
+<!-- Products Grid -->
+<div class="products-grid">
+    {% for product in recommendations %}
+        <div class="product-card" data-category="{{ product.subcategory }}">
+            <div class="product-image">
+                <i class="fas fa-bottle-droplet"></i>
+            </div>
+            
+            <div class="product-info">
+                <div class="product-brand">{{ product.brand }}</div>
+                <h3 class="product-title">{{ product.name }}</h3>
+                <p class="product-description">{{ product.description }}</p>
+                
+                <div class="product-rating">
+                    <span class="stars">
+                        {% for i in range(5) %}
+                            <i class="fas fa-star{% if i >= product.rating|int %} text-muted{% endif %}"></i>
+                        {% endfor %}
+                    </span>
+                    <span>{{ product.rating }}/5</span>
+                </div>
+                
+                <div class="product-price">${{ "%.2f"|format(product.price) }}</div>
+                
+                <div class="product-details">
+                    <p><strong>For:</strong> {{ product.suitable_skin_types.title() }}</p>
+                    {% if product.target_concerns %}
+                        <p><strong>Helps with:</strong> {{ product.target_concerns.replace(',', ', ').title() }}</p>
+                    {% endif %}
+                </div>
+                
+                <div class="product-ingredients">
+                    <strong>Key Ingredients:</strong>
+                    <p>{{ product.ingredients }}</p>
+                </div>
+                
+                <div class="product-actions">
+                    <button class="btn btn-primary compare-prices" data-product-id="{{ product.id }}">
+                        <i class="fas fa-chart-bar"></i> Compare Prices
+                    </button>
+                </div>
+                
+                <div class="price-comparison">
+                    <a href="{{ product.amazon_url }}" target="_blank" class="price-link amazon-link">
+                        <i class="fab fa-amazon"></i> Amazon
+                    </a>
+                    <a href="{{ product.nykaa_url }}" target="_blank" class="price-link nykaa-link">
+                        Nykaa
+                    </a>
+                    <a href="{{ product.sephora_url }}" target="_blank" class="price-link sephora-link">
+                        <i class="fas fa-store"></i> Sephora
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    
+    {% if not recommendations %}
+        <div class="no-recommendations">
+            <div class="empty-state">
+                <i class="fas fa-search"></i>
+                <h3>No Recommendations Yet</h3>
+                <p>Please complete your skin assessment quiz to get personalized product recommendations.</p>
+                <a href="{{ url_for('skin_quiz') }}" class="btn btn-primary">Take Skin Quiz</a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Skincare Routine Guide -->
+{% if recommendations %}
+<div class="routine-guide card">
+    <div class="card-header">
+        <h2><i class="fas fa-list-check"></i> Recommended Routine for {{ user_profile.skin_type.title() }} Skin</h2>
+    </div>
+    
+    <div class="routine-steps">
+        <div class="routine-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h4>Morning Cleanser</h4>
+                <p>Start with a gentle cleanser suitable for your {{ user_profile.skin_type }} skin.</p>
+            </div>
+        </div>
+        
+        <div class="routine-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h4>Treatment Serum</h4>
+                <p>Apply targeted serums to address your specific concerns.</p>
+            </div>
+        </div>
+        
+        <div class="routine-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h4>Moisturizer</h4>
+                <p>Hydrate with a moisturizer appropriate for your skin type.</p>
+            </div>
+        </div>
+        
+        <div class="routine-step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <h4>Sunscreen (AM only)</h4>
+                <p>Always finish your morning routine with broad-spectrum SPF 30+.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<style>
+.recommendations-header {
+    margin-bottom: 3rem;
+}
+
+.recommendations-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.recommendations-header p {
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.skin-info {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(233, 30, 99, 0.05);
+    border-radius: 8px;
+    display: inline-block;
+}
+
+.filters-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.filters {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 8px 16px;
+    border: 2px solid #e9ecef;
+    background: white;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: white;
+}
+
+.search-box {
+    position: relative;
+    max-width: 300px;
+}
+
+.search-box i {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+}
+
+.search-box input {
+    padding-right: 40px;
+}
+
+.no-recommendations {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    color: #ccc;
+    margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.routine-guide {
+    margin-top: 4rem;
+}
+
+.routine-steps {
+    display: grid;
+    gap: 1rem;
+}
+
+.routine-step {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.routine-step .step-number {
+    width: 40px;
+    height: 40px;
+    background: var(--gradient-primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.step-content h4 {
+    margin-bottom: 0.25rem;
+    color: var(--primary);
+}
+
+.step-content p {
+    margin: 0;
+    color: #666;
+}
+
+.product-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-details {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.product-details p {
+    margin-bottom: 0.5rem;
+}
+
+.product-details p:last-child {
+    margin-bottom: 0;
+}
+
+.product-ingredients {
+    margin: 1rem 0;
+    font-size: 0.9rem;
+}
+
+.product-ingredients strong {
+    color: var(--primary);
+}
+
+.product-ingredients p {
+    margin: 0.5rem 0 0;
+    color: #666;
+}
+
+.product-actions {
+    margin: 1rem 0;
+}
+
+@media (max-width: 768px) {
+    .filters-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .filters {
+        justify-content: center;
+    }
+    
+    .search-box {
+        max-width: none;
+    }
+    
+    .routine-step {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .routine-step .step-number {
+        margin-bottom: 1rem;
+    }
+}
+</style>
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize product filtering and search
+    initializeFilters();
+    initializeSearch();
+});
+</script>
+{% endblock %}
+{% endblock %}

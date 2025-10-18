@@ -1,0 +1,37 @@
+{% extends "admin_layout.html" %}
+
+{% block title %}Admin Dashboard - SkinNova{% endblock %}
+
+{% block admin_content %}
+<div class="grid grid-2">
+  <div class="card">
+    <h3>Quick Links</h3>
+    <div class="grid">
+      <a class="btn primary" href="{{ url_for('admin_products') }}">Manage Products</a>
+      <a class="btn" href="{{ url_for('admin_reviews') }}">Manage Reviews</a>
+      <a class="btn" href="{{ url_for('admin_rules') }}">Recommendation Rules</a>
+      <a class="btn" href="{{ url_for('admin_blog_list') }}">Blog Posts</a>
+      <a class="btn" href="{{ url_for('admin_settings') }}">Site Settings</a>
+      <a class="btn" href="{{ url_for('admin_skincare_images') }}">Skincare Manual Images</a>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Data Tools</h3>
+    <div class="grid">
+      <a class="btn" href="{{ url_for('upload_product_image') }}">Upload Product Image</a>
+      <form method="POST" action="{{ url_for('admin_skincare_purge') }}" onsubmit="return confirm('Delete ALL skincare products?')">
+        <button class="btn danger" type="submit">Purge All Skincare Products</button>
+      </form>
+      <a class="btn" href="{{ url_for('admin_skincare_images') }}">Open Skincare Images Folder</a>
+      <form method="POST" action="{{ url_for('admin_replace_skincare') }}">
+        <div class="label">Replace Skincare From JSON</div>
+        <div class="form-row single">
+          <input class="input" type="text" name="json_path" placeholder="data/skincare_seed.json" />
+        </div>
+        <div style="margin-top:.6rem"><button class="btn primary" type="submit">Replace</button></div>
+      </form>
+      <a class="btn" href="{{ url_for('admin_enrich_nykaa_images') }}">External Enrichment (Disabled)</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

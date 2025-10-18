@@ -1,0 +1,46 @@
+{% extends "admin_layout.html" %}
+{% block title %}Blog - Admin{% endblock %}
+{% block admin_content %}
+<h2>Blog Posts</h2>
+<div class="card" style="margin-bottom:1rem;">
+  <a class="btn primary" href="{{ url_for('admin_blog_new') }}">+ New Post</a>
+</div>
+<style>
+  .blog-table{width:100%;border-collapse:separate;border-spacing:0 8px}
+  .blog-table th,.blog-table td{padding:.6rem .75rem;background:#fff;border:1px solid #f3c2d3}
+  .blog-table th{background:#ffe9f1;color:#7a0f37}
+  .btn{display:inline-flex;align-items:center;gap:.4rem;padding:.4rem .8rem;border-radius:8px;border:1px solid #f3c2d3;background:#ffedf3;color:#b10e52;text-decoration:none}
+  .btn.danger{background:#ffb3c9;border-color:#ff8fb2;color:#7a0f37}
+</style>
+<div class="card">
+  <table class="blog-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Slug</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in posts %}
+      <tr>
+        <td>{{ p.id }}</td>
+        <td>{{ p.title }}</td>
+        <td>{{ p.slug }}</td>
+        <td>{{ p.created_at }}</td>
+        <td>
+          <a class="btn" href="{{ url_for('admin_blog_edit', bid=p.id) }}">Edit</a>
+          <form method="POST" action="{{ url_for('admin_blog_delete', bid=p.id) }}" style="display:inline" onsubmit="return confirm('Delete this post?')">
+            <button class="btn danger" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5">No posts yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

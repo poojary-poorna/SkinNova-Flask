@@ -1,0 +1,47 @@
+{% extends "admin_layout.html" %}
+{% block title %}Reviews - Admin{% endblock %}
+{% block admin_content %}
+<h2>User Reviews</h2>
+<p>Delete inappropriate or spam reviews below.</p>
+<style>
+  .rev-table{width:100%;border-collapse:separate;border-spacing:0 8px}
+  .rev-table th,.rev-table td{padding:.6rem .75rem;background:#fff;border:1px solid #f3c2d3}
+  .rev-table th{background:#ffe9f1;color:#7a0f37}
+  .btn{display:inline-flex;align-items:center;gap:.4rem;padding:.4rem .8rem;border-radius:8px;border:1px solid #f3c2d3;background:#ffedf3;color:#b10e52;text-decoration:none}
+  .btn.danger{background:#ffb3c9;border-color:#ff8fb2;color:#7a0f37}
+</style>
+<div class="card">
+  <table class="rev-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Product</th>
+        <th>User</th>
+        <th>Rating</th>
+        <th>Review</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in reviews %}
+      <tr>
+        <td>{{ r.id }}</td>
+        <td>{{ r.product_name }}</td>
+        <td>{{ r.user_name }}</td>
+        <td>{{ r.rating }}</td>
+        <td>{{ r.review_text }}</td>
+        <td>{{ r.created_at }}</td>
+        <td>
+          <form method="POST" action="{{ url_for('admin_review_delete', rid=r.id) }}" onsubmit="return confirm('Delete this review?')">
+            <button class="btn danger" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="7">No reviews found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

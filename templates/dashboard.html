@@ -1,0 +1,1592 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - SkinNova{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+<div class="dashboard-header">
+    <div class="header-content">
+        <div class="welcome-section">
+            <h1><i class="fas fa-tachometer-alt glow-icon"></i> Welcome, {{ session.username }}!</h1>
+            <p>Your personalized beauty assistant dashboard</p>
+        </div>
+        <div class="theme-toggle-container">
+            <div class="theme-toggle">
+                <input type="checkbox" id="theme-switch" class="theme-checkbox">
+                <label for="theme-switch" class="theme-label">
+                    <i class="fas fa-sun theme-icon light-icon"></i>
+                    <i class="fas fa-moon theme-icon dark-icon"></i>
+                    <div class="theme-slider"></div>
+                </label>
+                <span class="theme-text">Dark Mode</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Profile Status -->
+<div class="profile-status card">
+    <div class="card-header">
+        <h2><i class="fas fa-user-circle"></i> Your Profile Status</h2>
+    </div>
+    
+    {% if user_profile %}
+        <div class="profile-info">
+            <div class="profile-item">
+                <strong>Skin Type:</strong> 
+                {{ user_profile.skin_type.title() if user_profile.skin_type else 'Not set' }}
+            </div>
+            
+            <div class="profile-item">
+                <strong>Skin Concerns:</strong> 
+                {% if user_profile.skin_concerns %}
+                    {{ user_profile.skin_concerns.replace(',', ', ').title() }}
+                {% else %}
+                    Not set
+                {% endif %}
+            </div>
+            
+            <div class="profile-item">
+                <strong>Skin Undertone:</strong> 
+                {{ user_profile.skin_undertone.title() if user_profile.skin_undertone else 'Not set' }}
+            </div>
+            
+            <div class="profile-item">
+                <strong>Color Season:</strong> 
+                {{ user_profile.color_season.title() if user_profile.color_season else 'Not analyzed' }}
+            </div>
+        </div>
+    {% else %}
+        <div class="no-profile">
+            <p><i class="fas fa-info-circle"></i> Complete your skin assessment to get personalized recommendations!</p>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Quick Actions -->
+<div class="quick-actions">
+    <h2>Quick Actions</h2>
+    
+    <div class="dashboard-grid">
+        <div class="dashboard-card">
+            <div class="dashboard-icon">
+                <i class="fas fa-palette"></i>
+            </div>
+            <h3>Makeup Quiz</h3>
+            <p>Discover makeup that complements your skin undertone</p>
+            <a href="{{ url_for('makeup_quiz') }}" class="btn btn-primary">
+                {% if user_profile and user_profile.skin_undertone %}Retake Quiz{% else %}Take Quiz{% endif %}
+            </a>
+        </div>
+        
+        <div class="dashboard-card camera-card">
+            <div class="dashboard-icon">
+                <i class="fas fa-camera camera-icon"></i>
+            </div>
+            <h3>Color Analysis with Camera</h3>
+            <p>Use your camera to analyze skin tone and find perfect colors</p>
+            <div class="camera-section">
+                <video id="cameraFeed" class="camera-feed" style="display: none;"></video>
+                <canvas id="cameraCanvas" class="camera-canvas" style="display: none;"></canvas>
+                <div class="camera-preview" id="cameraPreview"></div>
+            </div>
+            <div class="camera-controls">
+                <button id="startCamera" class="btn btn-neon">Start Camera</button>
+                <button id="capturePhoto" class="btn btn-capture" style="display: none;">Capture Photo</button>
+                <button id="retakePhoto" class="btn btn-secondary" style="display: none;">Retake</button>
+            </div>
+            <a href="{{ url_for('photo_color_analysis') }}" class="btn btn-primary btn-analyze">
+                <i class="fas fa-camera"></i>
+                Full Photo Analysis
+            </a>
+            <a href="{{ url_for('color_analysis') }}" class="btn btn-secondary btn-analyze">
+                {% if user_profile and user_profile.color_season %}View Results{% else %}Manual Analysis{% endif %}
+            </a>
+        </div>
+        
+        <div class="dashboard-card">
+            <div class="dashboard-icon">
+                <i class="fas fa-heart"></i>
+            </div>
+            <h3>Skincare Products</h3>
+            <p>View your personalized skincare recommendations</p>
+            <a href="{{ url_for('skincare_recommendations') }}" class="btn btn-outline">
+                {% if user_profile and user_profile.skin_type %}View Products{% else %}Take Quiz First{% endif %}
+            </a>
+        </div>
+        
+        <div class="dashboard-card">
+            <div class="dashboard-icon">
+                <i class="fas fa-lipstick"></i>
+            </div>
+            <h3>Makeup Products</h3>
+            <p>Explore makeup recommendations for your undertone</p>
+            <a href="{{ url_for('makeup_recommendations') }}" class="btn btn-outline">
+                {% if user_profile and user_profile.skin_undertone %}View Products{% else %}Take Quiz First{% endif %}
+            </a>
+        </div>
+        
+        <div class="dashboard-card">
+            <div class="dashboard-icon">
+                <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <h3>Find Dermatologists</h3>
+            <p>Locate nearby skin specialists in your area</p>
+            <a href="{{ url_for('find_dermatologists') }}" class="btn btn-outline">Find Doctors</a>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="recent-activity card">
+    <div class="card-header">
+        <h2><i class="fas fa-clock"></i> Getting Started</h2>
+    </div>
+    
+    <div class="activity-list">
+        <div class="activity-item {% if user_profile and user_profile.skin_type %}completed{% endif %}">
+            <div class="activity-icon">
+                <i class="fas fa-{% if user_profile and user_profile.skin_type %}check-circle{% else %}circle{% endif %}"></i>
+            </div>
+            <div class="activity-content">
+                <h4>Complete Skin Assessment</h4>
+                <p>Identify your skin type and concerns</p>
+            </div>
+        </div>
+        
+        <div class="activity-item {% if user_profile and user_profile.skin_undertone %}completed{% endif %}">
+            <div class="activity-icon">
+                <i class="fas fa-{% if user_profile and user_profile.skin_undertone %}check-circle{% else %}circle{% endif %}"></i>
+            </div>
+            <div class="activity-content">
+                <h4>Take Makeup Quiz</h4>
+                <p>Discover your skin undertone</p>
+            </div>
+        </div>
+        
+        <div class="activity-item {% if user_profile and user_profile.color_season %}completed{% endif %}">
+            <div class="activity-icon">
+                <i class="fas fa-{% if user_profile and user_profile.color_season %}check-circle{% else %}circle{% endif %}"></i>
+            </div>
+            <div class="activity-content">
+                <h4>Color Analysis</h4>
+                <p>Find your perfect color palette</p>
+            </div>
+        </div>
+        
+        <div class="activity-item">
+            <div class="activity-icon">
+                <i class="fas fa-circle"></i>
+            </div>
+            <div class="activity-content">
+                <h4>Explore Recommendations</h4>
+                <p>Browse your personalized product suggestions</p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<style>
+/* CSS Variables for Light and Dark Themes */
+:root {
+    /* Light Theme - Enhanced Pastel Colors */
+    --bg-primary: #fef7ff;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f8f3ff;
+    --text-primary: #2d1b69;
+    --text-secondary: #6b46c1;
+    --text-muted: #9ca3af;
+    --accent-primary: #ec4899;
+    --accent-secondary: #a855f7;
+    --accent-tertiary: #3b82f6;
+    --border-color: #e5e7eb;
+    --shadow: rgba(0, 0, 0, 0.08);
+    --gradient-bg: linear-gradient(135deg, #fdf2f8 0%, #f3e8ff 50%, #e0f2fe 100%);
+    --card-bg: #ffffff;
+    --hover-bg: #f3f4f6;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    
+    /* Enhanced Pastel Palette */
+    --pastel-pink: #fce7f3;
+    --pastel-purple: #f3e8ff;
+    --pastel-blue: #dbeafe;
+    --pastel-lavender: #e9d5ff;
+    --pastel-mint: #d1fae5;
+    --pastel-peach: #fed7aa;
+    --pastel-rose: #fecaca;
+    --pastel-sky: #e0f2fe;
+    --pastel-lilac: #f3e8ff;
+    --pastel-coral: #fde2e7;
+    
+    /* Shimmer Colors */
+    --shimmer-1: rgba(255, 182, 193, 0.3);
+    --shimmer-2: rgba(255, 105, 180, 0.25);
+    --shimmer-3: rgba(168, 85, 247, 0.2);
+    --shimmer-4: rgba(59, 130, 246, 0.15);
+    --shimmer-5: rgba(16, 185, 129, 0.2);
+}
+
+[data-theme="dark"] {
+    /* Dark Theme - Neon Colors */
+    --bg-primary: #0a0a0f;
+    --bg-secondary: #1a1a2e;
+    --bg-tertiary: #16213e;
+    --text-primary: #ffffff;
+    --text-secondary: #e2e8f0;
+    --text-muted: #94a3b8;
+    --accent-primary: #ff0080;
+    --accent-secondary: #00ffff;
+    --accent-tertiary: #ffff00;
+    --border-color: #2d3748;
+    --shadow: rgba(255, 0, 128, 0.2);
+    --gradient-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    --card-bg: #1e293b;
+    --hover-bg: #334155;
+    --success: #00ff88;
+    --warning: #ffaa00;
+    --error: #ff4466;
+}
+
+/* Base Styles */
+body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+/* Dashboard-specific background */
+.dashboard-container {
+    position: relative;
+    min-height: 100vh;
+    background: 
+        linear-gradient(135deg,
+            rgba(255, 192, 203, 0.3) 0%,
+            rgba(255, 182, 193, 0.4) 25%,
+            rgba(255, 105, 180, 0.25) 50%,
+            rgba(219, 112, 147, 0.4) 75%,
+            rgba(255, 192, 203, 0.3) 100%
+        ),
+        url('{{ url_for('static', filename='images/dashboardimage.png') }}?v=1') center center / cover no-repeat fixed;
+    border: 3px solid #ff6b9d;
+    border-radius: 20px;
+    margin: 10px;
+}
+
+.dashboard-container::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.3;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(255, 182, 193, 0.4) 0%, transparent 60%),
+        radial-gradient(circle at 80% 70%, rgba(255, 105, 180, 0.3) 0%, transparent 60%),
+        radial-gradient(circle at 40% 80%, rgba(255, 192, 203, 0.35) 0%, transparent 60%),
+        radial-gradient(circle at 60% 20%, rgba(255, 182, 193, 0.25) 0%, transparent 60%);
+    animation: shimmerBackground 15s ease-in-out infinite;
+}
+
+/* Beautiful flowing backgrounds for other pages */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.6;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(255, 192, 203, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 182, 193, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(255, 105, 180, 0.2) 0%, transparent 50%),
+        linear-gradient(135deg, 
+            rgba(255, 192, 203, 0.1) 0%,
+            rgba(255, 182, 193, 0.15) 25%,
+            rgba(255, 105, 180, 0.1) 50%,
+            rgba(219, 112, 147, 0.15) 75%,
+            rgba(255, 192, 203, 0.1) 100%
+        );
+    animation: flowingBackground 20s ease-in-out infinite;
+}
+
+[data-theme="dark"] body::before {
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(255, 0, 128, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(255, 255, 0, 0.08) 0%, transparent 50%),
+        linear-gradient(135deg, 
+            rgba(10, 10, 15, 0.8) 0%,
+            rgba(26, 26, 46, 0.9) 25%,
+            rgba(22, 33, 62, 0.8) 50%,
+            rgba(26, 26, 46, 0.9) 75%,
+            rgba(10, 10, 15, 0.8) 100%
+        );
+}
+
+@keyframes flowingBackground {
+    0%, 100% {
+        transform: translateX(0) translateY(0) rotate(0deg) scale(1);
+    }
+    25% {
+        transform: translateX(-20px) translateY(-30px) rotate(2deg) scale(1.05);
+    }
+    50% {
+        transform: translateX(20px) translateY(20px) rotate(-1deg) scale(0.98);
+    }
+    75% {
+        transform: translateX(-10px) translateY(10px) rotate(1deg) scale(1.02);
+    }
+}
+
+@keyframes shimmerBackground {
+    0%, 100% {
+        transform: translateX(0) translateY(0) rotate(0deg) scale(1);
+        filter: hue-rotate(0deg) brightness(1);
+    }
+    25% {
+        transform: translateX(15px) translateY(-20px) rotate(1deg) scale(1.02);
+        filter: hue-rotate(10deg) brightness(1.1);
+    }
+    50% {
+        transform: translateX(-10px) translateY(15px) rotate(-0.5deg) scale(0.98);
+        filter: hue-rotate(-5deg) brightness(0.95);
+    }
+    75% {
+        transform: translateX(-15px) translateY(-5px) rotate(0.8deg) scale(1.01);
+        filter: hue-rotate(8deg) brightness(1.05);
+    }
+}
+
+/* Dashboard Header */
+.dashboard-header {
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background: var(--gradient-bg);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px var(--shadow);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.welcome-section {
+    text-align: center;
+    flex: 1;
+}
+
+.dashboard-header h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.glow-icon {
+    filter: drop-shadow(0 0 10px var(--accent-primary));
+    animation: pulse-glow 2s infinite alternate;
+}
+
+@keyframes pulse-glow {
+    0% { filter: drop-shadow(0 0 5px var(--accent-primary)); }
+    100% { filter: drop-shadow(0 0 20px var(--accent-primary)); }
+}
+
+.dashboard-header p {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    opacity: 0.9;
+}
+
+/* Theme Toggle */
+.theme-toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.theme-checkbox {
+    display: none;
+}
+
+.theme-label {
+    position: relative;
+    width: 60px;
+    height: 30px;
+    background: var(--border-color);
+    border-radius: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+    transition: background 0.3s ease;
+}
+
+.theme-slider {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: var(--accent-primary);
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+    box-shadow: 0 0 10px var(--accent-primary);
+}
+
+.theme-checkbox:checked + .theme-label .theme-slider {
+    transform: translateX(30px);
+    background: var(--accent-secondary);
+    box-shadow: 0 0 15px var(--accent-secondary);
+}
+
+.theme-icon {
+    font-size: 12px;
+    z-index: 1;
+}
+
+.light-icon {
+    color: #fbbf24;
+}
+
+.dark-icon {
+    color: #818cf8;
+}
+
+.theme-text {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+/* Cards with Shimmer Effect */
+.card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px var(--shadow);
+    border: 1px solid var(--border-color);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    position: relative;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        var(--shimmer-1), 
+        var(--shimmer-2), 
+        var(--shimmer-3), 
+        transparent
+    );
+    transition: left 0.6s ease;
+    z-index: 1;
+}
+
+.card:hover::before {
+    left: 100%;
+}
+
+.card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 25px 80px var(--shadow);
+    border-color: var(--accent-primary);
+}
+
+.card > * {
+    position: relative;
+    z-index: 2;
+}
+
+.card-header {
+    background: var(--gradient-bg);
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.card-header h2 {
+    color: var(--text-primary);
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+/* Profile Status */
+.profile-status {
+    margin-bottom: 3rem;
+}
+
+.profile-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem;
+}
+
+.profile-item {
+    padding: 1.5rem;
+    background: var(--bg-tertiary);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.profile-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px var(--shadow);
+    border-color: var(--accent-primary);
+}
+
+.profile-item strong {
+    color: var(--accent-primary);
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.dashboard-card {
+    background: linear-gradient(135deg, 
+        var(--pastel-pink) 0%, 
+        var(--pastel-purple) 25%, 
+        var(--pastel-blue) 50%, 
+        var(--pastel-lavender) 75%, 
+        var(--pastel-mint) 100%
+    );
+    padding: 2rem;
+    border-radius: 24px;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        var(--shimmer-1), 
+        var(--shimmer-2), 
+        var(--shimmer-3), 
+        var(--shimmer-4), 
+        transparent
+    );
+    transition: left 0.8s ease;
+    z-index: 1;
+}
+
+.dashboard-card:hover::before {
+    left: 100%;
+}
+
+.dashboard-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, 
+        var(--shimmer-1), 
+        var(--shimmer-2), 
+        var(--shimmer-3), 
+        var(--shimmer-4)
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 0;
+    border-radius: 24px;
+}
+
+.dashboard-card:hover::after {
+    opacity: 0.1;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-12px) scale(1.03);
+    box-shadow: 0 30px 80px var(--shadow);
+    border-color: var(--accent-primary);
+}
+
+.dashboard-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+.dashboard-icon {
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 10px var(--accent-primary));
+}
+
+.dashboard-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.dashboard-card p {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+/* Camera Card Special Styling */
+.camera-card {
+    position: relative;
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+    border: 2px solid var(--accent-secondary);
+    overflow: hidden;
+}
+
+.camera-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(ellipse at 30% 20%, rgba(255, 192, 203, 0.3) 0%, transparent 40%),
+        radial-gradient(ellipse at 70% 80%, rgba(255, 182, 193, 0.25) 0%, transparent 45%),
+        radial-gradient(ellipse at 20% 70%, rgba(255, 105, 180, 0.2) 0%, transparent 35%),
+        radial-gradient(ellipse at 80% 30%, rgba(219, 112, 147, 0.28) 0%, transparent 50%),
+        linear-gradient(45deg, 
+            rgba(255, 215, 225, 0.15) 0%,
+            rgba(255, 192, 203, 0.2) 20%,
+            rgba(255, 182, 193, 0.18) 40%,
+            rgba(255, 105, 180, 0.15) 60%,
+            rgba(219, 112, 147, 0.2) 80%,
+            rgba(255, 215, 225, 0.15) 100%
+        );
+    animation: liquidFlow 15s ease-in-out infinite;
+    z-index: 0;
+}
+
+[data-theme="dark"] .camera-card::before {
+    background: 
+        radial-gradient(ellipse at 30% 20%, rgba(255, 0, 128, 0.2) 0%, transparent 40%),
+        radial-gradient(ellipse at 70% 80%, rgba(0, 255, 255, 0.15) 0%, transparent 45%),
+        radial-gradient(ellipse at 20% 70%, rgba(255, 255, 0, 0.1) 0%, transparent 35%),
+        radial-gradient(ellipse at 80% 30%, rgba(128, 0, 255, 0.18) 0%, transparent 50%),
+        linear-gradient(45deg, 
+            rgba(26, 26, 46, 0.6) 0%,
+            rgba(22, 33, 62, 0.7) 20%,
+            rgba(30, 41, 59, 0.6) 40%,
+            rgba(26, 26, 46, 0.8) 60%,
+            rgba(22, 33, 62, 0.7) 80%,
+            rgba(26, 26, 46, 0.6) 100%
+        );
+}
+
+.camera-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+@keyframes liquidFlow {
+    0%, 100% {
+        transform: translateX(0) translateY(0) rotate(0deg) scale(1);
+        filter: hue-rotate(0deg) brightness(1);
+    }
+    25% {
+        transform: translateX(10px) translateY(-5px) rotate(1deg) scale(1.02);
+        filter: hue-rotate(10deg) brightness(1.1);
+    }
+    50% {
+        transform: translateX(-5px) translateY(8px) rotate(-0.5deg) scale(0.98);
+        filter: hue-rotate(-5deg) brightness(0.95);
+    }
+    75% {
+        transform: translateX(-8px) translateY(-3px) rotate(0.8deg) scale(1.01);
+        filter: hue-rotate(8deg) brightness(1.05);
+    }
+}
+
+.camera-icon {
+    animation: camera-pulse 2s infinite;
+}
+
+@keyframes camera-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.camera-section {
+    margin: 1.5rem 0;
+    border-radius: 16px;
+    overflow: hidden;
+    background: 
+        radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 70%),
+        linear-gradient(135deg, rgba(255, 192, 203, 0.1), rgba(255, 105, 180, 0.08));
+    min-height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed var(--border-color);
+    position: relative;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .camera-section {
+    background: 
+        radial-gradient(ellipse at 50% 50%, rgba(0, 255, 255, 0.08) 0%, transparent 70%),
+        linear-gradient(135deg, rgba(255, 0, 128, 0.05), rgba(0, 255, 255, 0.03));
+}
+
+.camera-feed, .camera-canvas {
+    width: 100%;
+    max-width: 350px;
+    height: 250px;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.camera-feed:hover {
+    transform: scale(1.02);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .camera-feed,
+[data-theme="dark"] .camera-canvas {
+    border: 2px solid rgba(0, 255, 255, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
+}
+
+.camera-preview {
+    width: 100%;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    text-align: center;
+    font-weight: 500;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.camera-preview.has-image {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 8px;
+}
+
+.camera-controls {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin: 1rem 0;
+    flex-wrap: wrap;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    cursor: pointer;
+    font-size: 0.9rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease;
+}
+
+.btn:hover::before {
+    width: 200%;
+    height: 200%;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
+    color: white;
+    box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(236, 72, 153, 0.4);
+}
+
+.btn-secondary {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+.btn-secondary:hover {
+    background: var(--hover-bg);
+    transform: translateY(-2px);
+}
+
+.btn-neon {
+    background: transparent;
+    color: var(--accent-secondary);
+    border: 2px solid var(--accent-secondary);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    animation: neon-pulse 2s infinite alternate;
+}
+
+@keyframes neon-pulse {
+    0% { box-shadow: 0 0 5px var(--accent-secondary); }
+    100% { box-shadow: 0 0 25px var(--accent-secondary), 0 0 35px var(--accent-secondary); }
+}
+
+.btn-neon:hover {
+    background: var(--accent-secondary);
+    color: var(--bg-primary);
+    transform: scale(1.05);
+}
+
+.btn-capture {
+    background: linear-gradient(45deg, #ff6b35, #f7931e);
+    color: white;
+    animation: capture-ready 1.5s infinite;
+}
+
+@keyframes capture-ready {
+    0%, 100% { box-shadow: 0 0 10px rgba(255, 107, 53, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(255, 107, 53, 0.8); }
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--accent-primary);
+    border: 2px solid var(--accent-primary);
+}
+
+.btn-outline:hover {
+    background: var(--accent-primary);
+    color: white;
+}
+
+/* Activity List */
+.recent-activity {
+    margin-bottom: 2rem;
+}
+
+.activity-list {
+    display: grid;
+    gap: 1rem;
+    padding: 2rem;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+}
+
+.activity-item:hover {
+    background: var(--hover-bg);
+    transform: translateX(10px);
+    border-color: var(--accent-primary);
+}
+
+.activity-item.completed {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+    border-color: var(--success);
+}
+
+.activity-icon {
+    font-size: 1.8rem;
+    width: 50px;
+    text-align: center;
+}
+
+.activity-item:not(.completed) .activity-icon {
+    color: var(--text-muted);
+}
+
+.activity-item.completed .activity-icon {
+    color: var(--success);
+    animation: completed-bounce 0.6s ease;
+}
+
+@keyframes completed-bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+.activity-content h4 {
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+}
+
+.activity-content p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+/* Quick Actions Section */
+.quick-actions {
+    margin-bottom: 3rem;
+}
+
+.quick-actions h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .dashboard-header h1 {
+        font-size: 2.2rem;
+    }
+    
+    .profile-info {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+    }
+    
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .dashboard-card {
+        padding: 1.5rem;
+    }
+    
+    .activity-item {
+        padding: 1rem;
+    }
+    
+    .camera-controls {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .btn {
+        width: 100%;
+        max-width: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-header {
+        padding: 1.5rem;
+    }
+    
+    .dashboard-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .dashboard-card {
+        padding: 1.2rem;
+    }
+    
+    .camera-section {
+        min-height: 150px;
+    }
+    
+    .camera-feed, .camera-canvas {
+        height: 150px;
+    }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-primary);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-secondary);
+}
+</style>
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Theme Toggle Functionality
+    const themeToggle = document.getElementById('theme-switch');
+    const themeText = document.querySelector('.theme-text');
+    
+    // Load saved theme or default to light
+    const savedTheme = localStorage.getItem('dashboard-theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    themeToggle.checked = savedTheme === 'dark';
+    themeText.textContent = savedTheme === 'dark' ? 'Light Mode' : 'Dark Mode';
+    
+    // Theme toggle event listener
+    themeToggle.addEventListener('change', function() {
+        const newTheme = this.checked ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('dashboard-theme', newTheme);
+        themeText.textContent = newTheme === 'dark' ? 'Light Mode' : 'Dark Mode';
+        
+        // Add theme switch animation
+        document.body.style.transition = 'all 0.3s ease';
+        setTimeout(() => {
+            document.body.style.transition = '';
+        }, 300);
+    });
+    
+    // Camera Functionality
+    const startCameraBtn = document.getElementById('startCamera');
+    const capturePhotoBtn = document.getElementById('capturePhoto');
+    const retakePhotoBtn = document.getElementById('retakePhoto');
+    const cameraFeed = document.getElementById('cameraFeed');
+    const cameraCanvas = document.getElementById('cameraCanvas');
+    const cameraPreview = document.getElementById('cameraPreview');
+    
+    let stream = null;
+    let capturedImageData = null;
+    
+    // Initialize camera preview with beautiful styling
+    cameraPreview.innerHTML = `
+        <div style="text-align: center; padding: 2rem;">
+            <i class="fas fa-camera" style="font-size: 4rem; color: var(--accent-primary); margin-bottom: 1rem; animation: pulse 2s infinite;"></i><br>
+            <strong style="color: var(--text-primary); font-size: 1.2rem;">AI-Powered Color Analysis</strong><br>
+            <span style="color: var(--text-muted); font-size: 1rem; line-height: 1.6;">Click "Start Camera" to capture your photo<br>and get instant skin tone analysis</span>
+        </div>
+    `;
+    
+    // Start Camera Function
+    async function startCamera() {
+        try {
+            console.log('Requesting camera access...');
+            
+            // Check if getUserMedia is supported
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                throw new Error('Camera API not supported in this browser');
+            }
+            
+            // Request camera permissions with more comprehensive options
+            const constraints = {
+                video: {
+                    width: { ideal: 640, max: 1280 },
+                    height: { ideal: 480, max: 720 },
+                    facingMode: 'user', // Front camera for selfies
+                    frameRate: { ideal: 30 }
+                },
+                audio: false
+            };
+            
+            stream = await navigator.mediaDevices.getUserMedia(constraints);
+            console.log('Camera stream obtained:', stream);
+            
+            // Set the video source
+            cameraFeed.srcObject = stream;
+            
+            // Wait for metadata to load
+            await new Promise((resolve) => {
+                cameraFeed.onloadedmetadata = () => {
+                    console.log('Video metadata loaded');
+                    resolve();
+                };
+            });
+            
+            // Start playing the video
+            await cameraFeed.play();
+            console.log('Video playing');
+            
+            // Show video, hide preview
+            cameraFeed.style.display = 'block';
+            cameraPreview.style.display = 'none';
+            
+            // Update button visibility
+            startCameraBtn.style.display = 'none';
+            capturePhotoBtn.style.display = 'inline-block';
+            
+            // Add camera active styling with neon glow
+            const cameraSection = document.querySelector('.camera-section');
+            cameraSection.style.borderColor = 'var(--accent-secondary)';
+            cameraSection.style.boxShadow = '0 0 30px rgba(0, 255, 255, 0.5), inset 0 0 20px rgba(0, 255, 255, 0.1)';
+            cameraSection.style.background = 'linear-gradient(45deg, rgba(0, 255, 255, 0.05), rgba(255, 0, 128, 0.05))';
+            
+            showNotification('📸 Camera is live! Position yourself and click "Capture Photo"', 'success');
+            
+        } catch (error) {
+            console.error('Camera error:', error);
+            let errorMessage = 'Failed to access camera. ';
+            
+            switch (error.name) {
+                case 'NotAllowedError':
+                    errorMessage += 'Please allow camera permissions and refresh the page.';
+                    break;
+                case 'NotFoundError':
+                    errorMessage += 'No camera found on this device.';
+                    break;
+                case 'NotReadableError':
+                    errorMessage += 'Camera is being used by another application.';
+                    break;
+                case 'OverconstrainedError':
+                    errorMessage += 'Camera constraints not supported.';
+                    break;
+                default:
+                    errorMessage += error.message || 'Please check your camera and try again.';
+            }
+            
+            showNotification(errorMessage, 'error');
+            cameraPreview.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--error); margin-bottom: 1rem;"></i><br>
+                    <strong style="color: var(--error);">Camera Access Failed</strong><br>
+                    <span style="color: var(--text-muted); font-size: 0.9rem;">${errorMessage}</span><br>
+                    <button onclick="location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: var(--accent-primary); color: white; border: none; border-radius: 5px; cursor: pointer;">Refresh Page</button>
+                </div>
+            `;
+        }
+    }
+    
+    // Capture Photo Function
+    function capturePhoto() {
+        const canvas = cameraCanvas;
+        const video = cameraFeed;
+        const context = canvas.getContext('2d');
+        
+        // Set canvas dimensions to match video
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        
+        // Draw the video frame to canvas
+        context.drawImage(video, 0, 0);
+        
+        // Get image data
+        capturedImageData = canvas.toDataURL('image/jpeg', 0.8);
+        
+        // Hide video, show captured image
+        video.style.display = 'none';
+        cameraPreview.style.display = 'block';
+        cameraPreview.innerHTML = '';
+        cameraPreview.style.backgroundImage = `url(${capturedImageData})`;
+        cameraPreview.classList.add('has-image');
+        
+        // Update button visibility
+        capturePhotoBtn.style.display = 'none';
+        retakePhotoBtn.style.display = 'inline-block';
+        
+        // Add capture success styling
+        document.querySelector('.camera-section').style.borderColor = 'var(--success)';
+        document.querySelector('.camera-section').style.boxShadow = '0 0 20px rgba(16, 185, 129, 0.3)';
+        
+        // Stop camera stream
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+        }
+        
+        showNotification('Photo captured! 📷 You can now use this for color analysis.', 'success');
+        
+        // Simulate color analysis (you can integrate with actual analysis later)
+        setTimeout(() => {
+            analyzeImageColors();
+        }, 1000);
+    }
+    
+    // Retake Photo Function
+    function retakePhoto() {
+        // Reset UI with beautiful styling
+        cameraPreview.style.backgroundImage = '';
+        cameraPreview.classList.remove('has-image');
+        cameraPreview.innerHTML = `
+            <div style="text-align: center; padding: 2rem;">
+                <i class="fas fa-camera" style="font-size: 4rem; color: var(--accent-primary); margin-bottom: 1rem; animation: pulse 2s infinite;"></i><br>
+                <strong style="color: var(--text-primary); font-size: 1.2rem;">Ready for New Analysis</strong><br>
+                <span style="color: var(--text-muted); font-size: 1rem; line-height: 1.6;">Click "Start Camera" to capture<br>a new photo for analysis</span>
+            </div>
+        `;
+        cameraPreview.style.display = 'block';
+        
+        // Reset buttons
+        startCameraBtn.style.display = 'inline-block';
+        capturePhotoBtn.style.display = 'none';
+        retakePhotoBtn.style.display = 'none';
+        
+        // Reset styling
+        document.querySelector('.camera-section').style.borderColor = 'var(--border-color)';
+        document.querySelector('.camera-section').style.boxShadow = '';
+        
+        capturedImageData = null;
+        showNotification('Ready to take a new photo! 📸', 'info');
+    }
+    
+    // Simple Color Analysis (Mock)
+    function analyzeImageColors() {
+        if (!capturedImageData) return;
+        
+        // Create a temporary canvas to analyze image
+        const tempCanvas = document.createElement('canvas');
+        const tempCtx = tempCanvas.getContext('2d');
+        const img = new Image();
+        
+        img.onload = function() {
+            tempCanvas.width = 100; // Small size for performance
+            tempCanvas.height = 100;
+            tempCtx.drawImage(img, 0, 0, 100, 100);
+            
+            // Get image data
+            const imageData = tempCtx.getImageData(0, 0, 100, 100);
+            const data = imageData.data;
+            
+            // Analyze colors (simplified)
+            let totalR = 0, totalG = 0, totalB = 0;
+            const pixelCount = data.length / 4;
+            
+            for (let i = 0; i < data.length; i += 4) {
+                totalR += data[i];
+                totalG += data[i + 1];
+                totalB += data[i + 2];
+            }
+            
+            const avgR = Math.round(totalR / pixelCount);
+            const avgG = Math.round(totalG / pixelCount);
+            const avgB = Math.round(totalB / pixelCount);
+            
+            // Determine skin undertone (simplified logic)
+            let undertone = 'neutral';
+            if (avgR > avgG && avgR > avgB) {
+                undertone = 'warm';
+            } else if (avgB > avgR && avgG > avgR) {
+                undertone = 'cool';
+            }
+            
+            // Display results
+            showColorAnalysisResult(undertone, { r: avgR, g: avgG, b: avgB });
+        };
+        
+        img.src = capturedImageData;
+    }
+    
+    // Show Color Analysis Results
+    function showColorAnalysisResult(undertone, avgColor) {
+        const resultHTML = `
+            <div class="color-analysis-result">
+                <h4 style="color: var(--accent-primary); margin-bottom: 1rem;">🎨 Color Analysis Result</h4>
+                <div style="background: var(--bg-tertiary); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                    <p><strong>Detected Undertone:</strong> <span style="color: var(--accent-secondary); text-transform: capitalize;">${undertone}</span></p>
+                    <p><strong>Average Color:</strong> <span style="background: rgb(${avgColor.r}, ${avgColor.g}, ${avgColor.b}); padding: 4px 8px; border-radius: 4px; color: white; font-family: monospace;">RGB(${avgColor.r}, ${avgColor.g}, ${avgColor.b})</span></p>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.4;">This is a basic analysis. For more accurate results, visit our detailed Color Analysis page!</p>
+            </div>
+        `;
+        
+        // Create and show modal/popup
+        showModal('Color Analysis Complete! 🎨', resultHTML);
+    }
+    
+    // Event Listeners
+    startCameraBtn.addEventListener('click', startCamera);
+    capturePhotoBtn.addEventListener('click', capturePhoto);
+    retakePhotoBtn.addEventListener('click', retakePhoto);
+    
+    // Notification System
+    function showNotification(message, type = 'info') {
+        // Remove existing notifications
+        const existingNotifications = document.querySelectorAll('.notification');
+        existingNotifications.forEach(n => n.remove());
+        
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.innerHTML = `
+            <i class="fas ${
+                type === 'success' ? 'fa-check-circle' :
+                type === 'error' ? 'fa-exclamation-circle' :
+                type === 'warning' ? 'fa-exclamation-triangle' :
+                'fa-info-circle'
+            }"></i>
+            <span>${message}</span>
+            <button class="notification-close"><i class="fas fa-times"></i></button>
+        `;
+        
+        // Add notification styles
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid ${
+                type === 'success' ? 'var(--success)' :
+                type === 'error' ? 'var(--error)' :
+                type === 'warning' ? 'var(--warning)' :
+                'var(--accent-primary)'
+            };
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px var(--shadow);
+            max-width: 400px;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-primary);
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }
+        }, 5000);
+        
+        // Close button
+        notification.querySelector('.notification-close').addEventListener('click', () => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        });
+    }
+    
+    // Modal System
+    function showModal(title, content) {
+        // Remove existing modals
+        const existingModals = document.querySelectorAll('.modal-overlay');
+        existingModals.forEach(m => m.remove());
+        
+        const modalOverlay = document.createElement('div');
+        modalOverlay.className = 'modal-overlay';
+        modalOverlay.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>${title}</h3>
+                    <button class="modal-close"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body">
+                    ${content}
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary modal-ok">Got it!</button>
+                </div>
+            </div>
+        `;
+        
+        // Add modal styles
+        modalOverlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        `;
+        
+        const modalContent = modalOverlay.querySelector('.modal-content');
+        modalContent.style.cssText = `
+            background: var(--card-bg);
+            border-radius: 16px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: scaleIn 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        `;
+        
+        const modalHeader = modalOverlay.querySelector('.modal-header');
+        modalHeader.style.cssText = `
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--gradient-bg);
+            border-radius: 16px 16px 0 0;
+        `;
+        
+        const modalBody = modalOverlay.querySelector('.modal-body');
+        modalBody.style.cssText = `
+            padding: 2rem;
+            color: var(--text-primary);
+        `;
+        
+        const modalFooter = modalOverlay.querySelector('.modal-footer');
+        modalFooter.style.cssText = `
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            text-align: right;
+            background: var(--bg-tertiary);
+            border-radius: 0 0 16px 16px;
+        `;
+        
+        document.body.appendChild(modalOverlay);
+        
+        // Close handlers
+        const closeModal = () => {
+            modalOverlay.style.animation = 'fadeOut 0.3s ease';
+            setTimeout(() => modalOverlay.remove(), 300);
+        };
+        
+        modalOverlay.querySelector('.modal-close').addEventListener('click', closeModal);
+        modalOverlay.querySelector('.modal-ok').addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) closeModal();
+        });
+    }
+    
+    // Add animation styles
+    const animationStyles = document.createElement('style');
+    animationStyles.textContent = `
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        @keyframes scaleIn {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .notification-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0;
+            margin-left: auto;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: background 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            background: var(--hover-bg);
+        }
+    `;
+    document.head.appendChild(animationStyles);
+    
+    // Card hover effects
+    const dashboardCards = document.querySelectorAll('.dashboard-card');
+    dashboardCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-10px) scale(1.02)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+        });
+    });
+    
+    // Welcome animation
+    setTimeout(() => {
+        showNotification(`Welcome back, {{ session.username }}! 👋`, 'success');
+    }, 1000);
+});
+</script>
+{% endblock %}
+
+{% endblock %}

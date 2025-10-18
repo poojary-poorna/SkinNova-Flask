@@ -1,0 +1,40 @@
+{% extends "admin_layout.html" %}
+{% if mode == 'new' %}{% set heading = 'New Post' %}{% else %}{% set heading = 'Edit Post' %}{% endif %}
+{% block title %}{{ heading }} - Admin{% endblock %}
+{% block admin_content %}
+<h2>{{ heading }}</h2>
+<form method="POST" enctype="multipart/form-data" class="card">
+  <div class="form-row">
+    <div>
+      <div class="label">Title</div>
+      <input class="input" type="text" name="title" value="{{ post.title if post }}" required>
+    </div>
+    <div>
+      <div class="label">Slug</div>
+      <input class="input" type="text" name="slug" value="{{ post.slug if post }}">
+    </div>
+  </div>
+  <div class="form-row single" style="margin-top:.6rem;">
+    <div>
+      <div class="label">Cover Image URL</div>
+      <input class="input" type="text" name="cover_image" value="{{ post.cover_image if post }}" placeholder="/static/images/blog/cover.jpg">
+    </div>
+  </div>
+  <div class="form-row" style="margin-top:.6rem;">
+    <div>
+      <div class="label">Or Upload Cover</div>
+      <input class="input" type="file" name="cover_file" accept="image/*">
+    </div>
+  </div>
+  <div class="form-row single" style="margin-top:.6rem;">
+    <div>
+      <div class="label">Content</div>
+      <textarea class="input" name="content" rows="12">{{ post.content if post }}</textarea>
+    </div>
+  </div>
+  <div style="margin-top:1rem;">
+    <button class="btn primary" type="submit">Save</button>
+    <a class="btn" href="{{ url_for('admin_blog_list') }}">Back</a>
+  </div>
+</form>
+{% endblock %}

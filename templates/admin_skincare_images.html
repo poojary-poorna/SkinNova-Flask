@@ -1,0 +1,30 @@
+{% extends "admin_layout.html" %}
+{% block title %}Skincare Images - Admin{% endblock %}
+{% block admin_content %}
+<h2>Skincare Manual Images</h2>
+<p>Upload images to <code>static/images/skincare_manual/</code>. These files can be referenced in products via an image URL like <code>/static/images/skincare_manual/filename.jpg</code>.</p>
+
+<div class="card" style="margin-bottom:1rem;">
+  <form method="POST" enctype="multipart/form-data">
+    <div class="label">Upload Images</div>
+    <input type="file" name="images" accept="image/*" multiple class="input">
+    <div style="margin-top:.6rem"><button class="btn primary" type="submit">Upload Selected</button></div>
+  </form>
+</div>
+
+<div class="card">
+  <h3>Existing Images ({{ images|length }})</h3>
+  {% if images %}
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;">
+      {% for img in images %}
+      <div class="card" style="padding:.5rem;">
+        <img src="{{ img }}" alt="" style="width:100%;height:120px;object-fit:cover;border-radius:8px;border:1px solid #f3c2d3;" />
+        <div style="font-size:.8rem;margin-top:.4rem;word-break:break-all;">{{ img }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No images uploaded yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

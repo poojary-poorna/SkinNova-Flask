@@ -1,0 +1,642 @@
+{% extends "base.html" %}
+
+{% block title %}Beauty Tutorials - SkinNova{% endblock %}
+
+{% block content %}
+<div class="tutorials-container">
+    <div class="page-header text-center">
+        <h1><i class="fas fa-play-circle"></i> Personalized Beauty Tutorials</h1>
+        <p>Watch curated video tutorials based on your skin concerns and beauty goals.</p>
+    </div>
+
+    <!-- Your Recommendations -->
+    {% if videos %}
+    <div class="recommendations-section card">
+        <div class="card-header">
+            <h2><i class="fas fa-heart"></i> Recommended for You</h2>
+        </div>
+        
+        <p class="section-intro">Based on your skin profile, here are tutorials that can help address your concerns:</p>
+        
+        <div class="video-grid">
+            {% for video in videos %}
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <img src="{{ video.thumbnail }}" alt="{{ video.title }}" />
+                        <div class="video-play-overlay">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h4>{{ video.title }}</h4>
+                        <p class="video-channel">{{ video.channel }}</p>
+                        <p class="video-description">{{ video.description }}</p>
+                        <a href="{{ video.url }}" target="_blank" class="btn btn-primary">
+                            <i class="fas fa-play"></i> Watch on YouTube
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Browse by Category -->
+    <div class="categories-section card">
+        <div class="card-header">
+            <h2><i class="fas fa-th-large"></i> Browse by Category</h2>
+        </div>
+        
+        <div class="category-tabs">
+            <button class="category-tab active" data-category="all">All Tutorials</button>
+            <button class="category-tab" data-category="skincare">Skincare</button>
+            <button class="category-tab" data-category="makeup">Makeup</button>
+            <button class="category-tab" data-category="beginner">Beginner</button>
+            <button class="category-tab" data-category="advanced">Advanced</button>
+        </div>
+        
+        <div class="tutorials-grid">
+            <!-- Skincare Tutorials -->
+            {% for video in skincare_videos %}
+            <div class="tutorial-card" data-category="skincare">
+                <div class="tutorial-thumbnail">
+                    <img src="{{ video.thumbnail }}" alt="{{ video.title }}" />
+                    <div class="video-play-overlay">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                </div>
+                <div class="tutorial-info">
+                    <h4>{{ video.title }}</h4>
+                    <p class="tutorial-channel">{{ video.channel }}</p>
+                    <p class="tutorial-description">{{ video.description }}</p>
+                    <div class="tutorial-tags">
+                        <span class="tag">Skincare</span>
+                        <span class="tag">Routine</span>
+                    </div>
+                    <a href="{{ video.url }}" target="_blank" class="btn btn-outline watch-tutorial">
+                        <i class="fas fa-play"></i> Watch Now
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="tutorial-card" data-category="skincare">
+                <div class="tutorial-thumbnail">
+                    <i class="fas fa-leaf"></i>
+                    <div class="tutorial-duration">12:30</div>
+                </div>
+                <div class="tutorial-info">
+                    <h4>Treating Acne Naturally</h4>
+                    <p class="tutorial-channel">Natural Beauty Guru</p>
+                    <p class="tutorial-description">Discover natural ingredients and methods to clear acne without harsh chemicals.</p>
+                    <div class="tutorial-tags">
+                        <span class="tag">Acne</span>
+                        <span class="tag">Natural</span>
+                    </div>
+                    <button class="btn btn-outline watch-tutorial" data-url="https://youtube.com/watch?v=sample2">
+                        <i class="fas fa-play"></i> Watch Now
+                    </button>
+                </div>
+            </div>
+
+            <div class="tutorial-card" data-category="skincare">
+                <div class="tutorial-thumbnail">
+                    <i class="fas fa-sun"></i>
+                    <div class="tutorial-duration">6:45</div>
+                </div>
+                <div class="tutorial-info">
+                    <h4>Brightening Dull Skin</h4>
+                    <p class="tutorial-channel">Glow Up Academy</p>
+                    <p class="tutorial-description">Tips and tricks to restore radiance and brightness to tired, dull skin.</p>
+                    <div class="tutorial-tags">
+                        <span class="tag">Brightening</span>
+                        <span class="tag">Glow</span>
+                    </div>
+                    <button class="btn btn-outline watch-tutorial" data-url="https://youtube.com/watch?v=sample3">
+                        <i class="fas fa-play"></i> Watch Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- Makeup Tutorials -->
+            {% for video in makeup_videos %}
+            <div class="tutorial-card" data-category="makeup">
+                <div class="tutorial-thumbnail">
+                    <img src="{{ video.thumbnail }}" alt="{{ video.title }}" />
+                    <div class="video-play-overlay">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                </div>
+                <div class="tutorial-info">
+                    <h4>{{ video.title }}</h4>
+                    <p class="tutorial-channel">{{ video.channel }}</p>
+                    <p class="tutorial-description">{{ video.description }}</p>
+                    <div class="tutorial-tags">
+                        <span class="tag">Makeup</span>
+                        <span class="tag">Tutorial</span>
+                    </div>
+                    <a href="{{ video.url }}" target="_blank" class="btn btn-outline watch-tutorial">
+                        <i class="fas fa-play"></i> Watch Now
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Featured Channels -->
+    <div class="channels-section card">
+        <div class="card-header">
+            <h2><i class="fas fa-star"></i> Featured Beauty Channels</h2>
+        </div>
+        
+        <div class="channels-grid">
+            <div class="channel-card">
+                <div class="channel-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="channel-info">
+                    <h4>SkinCare by Science</h4>
+                    <p>Evidence-based skincare education</p>
+                    <div class="channel-stats">
+                        <span><i class="fas fa-users"></i> 2.1M subscribers</span>
+                        <span><i class="fas fa-video"></i> 450 videos</span>
+                    </div>
+                </div>
+                <button class="btn btn-primary">Follow</button>
+            </div>
+
+            <div class="channel-card">
+                <div class="channel-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="channel-info">
+                    <h4>Makeup Made Easy</h4>
+                    <p>Beginner-friendly makeup tutorials</p>
+                    <div class="channel-stats">
+                        <span><i class="fas fa-users"></i> 1.8M subscribers</span>
+                        <span><i class="fas fa-video"></i> 320 videos</span>
+                    </div>
+                </div>
+                <button class="btn btn-primary">Follow</button>
+            </div>
+
+            <div class="channel-card">
+                <div class="channel-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="channel-info">
+                    <h4>Natural Beauty Guru</h4>
+                    <p>Organic and natural beauty solutions</p>
+                    <div class="channel-stats">
+                        <span><i class="fas fa-users"></i> 950K subscribers</span>
+                        <span><i class="fas fa-video"></i> 280 videos</span>
+                    </div>
+                </div>
+                <button class="btn btn-primary">Follow</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tips Section -->
+    <div class="tips-section card">
+        <div class="card-header">
+            <h2><i class="fas fa-lightbulb"></i> Get the Most from Beauty Tutorials</h2>
+        </div>
+        
+        <div class="tips-grid">
+            <div class="tip-card">
+                <div class="tip-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h4>Watch at Your Own Pace</h4>
+                <p>Pause, rewind, and practice each step until you feel comfortable with the technique.</p>
+            </div>
+            
+            <div class="tip-card">
+                <div class="tip-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <h4>Check Product Recommendations</h4>
+                <p>Look for product links in video descriptions and compare with your SkinNova recommendations.</p>
+            </div>
+            
+            <div class="tip-card">
+                <div class="tip-icon">
+                    <i class="fas fa-camera"></i>
+                </div>
+                <h4>Practice Makes Perfect</h4>
+                <p>Take before and after photos to track your progress and see how techniques improve your look.</p>
+            </div>
+            
+            <div class="tip-card">
+                <div class="tip-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h4>Adapt to Your Needs</h4>
+                <p>Modify techniques based on your skin type and concerns identified in your SkinNova profile.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.tutorials-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.page-header {
+    margin-bottom: 3rem;
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.page-header p {
+    font-size: 1.1rem;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.section-intro {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.video-grid, .tutorials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.video-card, .tutorial-card {
+    background: white;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.video-card:hover, .tutorial-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+.video-thumbnail, .tutorial-thumbnail {
+    height: 200px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.video-thumbnail img, .tutorial-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.video-card:hover .video-thumbnail img,
+.tutorial-card:hover .tutorial-thumbnail img {
+    transform: scale(1.05);
+}
+
+.video-play-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    opacity: 0.9;
+    transition: all 0.3s ease;
+}
+
+.video-card:hover .video-play-overlay,
+.tutorial-card:hover .video-play-overlay {
+    opacity: 1;
+    background: rgba(233, 30, 99, 0.9);
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.video-duration, .tutorial-duration {
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.5rem;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.video-info, .tutorial-info {
+    padding: 1.5rem;
+}
+
+.video-info h4, .tutorial-info h4 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.video-channel, .tutorial-channel {
+    color: var(--primary);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.video-channel::before, .tutorial-channel::before {
+    content: "📺";
+    font-size: 0.8rem;
+}
+
+.video-description, .tutorial-description {
+    color: #666;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+    font-size: 0.9rem;
+}
+
+.video-meta {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.video-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.tutorial-tags {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.tag {
+    background: rgba(233, 30, 99, 0.1);
+    color: var(--primary);
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.category-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.category-tab {
+    padding: 8px 20px;
+    border: 2px solid #e9ecef;
+    background: white;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.category-tab:hover,
+.category-tab.active {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: white;
+}
+
+.channels-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.channel-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+}
+
+.channel-card:hover {
+    transform: translateY(-3px);
+}
+
+.channel-avatar {
+    width: 60px;
+    height: 60px;
+    background: var(--gradient-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    flex-shrink: 0;
+}
+
+.channel-info {
+    flex: 1;
+}
+
+.channel-info h4 {
+    color: var(--primary);
+    margin-bottom: 0.25rem;
+}
+
+.channel-info p {
+    color: #666;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.channel-stats {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.channel-stats span {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.tip-card {
+    text-align: center;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.tip-icon {
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.tip-card h4 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.tip-card p {
+    color: #666;
+    line-height: 1.6;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .page-header h1 {
+        font-size: 2rem;
+    }
+    
+    .video-grid, .tutorials-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .channels-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .channel-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .channel-avatar {
+        margin-bottom: 1rem;
+    }
+    
+    .channel-stats {
+        justify-content: center;
+    }
+    
+    .category-tabs {
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+    }
+    
+    .category-tab {
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+}
+</style>
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Category filtering
+    const categoryTabs = document.querySelectorAll('.category-tab');
+    const tutorialCards = document.querySelectorAll('.tutorial-card');
+    
+    categoryTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const category = this.dataset.category;
+            
+            // Update active tab
+            categoryTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Filter tutorials
+            tutorialCards.forEach(card => {
+                const cardCategories = card.dataset.category.split(' ');
+                if (category === 'all' || cardCategories.includes(category)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+    
+    // Watch tutorial buttons
+    const watchButtons = document.querySelectorAll('.watch-tutorial');
+    watchButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const url = this.dataset.url;
+            if (url) {
+                window.open(url, '_blank');
+            } else {
+                showAlert('Tutorial video will open in YouTube', 'info');
+            }
+        });
+    });
+    
+    // Follow channel buttons
+    const followButtons = document.querySelectorAll('.channel-card .btn');
+    followButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const channelName = this.closest('.channel-card').querySelector('h4').textContent;
+            if (this.textContent === 'Follow') {
+                this.textContent = 'Following';
+                this.classList.remove('btn-primary');
+                this.classList.add('btn-secondary');
+                showAlert(`Now following ${channelName}!`, 'success');
+            } else {
+                this.textContent = 'Follow';
+                this.classList.remove('btn-secondary');
+                this.classList.add('btn-primary');
+                showAlert(`Unfollowed ${channelName}`, 'info');
+            }
+        });
+    });
+});
+
+function showAlert(message, type = 'info') {
+    // Use the existing alert function from main.js
+    if (typeof window.showAlert === 'function') {
+        window.showAlert(message, type);
+    } else {
+        alert(message);
+    }
+}
+</script>
+{% endblock %}
+{% endblock %}

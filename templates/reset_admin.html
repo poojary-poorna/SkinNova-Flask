@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Reconfigure Admin - SkinNova{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="auth-icon"><i class="fas fa-tools"></i></div>
+      <h1>Reconfigure Admin</h1>
+      <p>Delete existing admin account(s) and set up a new admin.</p>
+    </div>
+
+    {% if admin_exists %}
+      <div class="alert alert-warning" style="margin-bottom:1rem;">
+        <i class="fas fa-exclamation-triangle"></i> This will permanently remove all current admin users.
+      </div>
+    {% else %}
+      <div class="alert alert-info" style="margin-bottom:1rem;">
+        <i class="fas fa-info-circle"></i> No admin exists yet. You can go directly to Setup Admin.
+      </div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('reset_admin_execute') }}" class="auth-form">
+      <button type="submit" class="btn-modern btn-full" style="background:#ef4444"><i class="fas fa-trash"></i> Delete Admins and Continue</button>
+    </form>
+
+    <div class="auth-footer">
+      <p><a href="{{ url_for('setup_admin') }}">Go to Setup Admin</a> · <a href="{{ url_for('login_admin') }}">Back to Admin Login</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

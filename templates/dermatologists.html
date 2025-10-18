@@ -1,0 +1,747 @@
+{% extends "base.html" %}
+
+{% block title %}Find Dermatologists - SkinNova{% endblock %}
+
+{% block content %}
+<div class="dermatologists-container">
+    <div class="page-header text-center">
+        <h1><i class="fas fa-map-marker-alt"></i> Find Dermatologists Near You</h1>
+        <p>Locate qualified skin specialists in your area for professional consultation and treatment.</p>
+    </div>
+
+    <!-- Search Section -->
+    <div class="search-section card">
+        <div class="card-header">
+            <h2><i class="fas fa-search"></i> Search for Specialists</h2>
+        </div>
+        
+        <div class="search-controls">
+            <div class="location-search">
+                <button id="find-dermatologists-btn" class="btn btn-primary">
+                    <i class="fas fa-location-arrow"></i> Use My Location
+                </button>
+                <p class="search-help">Or search by location manually:</p>
+                <div class="location-input-group">
+                    <input type="text" id="location-input" placeholder="Enter city, zip code, or address..." class="form-control">
+                    <button id="search-location-btn" class="btn btn-outline">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+                <div class="current-location-info" id="current-location-info" style="display: none;">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span id="current-location-text"></span>
+                </div>
+            </div>
+            
+            <div class="filter-options">
+                <h3>Filter by Specialization:</h3>
+                <div class="specialization-filters">
+                    <label class="filter-checkbox">
+                        <input type="checkbox" value="acne" checked>
+                        <span>Acne Treatment</span>
+                    </label>
+                    <label class="filter-checkbox">
+                        <input type="checkbox" value="anti-aging" checked>
+                        <span>Anti-Aging</span>
+                    </label>
+                    <label class="filter-checkbox">
+                        <input type="checkbox" value="skin-cancer" checked>
+                        <span>Skin Cancer</span>
+                    </label>
+                    <label class="filter-checkbox">
+                        <input type="checkbox" value="dermatitis" checked>
+                        <span>Dermatitis</span>
+                    </label>
+                    <label class="filter-checkbox">
+                        <input type="checkbox" value="cosmetic" checked>
+                        <span>Cosmetic Dermatology</span>
+                    </label>
+                    <label class="filter-checkbox">
+                        <input type="checkbox" value="laser" checked>
+                        <span>Laser Treatments</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loading-state" class="loading-card card" style="display: none;">
+        <div class="text-center">
+            <div class="spinner"></div>
+            <p>Finding dermatologists near you...</p>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div id="dermatologists-list" class="dermatologists-results">
+        <!-- Results will be populated here by JavaScript -->
+    </div>
+
+    <!-- Default Results (Sample Data) -->
+    <div id="default-results" class="dermatologists-results">
+        <h2><i class="fas fa-hospital"></i> Featured Dermatologists</h2>
+        <p class="results-intro">Here are some highly-rated dermatologists in your area:</p>
+        
+        <div class="dermatologist-card">
+            <div class="doctor-avatar">
+                <i class="fas fa-user-md"></i>
+            </div>
+            <div class="dermatologist-info">
+                <h4>Dr. Sarah Johnson</h4>
+                <p class="specialization">Acne Treatment, Anti-Aging</p>
+                <p class="address"><i class="fas fa-map-marker-alt"></i> 123 Medical Center Dr, Downtown</p>
+                <p class="contact">
+                    <i class="fas fa-phone"></i> +1-555-0123
+                    <i class="fas fa-envelope"></i> sarah.johnson@medcenter.com
+                </p>
+                <div class="doctor-details">
+                    <div class="rating-badge">
+                        <i class="fas fa-star"></i> 4.8
+                    </div>
+                    <div class="distance-badge">
+                        <i class="fas fa-route"></i> 0.5 miles
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-primary book-appointment">
+                        <i class="fas fa-calendar"></i> Book Appointment
+                    </button>
+                    <button class="btn btn-outline view-profile">
+                        <i class="fas fa-user"></i> View Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="dermatologist-card">
+            <div class="doctor-avatar">
+                <i class="fas fa-user-md"></i>
+            </div>
+            <div class="dermatologist-info">
+                <h4>Dr. Michael Brown</h4>
+                <p class="specialization">Skin Cancer, Dermatitis</p>
+                <p class="address"><i class="fas fa-map-marker-alt"></i> 456 Health Plaza, Midtown</p>
+                <p class="contact">
+                    <i class="fas fa-phone"></i> +1-555-0124
+                    <i class="fas fa-envelope"></i> michael.brown@healthplaza.com
+                </p>
+                <div class="doctor-details">
+                    <div class="rating-badge">
+                        <i class="fas fa-star"></i> 4.6
+                    </div>
+                    <div class="distance-badge">
+                        <i class="fas fa-route"></i> 1.2 miles
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-primary book-appointment">
+                        <i class="fas fa-calendar"></i> Book Appointment
+                    </button>
+                    <button class="btn btn-outline view-profile">
+                        <i class="fas fa-user"></i> View Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="dermatologist-card">
+            <div class="doctor-avatar">
+                <i class="fas fa-user-md"></i>
+            </div>
+            <div class="dermatologist-info">
+                <h4>Dr. Emily Davis</h4>
+                <p class="specialization">Cosmetic Dermatology, Rosacea</p>
+                <p class="address"><i class="fas fa-map-marker-alt"></i> 789 Wellness Ave, Uptown</p>
+                <p class="contact">
+                    <i class="fas fa-phone"></i> +1-555-0125
+                    <i class="fas fa-envelope"></i> emily.davis@wellness.com
+                </p>
+                <div class="doctor-details">
+                    <div class="rating-badge">
+                        <i class="fas fa-star"></i> 4.9
+                    </div>
+                    <div class="distance-badge">
+                        <i class="fas fa-route"></i> 2.1 miles
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-primary book-appointment">
+                        <i class="fas fa-calendar"></i> Book Appointment
+                    </button>
+                    <button class="btn btn-outline view-profile">
+                        <i class="fas fa-user"></i> View Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tips Section -->
+    <div class="tips-section card">
+        <div class="card-header">
+            <h2><i class="fas fa-lightbulb"></i> Tips for Your Dermatologist Visit</h2>
+        </div>
+        
+        <div class="tips-grid">
+            <div class="tip-card">
+                <div class="tip-icon">
+                    <i class="fas fa-list"></i>
+                </div>
+                <h4>Prepare Your Questions</h4>
+                <p>Write down your skin concerns, current routine, and any questions you have before your appointment.</p>
+            </div>
+            
+            <div class="tip-card">
+                <div class="tip-icon">
+                    <i class="fas fa-camera"></i>
+                </div>
+                <h4>Document Changes</h4>
+                <p>Take photos of any skin changes or issues to show your dermatologist the progression over time.</p>
+            </div>
+            
+            <div class="tip-card">
+                <div class="tip-icon">
+                    <i class="fas fa-pills"></i>
+                </div>
+                <h4>Bring Your Products</h4>
+                <p>Bring all skincare products and medications you're currently using for review.</p>
+            </div>
+            
+            <div class="tip-card">
+                <div class="tip-icon">
+                    <i class="fas fa-history"></i>
+                </div>
+                <h4>Share Your History</h4>
+                <p>Be prepared to discuss your family history of skin conditions and any previous treatments.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.dermatologists-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.page-header {
+    margin-bottom: 3rem;
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.page-header p {
+    font-size: 1.1rem;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.search-controls {
+    display: grid;
+    gap: 2rem;
+}
+
+.location-search {
+    text-align: center;
+}
+
+.location-search .btn {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.search-help {
+    margin: 1rem 0 0.5rem;
+    color: #666;
+}
+
+.location-input-group {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.location-input-group .form-control {
+    flex: 1;
+}
+
+.location-input-group .btn {
+    margin-bottom: 0;
+    white-space: nowrap;
+}
+
+.current-location-info {
+    background: rgba(0, 255, 255, 0.1);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    border-radius: 8px;
+    padding: 0.75rem;
+    margin-top: 1rem;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+}
+
+[data-theme="light"] .current-location-info {
+    background: rgba(255, 107, 157, 0.1);
+    border-color: rgba(255, 107, 157, 0.3);
+    color: var(--text-primary);
+}
+
+.filter-options h3 {
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.specialization-filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.filter-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: background 0.3s ease;
+}
+
+.filter-checkbox:hover {
+    background: rgba(233, 30, 99, 0.05);
+}
+
+.filter-checkbox input {
+    accent-color: var(--primary);
+}
+
+.loading-card {
+    text-align: center;
+    padding: 3rem;
+}
+
+.dermatologists-results {
+    margin: 2rem 0;
+}
+
+.dermatologists-results h2 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.results-intro {
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.dermatologist-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dermatologist-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+.doctor-avatar {
+    width: 80px;
+    height: 80px;
+    background: var(--gradient-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: white;
+    flex-shrink: 0;
+}
+
+.dermatologist-info {
+    flex: 1;
+}
+
+.dermatologist-info h4 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+}
+
+.specialization {
+    color: var(--secondary);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.address, .contact {
+    color: #666;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.contact i {
+    margin-left: 1rem;
+}
+
+.contact i:first-child {
+    margin-left: 0;
+}
+
+.doctor-details {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.rating-badge, .distance-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.rating-badge {
+    background: var(--success);
+    color: white;
+}
+
+.distance-badge {
+    background: var(--accent);
+    color: white;
+}
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.status-badge.open {
+    background: var(--success);
+    color: white;
+}
+
+.status-badge.closed {
+    background: var(--error);
+    color: white;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.action-buttons .btn {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+}
+
+.tips-section {
+    margin-top: 3rem;
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.tip-card {
+    text-align: center;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.tip-icon {
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.tip-card h4 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.tip-card p {
+    color: #666;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .page-header h1 {
+        font-size: 2rem;
+    }
+    
+    .specialization-filters {
+        grid-template-columns: 1fr;
+    }
+    
+    .dermatologist-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .doctor-avatar {
+        margin: 0 auto 1rem;
+    }
+    
+    .address, .contact {
+        justify-content: center;
+    }
+    
+    .doctor-details {
+        justify-content: center;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .tips-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+{% block extra_scripts %}
+<script>
+(function(){
+  const btn = document.getElementById('find-dermatologists-btn');
+  const searchBtn = document.getElementById('search-location-btn');
+  const locationInput = document.getElementById('location-input');
+  const list = document.getElementById('dermatologists-list');
+  const defaultResults = document.getElementById('default-results');
+  const loading = document.getElementById('loading-state');
+  const currentLocationInfo = document.getElementById('current-location-info');
+  const currentLocationText = document.getElementById('current-location-text');
+
+  let currentLat = null;
+  let currentLng = null;
+
+  function haversine(lat1, lon1, lat2, lon2){
+    function toRad(x){return x * Math.PI / 180;}
+    const R = 6371;
+    const dLat = toRad(lat2-lat1);
+    const dLon = toRad(lon2-lon1);
+    const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
+    const c = 2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R*c;
+  }
+
+  function showLocationInfo(lat, lng, address = null) {
+    currentLat = lat;
+    currentLng = lng;
+    if (address) {
+      currentLocationText.textContent = `Searching near: ${address}`;
+    } else {
+      currentLocationText.textContent = `Searching near: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+    }
+    currentLocationInfo.style.display = 'flex';
+  }
+
+  function hideLocationInfo() {
+    currentLocationInfo.style.display = 'none';
+  }
+
+  async function geocodeAddress(address) {
+    try {
+      const response = await fetch(`/api/geocode?address=${encodeURIComponent(address)}`);
+      const data = await response.json();
+      
+      if (data.status === 'success') {
+        return { lat: data.lat, lng: data.lng };
+      } else {
+        throw new Error(data.error || 'Geocoding failed');
+      }
+    } catch (error) {
+      console.error('Geocoding error:', error);
+      throw error;
+    }
+  }
+
+  async function fetchDermatologists(lat, lng, address = null){
+    loading.style.display = 'block';
+    list.innerHTML = '';
+    hideLocationInfo();
+    
+    try {
+      const res = await fetch(`/api/dermatologists?lat=${lat}&lng=${lng}`);
+      const data = await res.json();
+      loading.style.display = 'none';
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      
+      if (!Array.isArray(data) || data.length === 0) { 
+        defaultResults.style.display = 'block'; 
+        return; 
+      }
+      
+      // Show location info
+      showLocationInfo(lat, lng, address);
+      
+      // Data already includes distance from Google Places API
+      const enriched = data.map(d => ({
+        ...d, 
+        distance: d.distance || ((d.lat && d.lng) ? haversine(lat, lng, d.lat, d.lng) : null)
+      }));
+      
+      enriched.sort((a,b)=> (a.distance ?? 1e9) - (b.distance ?? 1e9));
+      defaultResults.style.display = 'none';
+      
+      list.innerHTML = enriched.slice(0,10).map(d=>`
+        <div class="dermatologist-card">
+          <div class="doctor-avatar"><i class="fas fa-user-md"></i></div>
+          <div class="dermatologist-info">
+            <h4>${d.name || 'Dermatology Clinic'}</h4>
+            <p class="address"><i class="fas fa-map-marker-alt"></i> ${d.address || 'Address not available'}</p>
+            <p class="contact"><i class="fas fa-phone"></i> ${d.phone || 'N/A'}</p>
+            <div class="doctor-details">
+              ${d.rating ? `<div class="rating-badge"><i class="fas fa-star"></i> ${d.rating}</div>` : ''}
+              ${d.distance!=null ? `<div class="distance-badge"><i class="fas fa-route"></i> ${d.distance.toFixed(1)} km</div>`:''}
+              ${d.is_open !== null ? `<div class="status-badge ${d.is_open ? 'open' : 'closed'}"><i class="fas fa-${d.is_open ? 'check-circle' : 'times-circle'}"></i> ${d.is_open ? 'Open' : 'Closed'}</div>` : ''}
+            </div>
+            <div class="action-buttons">
+              <a class="btn btn-primary" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.name||'Dermatologist')}+@${d.lat||''},${d.lng||''}" target="_blank"><i class="fas fa-map"></i> Directions</a>
+              ${d.place_id ? `<button class="btn btn-outline" onclick="getPlaceDetails('${d.place_id}')"><i class="fas fa-info-circle"></i> More Info</button>` : ''}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    } catch(err){
+      loading.style.display = 'none';
+      defaultResults.style.display = 'block';
+      console.error('Error fetching dermatologists:', err);
+      
+      // Show error message
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'alert alert-error';
+      errorDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Error: ${err.message}`;
+      list.appendChild(errorDiv);
+    }
+  }
+
+  // Use My Location button
+  if (btn){
+    btn.addEventListener('click', function(){
+      if (navigator.geolocation){
+        loading.style.display = 'block';
+        navigator.geolocation.getCurrentPosition(
+          pos => {
+            fetchDermatologists(pos.coords.latitude, pos.coords.longitude);
+          }, 
+          err => {
+            console.error('Geolocation error:', err);
+            // Fallback to default location
+            fetchDermatologists(19.0450, 72.8620);
+          }, 
+          { 
+            enableHighAccuracy: true, 
+            timeout: 10000,
+            maximumAge: 300000 // 5 minutes
+          }
+        );
+      } else {
+        fetchDermatologists(19.0450, 72.8620);
+      }
+    });
+  }
+
+  // Search by address button
+  if (searchBtn && locationInput) {
+    searchBtn.addEventListener('click', async function(){
+      const address = locationInput.value.trim();
+      if (!address) {
+        alert('Please enter an address to search');
+        return;
+      }
+      
+      try {
+        loading.style.display = 'block';
+        const coords = await geocodeAddress(address);
+        await fetchDermatologists(coords.lat, coords.lng, address);
+      } catch (error) {
+        loading.style.display = 'none';
+        alert(`Error: ${error.message}`);
+      }
+    });
+  }
+
+  // Enter key support for address input
+  if (locationInput) {
+    locationInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        searchBtn.click();
+      }
+    });
+  }
+
+  // Get place details function
+  window.getPlaceDetails = async function(placeId) {
+    try {
+      const response = await fetch(`/api/place-details?place_id=${placeId}`);
+      const data = await response.json();
+      
+      if (data.status === 'success') {
+        // Show place details in a modal or alert
+        const details = data.result;
+        const info = `
+          <strong>${details.name}</strong><br>
+          ${details.formatted_address}<br>
+          ${details.formatted_phone_number || 'Phone: N/A'}<br>
+          Rating: ${details.rating || 'N/A'}<br>
+          ${details.website ? `<a href="${details.website}" target="_blank">Website</a>` : ''}
+        `;
+        alert(info);
+      } else {
+        alert('Could not load additional details');
+      }
+    } catch (error) {
+      console.error('Error getting place details:', error);
+      alert('Error loading details');
+    }
+  };
+
+  // Auto-refresh location every 5 minutes if user is on the page
+  setInterval(() => {
+    if (currentLat && currentLng && document.visibilityState === 'visible') {
+      fetchDermatologists(currentLat, currentLng);
+    }
+  }, 300000); // 5 minutes
+
+})();
+</script>
+{% endblock %}
+
+{% endblock %}
